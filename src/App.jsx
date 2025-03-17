@@ -11,7 +11,7 @@ import JogoNumeros from './pages/jogoNumeros.jsx';
 import Resultados from './pages/resultados.jsx';
 import Perfil from './pages/perfil.jsx';
 import Login from './pages/login/Login.tsx';
-import FaceJogoVogais from './pages/FaceJogoVogais/FaceJogoVogais.jsx';
+import JogoVogais from './pages/JogoVogais/JogoVogais.jsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 
 const App = () => (
@@ -24,7 +24,7 @@ const App = () => (
         <Route path="/login" element={<Login />} />
         <Route path="/jogo-memoria" element={<JogoMemoria />} />
         <Route path="/jogo-numeros" element={<JogoNumeros />} />
-        <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
+        <Route path="/jogo-vogais" element={<JogoVogais />} />
         <Route path="/jogo-cores" element={<JogoCores />} />
         <Route path="/resultados" element={<Resultados />} />
         <Route path="/perfil" element={<Perfil />} />
