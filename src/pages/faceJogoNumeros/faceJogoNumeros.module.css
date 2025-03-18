@@ -8,30 +8,25 @@
 }
 
 .game {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 100vh;
+  display: grid;
 }
 
 .container {
+  place-self: center;
   background-color: var(--clr-primary-500);
-  container-type: inline-size;
-  margin: auto;
   padding: 2rem;
-  width: min(800px, 95%);
+  width: min(800px, 100%);
   border-radius: 1em;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.60);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
 }
 
-.container>.heading {
+.container > .heading {
   font-weight: var(--fw-bold);
   font-size: 3rem;
   margin-bottom: 1rem;
 }
 
-.container>.paragraph {
+.container > .paragraph {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -44,12 +39,12 @@
   max-width: inherit;
   margin: auto;
   margin-bottom: 2rem;
-  transition-duration: .5s;
+  transition-duration: 0.5s;
 
   &:hover,
   &:focus {
     background-color: var(--clr-neutral-100);
-    transition-duration: .5s;
+    transition-duration: 0.5s;
   }
 }
 
@@ -69,22 +64,16 @@
   border: 2px solid black;
   height: 70px;
   width: 70px;
-  transition-duration: .3s;
+  transition-duration: 0.3s;
   font-weight: var(--fw-bold);
 
   &:hover,
   &:focus {
     background-color: var(--clr-neutral-400);
-    transition-duration: .3s;
+    transition-duration: 0.3s;
   }
 
-  >span {
+  > span {
     font-size: 3rem;
-  }
-}
-
-@container (min-width: calc(70px * 6)) {
-  .numberGrid {
-    grid-template-columns: repeat(5, 1fr);
   }
 }

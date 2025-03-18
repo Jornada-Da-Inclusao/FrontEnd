@@ -23,7 +23,7 @@ body {
   background-color: var(--clr-info);
   container-type: inline-size;
   margin: auto;
-  width: min(800px, 95%);
+  width: min(800px, 100%);
 }
 
 .heading {
