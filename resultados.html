@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        .sidebar {
+            width: 25%;
+            background: #f4f4f4;
+            padding: 20px;
+            height: 100vh;
+            transition: transform 0.3s ease;
+        }
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            position: absolute;
+        }
+        .menu-toggle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .menu h2 {
+            border-bottom: 2px solid red;
+            padding-bottom: 5px;
+        }
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .menu ul li {
+            padding: 10px 0;
+        }
+        .menu ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+        .content {
+            flex: 1;
+            padding: 40px;
+        }
+        header {
+            border-bottom: 2px solid red;
+            padding-bottom: 10px;
+        }
+        .text-content {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="search-box">
+                <input type="text" placeholder="Search">
+            </div>
+            <nav class="menu">
+                <h2>Menu</h2>
+                <ul>
+                    <li><a href="perfil.html">Home</a></li>
+                </ul>
+                <ul>
+                    <li><a href="resultados.html">Resultados</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Resultados dos Jogos</h1>
+                <p>Acompanhe o desempenho das crianças nos jogos educativos.</p>
+            </header>
+            <section class="text-content">
+                <table>
+                    <tr>
+                        <th>Nome da Criança</th>
+                        <th>Jogo</th>
+                        <th>Acertos</th>
+                        <th>Erros</th>
+                        <th>Data</th>
+                    </tr>
+                    <tr>
+                        <td>João</td>
+                        <td>Jogo 1</td>
+                        <td>8</td>
+                        <td>2</td>
+                        <td>15/03/2025</td>
+                    </tr>
+                    <tr>
+                        <td>Maria</td>
+                        <td>Jogo 2</td>
+                        <td>10</td>
+                        <td>0</td>
+                        <td>15/03/2025</td>
+                    </tr>
+                    <tr>
+                        <td>Carlos</td>
+                        <td>Jogo 3</td>
+                        <td>6</td>
+                        <td>4</td>
+                        <td>15/03/2025</td>
+                    </tr>
+                </table>
+            </section>
+        </main>
+    </div>
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
