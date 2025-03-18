@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './App.css';
+import styles from './App.module.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/home.jsx';
-import Cadastro from './pages/cadastro/Cadastro.tsx';
+import Cadastro from './pages/Cadastro.tsx';
 import JogoCores from './pages/jogoCores.jsx';
 import JogoMemoria from './pages/jogoMemoria.jsx';
 import JogoNumeros from './pages/jogoNumeros.jsx';
 import Resultados from './pages/resultados.jsx';
 import Perfil from './pages/perfil.jsx';
-import Login from './pages/login/Login.tsx';
-import JogoVogais from './pages/JogoVogais/JogoVogais.jsx';
+import Login from './pages/Login.tsx';
+import JogoVogais from './pages/JogoVogais.jsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 
 const App = () => (

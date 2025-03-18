@@ -1,7 +1,7 @@
-import './login.css'
+import styles from '../assets/styles/login.module.css'
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
-import UsuarioLogin from '../../models/UsuarioLogin';
+import { AuthContext } from '../contexts/AuthContext';
+import UsuarioLogin from '../models/UsuarioLogin';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import React from 'react';
 
@@ -42,11 +42,11 @@ function Login() {
 
   return (
     <>
-      <div className="bodyLogin">
-        <div id="login-container">
+      <div className={styles.bodyLogin}>
+        <div className={styles.loginContainer}>
           <h1></h1>
-          <form id="login-form" onSubmit={login}>
-            <div className="full-box">
+          <form id="loginForm" onSubmit={login}>
+            <div className={styles.fullBox}>
               <label htmlFor="email">E-mail</label>
               <input
                 type="email"
@@ -58,7 +58,7 @@ function Login() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
             </div>
-            <div className="full-box">
+            <div className={styles.fullBox}>
               <label htmlFor="password">Senha</label>
               <input
                 type="password"

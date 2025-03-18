@@ -7,7 +7,7 @@
 }
 
 /* Container do formulário */
-.form-container {
+.formContainer {
     width: 100%;
     max-width: 600px; /* Aumentar o tamanho máximo do container */
     background-color: #e2e4ebfd; /* Cor de fundo do container */
@@ -19,7 +19,7 @@
 
 /* Título do formulário */
 h1 {
-    background-image: url("img/cadastro.png");
+    background-image: url("../../assets/images/LOGO.png");
     background-size: contain; /* Mantém a proporção da imagem */
     background-repeat: no-repeat; /* Evita que a imagem se repita */
     background-position: center; 
@@ -34,7 +34,7 @@ h1 {
     align-items: stretch; /* Alinha os inputs à largura do container */
 }
 
-.full-box {
+.fullBox {
     margin-bottom: 15px; /* Aumenta a margem entre os campos */
 }
 

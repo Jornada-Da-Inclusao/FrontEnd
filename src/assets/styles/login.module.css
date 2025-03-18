@@ -13,7 +13,7 @@
   }
 
   /* Tela de Login */
-  #login-container {
+  .loginContainer {
       width: 100%;
       max-width: 500px;
       /* Aumentar o tamanho da div para 500px */
@@ -26,7 +26,7 @@
 
   }
 
-  #login-container h1 {
+  .loginContainer h1 {
       background-image: url("../../assets/images/LOGO.png");
       background-size: contain;
       /* Mantém a proporção da imagem */
@@ -47,7 +47,7 @@
       flex-direction: column;
   }
 
-  .full-box {
+  .fullBox {
       margin-bottom: 5px;
   }
 

@@ -1,9 +1,10 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Usuario from '../../models/Usuario'
-import { cadastrarUsuario } from '../../services/Service'
-import './Cadastro.css'
+import Usuario from '../models/Usuario'
+import { cadastrarUsuario } from '../services/Service'
 import React from 'react'
+
+import styles from '../assets/styles/cadastro.module.css';
 
 function Cadastro() {
 
@@ -73,15 +74,15 @@ function Cadastro() {
 
   return (
     <>
-      <div className="bodyCad">
-        <div id="login-container" className="form-container">
+      <div className={styles.bodyCad}>
+        <div id="login-container" className={styles.formContainer}>
           <h1></h1>
-          <form className='formCad' id="login-form" onSubmit={cadastrarNovoUsuario}>
+          <form className={styles.formCad} id="login-form" onSubmit={cadastrarNovoUsuario}>
             <div className="half-box">
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-name">Nome do Pai/Responsável</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-name">Nome do Pai/Responsável</label>
                 <input
-                  className='inputCad'
+                  className={styles.inputCad}
                   type="text"
                   name="nomeResponsavel"
                   id="parent-name"
@@ -91,10 +92,10 @@ function Cadastro() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-email">E-mail</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-email">E-mail</label>
                 <input
-                  className='inputCad'
+                  className={styles.inputCad}
                   type="email"
                   name="email"
                   id="parent-email"
@@ -104,23 +105,23 @@ function Cadastro() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-password">Senha</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-password">Senha</label>
                 <input
                   type="password"
                   id="parent-password"
                   name="senha"
                   placeholder="Digite a senha do pai ou responsável"
-                  className="inputCad"
+                  className={styles.inputCad}
                   required
                   value={usuario.senha}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-password-confirmation">Confirmar Senha</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-password-confirmation">Confirmar Senha</label>
                 <input
-                  className='inputCad'
+                  className={styles.inputCad}
                   type="password"
                   name="senha"
                   id="parent-password-confirmation"
@@ -139,8 +140,8 @@ function Cadastro() {
         </div>
       </div>
       <div className="enabled">
-        <div className="active" vw-access-button></div>
-        <div vw-plugin-wrapper>
+        <div className="active" vw-access-button='true'></div>
+        <div vw-plugin-wrapper="true">
           <div className="vw-plugin-top-wrapper"></div>
         </div>
       </div>

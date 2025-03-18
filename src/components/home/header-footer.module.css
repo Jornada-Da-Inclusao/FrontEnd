@@ -1,4 +1,4 @@
-@import url('color_pallete.css');
+@import url('../../assets/styles/color_pallete.css');
 
 div.head {
     display: flex;
@@ -18,9 +18,10 @@ div.head {
 
 li > img {
     width: 50px;
+    padding: 5px;
 }
 
-.link-styles {
+.linkStyles {
     color: var(--black);
     font-family: sans-serif;
     text-decoration: none;
@@ -28,7 +29,7 @@ li > img {
     cursor: pointer;
 }
 
-.head .link-styles:last-child{
+.linkStyles:last-child{
     background-color: var(--red);
     padding: 10px 30px;
     border-radius: 25px;
@@ -37,7 +38,7 @@ li > img {
     transition: 0.5s;
 }
 
-.head .link-styles:last-child:hover{
+.linkStyles:last-child:hover{
     background-color: var(--white);
     color: var(--red);
     transition: 0.5s;
@@ -67,7 +68,7 @@ li {
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.footer-content {
+.footerContent {
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -77,15 +78,15 @@ li {
     font-size: 0.9rem;
 }
 
-.social-links {
+.socialLinks {
     margin-top: 10px;
 }
 
-.social-links a {
+.socialLinks a {
     margin: 0 10px;
 }
 
-.social-links img {
+.socialLinks img {
     width: 24px;
     height: 24px;
     vertical-align: middle;

@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home.jsx';
 import JogoCores from './pages/jogoCores.jsx';
 import JogoNumeros from './pages/jogoNumeros.jsx';
-import JogoVogais from "./pages/JogoVogais/JogoVogais";
+import JogoVogais from "./pages/JogoVogais";
 
 const App = () => (
     <Router>

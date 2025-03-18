@@ -1,9 +1,9 @@
-import '../../assets/styles/header-footer.css';
+import styles from '../../components/home/header-footer.module.css';
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-content">
+    <footer className={styles.footer}>
+      <div className={styles.footerContent}>
         <p>&copy; {new Date().getFullYear()} Integra Kids. Todos os direitos reservados.</p>
       </div>
     </footer>

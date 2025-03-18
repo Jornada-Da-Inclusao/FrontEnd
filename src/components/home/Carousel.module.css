@@ -1,4 +1,4 @@
-@import url('color_pallete.css');
+@import url('../../assets/styles/color_pallete.css');
 
 * {
   box-sizing: border-box;
@@ -14,23 +14,23 @@
   background-color: var(--white); 
 }
 
-.carousel-inner {
+.carouselInner { 
   display: flex;
   width: 100%; /* 3 slides = 300% da largura */
   height: 100%;
   transition: transform 0.5s ease-in-out;
 }
 
-.carousel-item {
+.carouselItem {
   flex: 100%;
   width: 100%;
   height: 100%;
-  display: flex; /* Centraliza a imagem dentro do container */
+  display: flex; 
   align-items: center;
   justify-content: center;
 }
 
-.carousel-item img {
+.carouselItem img {
   width: 100vw;
   height: 100%; /* Mantém a proporção da imagem */
   object-fit: cover; /* Garante que a imagem se ajuste sem cortar */
@@ -60,20 +60,20 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-#item-1:checked ~ .carousel-inner {
+.item1:checked ~ .carouselInner { /* Corrigido o nome da classe */
   transform: translateX(0%);
 }
 
-#item-2:checked ~ .carousel-inner {
+.item2:checked ~ .carouselInner { /* Corrigido o nome da classe */
   transform: translateX(-100%);
 }
 
-#item-3:checked ~ .carousel-inner {
+.item3:checked ~ .carouselInner { /* Corrigido o nome da classe */
   transform: translateX(-200%);
 }
 
-#item-1:checked ~ .controls label[for="item-1"],
-#item-2:checked ~ .controls label[for="item-2"],
-#item-3:checked ~ .controls label[for="item-3"] {
+.item1:checked ~ .controls label[for="item-1"],
+.item2:checked ~ .controls label[for="item-2"],
+.item3:checked ~ .controls label[for="item-3"] {
   background-color: #333;
 }

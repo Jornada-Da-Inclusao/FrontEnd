@@ -6,13 +6,13 @@ body {
     margin: 0;
     padding: 0;
     background-image: linear-gradient(100deg, #b6d9d4 0%, #fff8f8 35%, #b6d9d4 100%);
-    min-height: 100vh; /* Garante que o body tenha uma altura mínima de 100% da viewport */
+    min-height: 95vh; /* Garante que o body tenha uma altura mínima de 100% da viewport */
     overflow-y: auto; /* Adiciona rolagem vertical se necessário */
     
 }
 
 /* Container principal do jogo */
-.game-container {
+.gameContainer {
     width: 500px;
     height: 550px; /* Ajusta a altura automaticamente */
     display: flex;
@@ -31,7 +31,7 @@ body {
 }
 
 /* Container para o resultado com sombra */
-.result-container {
+.resultContainer {
     background: rgba(255, 253, 253, 0.985);
     padding: 15px;
     border-radius: 15px;
@@ -93,7 +93,7 @@ body {
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.popup-content {
+.popupContent {
     font-family: 'Courier New', Courier, monospace;
     background: #fffbfb;
     padding: 20px;
@@ -125,7 +125,7 @@ body {
 }
 
 /* Estilo do botão de fechar */
-#popup-close {
+#popupClose {
     font-family: 'Courier New', Courier, monospace;
     margin-top: 15px;
     padding: 10px 20px;
@@ -138,12 +138,12 @@ body {
     transition: background-color 0.3s ease;
 }
 
-#popup-close:hover {
+#popupClose:hover {
     background-color: #c2bcbc;
 }
 
 @media (max-width: 480px) {
-    .game-container {
+    .gameContainer {
         width: 90%;
         height: min-content;
         margin-left: 30px;
