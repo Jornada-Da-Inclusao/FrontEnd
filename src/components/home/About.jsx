@@ -7,10 +7,10 @@ import card4 from '../../assets/images/little_prince.png';
 // TODO: Generate cards programatically
 const About = () => {
   return (
-    <section className={styles.aboutContainer}>
+    <section className={styles.aboutContainer} id='sobre-nos'>
       <h2>Nossa Página</h2>
 
-      <div className={styles.aboutContent} id='sobre-nos'>
+      <div className={styles.aboutContent}>
         <div className={styles.aboutItem}>
           <img
             src={card1}
