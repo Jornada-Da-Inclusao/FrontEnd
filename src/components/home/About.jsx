@@ -4,7 +4,7 @@ import card2 from '../../assets/images/card2.jpeg';
 import card3 from '../../assets/images/card3.jpeg';
 import card4 from '../../assets/images/little_prince.png';
 
-
+// TODO: Generate cards programatically
 const About = () => {
   return (
     <section className={styles.aboutContainer}>
@@ -17,8 +17,8 @@ const About = () => {
             alt="Ilustração 1"
             className={styles.aboutImage}
           />
-          <p>
-            A plataforma "Integra Kids" foi desenvolvida com o objetivo de apoiar crianças do ensino fundamental que enfrentam dificuldades em matérias específicas. Com um ambiente lúdico e interativo, a plataforma oferece uma variedade de jogos educativos que tornam o aprendizado mais divertido e acessível. Ao identificar as áreas em que o aluno precisa de mais ajuda, a plataforma adapta as atividades, proporcionando um suporte personalizado que visa aumentar a confiança e a compreensão da criança.
+          <p className="paragraph">
+            A plataforma "Integra Kids" foi desenvolvida com o objetivo de apoiar crianças do ensino fundamental que enfrentam dificuldades em matérias específicas. Com um ambiente lúdico e interativo, a plataforma oferece uma variedade de games educativos que tornam o aprendizado mais divertido e acessível. Ao identificar as áreas em que o aluno precisa de mais ajuda, a plataforma adapta as atividades, proporcionando um suporte personalizado que visa aumentar a confiança e a compreensão da criança.
           </p>
         </div>
 
@@ -38,8 +38,8 @@ const About = () => {
             alt="Ilustração 1"
             className={styles.aboutImage}
           />
-          <p>
-            Além disso, a Integra Kids oferece recomendações de jogos complementares baseados no desempenho do aluno. Quando uma criança encontra dificuldades em um conceito, a plataforma sugere atividades alternativas que reforçam o aprendizado de forma lúdica. Dessa maneira, a criança é redirecionada a jogos que atendem suas necessidades, facilitando a compreensão e promovendo um aprendizado mais eficaz e divertido. Com essa abordagem, a Integra Kids se torna uma ferramenta valiosa tanto para alunos quanto para educadores, contribuindo para um aprendizado significativo e divertido.
+          <p className="paragraph">
+            Além disso, a Integra Kids oferece recomendações de games complementares baseados no desempenho do aluno. Quando uma criança encontra dificuldades em um conceito, a plataforma sugere atividades alternativas que reforçam o aprendizado de forma lúdica. Dessa maneira, a criança é redirecionada a games que atendem suas necessidades, facilitando a compreensão e promovendo um aprendizado mais eficaz e divertido. Com essa abordagem, a Integra Kids se torna uma ferramenta valiosa tanto para alunos quanto para educadores, contribuindo para um aprendizado significativo e divertido.
           </p>
         </div>
         <div className={styles.aboutItem}>

@@ -1,3 +1,43 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+{
+  "hash": "c0949ac2",
+  "configHash": "a84ce7f4",
+  "lockfileHash": "03604dde",
+  "browserHash": "b22f0052",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "2ab37760",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "1318a572",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "ac036b29",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-QPG7G3M7": {
+      "file": "chunk-QPG7G3M7.js"
+    },
+    "chunk-UTEJFLXC": {
+      "file": "chunk-UTEJFLXC.js"
+    }
+  }
+}
+||||||| 01dcd9a
+=======
+>>>>>>> 5e1fc147aff1122ed12ac63c44b1b939ce9711d7
 {
   "hash": "04fe629d",
   "configHash": "5003cea7",
@@ -64,4 +104,9 @@
       "file": "chunk-G3PMV62Z.js"
     }
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> desweb
+>>>>>>> 5e1fc147aff1122ed12ac63c44b1b939ce9711d7

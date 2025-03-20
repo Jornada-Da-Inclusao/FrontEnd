@@ -17,6 +17,8 @@ const Carousel = () => {
     return () => clearInterval(interval); 
   }, [images.length]);
 
+  // TODO: Turn this into an accessible carousel according to W3 guidelines
+  // (https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)
   return (
     <div className={styles.carousel} id="pagina-principal">
       <input type="radio" name="carousel" id="item-1" className={styles.item1} checked={currentIndex === 0} readOnly />

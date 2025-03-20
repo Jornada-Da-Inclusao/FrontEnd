@@ -3,22 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from '../../components/home/header-footer.module.css';
 import PiLogo from '../../assets/images/nano-icon.png';
 
-function Header() {
-  const scrollToSection = (id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      const headerOffset = 150; // Ajuste esse valor conforme a altura do seu cabeçalho
-      const elementPosition = section.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-
+export default function Header() {
   return (
     <div className={styles.head}>
       <li>
@@ -32,7 +17,3 @@ function Header() {
     </div>
   );
 }
-
-export default Header;
-
-

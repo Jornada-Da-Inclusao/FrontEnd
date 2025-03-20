@@ -1,20 +1,36 @@
 @import url('../../assets/styles/color_pallete.css');
 
-div.head {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 5%;
-    background-color: var(--white);
-    padding: 10px;
-    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-    position: fixed; /* Adiciona posição fixa */
-    top: 0; /* Fixa o cabeçalho ao topo */
-    left: 0; /* Alinha à esquerda */
-    right: 0; /* Alinha à direita */
-    z-index: 1000; /* Mantém o cabeçalho acima de outros elementos */
+.header-bar {
+  background-color: var(--white);
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Adiciona posição fixa */
+  position: fixed;
+
+  /* Mantém o cabeçalho acima de outros elementos */
+  z-index: 1000;
+
+  /* Fixa o cabeçalho ao topo, à esquerda e à direita, respectivamente */
+  top: 0;
+  left: 0;
+  right: 0;
 }
+
+.nav-bar {
+  display: flex;
+  gap: max(2.5em, 7vw);
+
+  padding: 1em;
+
+  > .logo {
+    max-width: 50px;
+  }
+
+  > .nav-list {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
 li > img {
     width: 50px;
@@ -25,8 +41,25 @@ li > img {
     color: var(--black);
     font-family: sans-serif;
     text-decoration: none;
-    font-weight: bolder;
-    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  > .nav-list > .nav-item > .form-button {
+    display: inline-block;
+
+    border-radius: 2em;
+    padding: 0.3em 1em;
+
+    background-color: var(--clr-info-500);
+
+    text-align: center;
+
+    transition: opacity 200ms ease;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
 }
 
 .linkStyles:last-child{
@@ -59,13 +92,13 @@ li {
 }
 
 .footer {
-    background-color: var(--white);
-    color: var(--black);
-    padding: 20px;
-    text-align: center;
-    font-family: sans-serif;
-    font-weight: bolder;
-    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  color: var(--black);
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: bolder;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .footerContent {
@@ -74,8 +107,8 @@ li {
 }
 
 .footer p {
-    margin: 0;
-    font-size: 0.9rem;
+  margin: 0;
+  font-size: 0.9rem;
 }
 
 .socialLinks {
@@ -93,7 +126,7 @@ li {
 }
 
 @media (max-width: 480px) {
-    div.head {
-        gap: 10px;
-    }
+  div.head {
+    gap: 10px;
+  }
 }

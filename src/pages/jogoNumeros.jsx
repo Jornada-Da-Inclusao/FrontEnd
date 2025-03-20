@@ -30,10 +30,13 @@ export default function JogoNumeros() {
     const listElements = numbers.map((number) => (
         <NumberBox key={number} id={number.toString()} value={number} />
     ));
+<<<<<<< HEAD
     
 
     
 
+=======
+>>>>>>> 5e1fc147aff1122ed12ac63c44b1b939ce9711d7
 
     const [droppedNumbers, setDroppedNumbers] = useState([]);
 
@@ -43,7 +46,11 @@ export default function JogoNumeros() {
         const { setNodeRef } = useDroppable({
             id: 'droppable-area',
         });
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 5e1fc147aff1122ed12ac63c44b1b939ce9711d7
         return (
             <div ref={setNodeRef} className={classes.dropArea}>
                 <DropBox droppedNumbers={droppedNumbers} />
@@ -78,6 +85,7 @@ export default function JogoNumeros() {
     };
 
     return (
+<<<<<<< HEAD
 
         <>
             <div className={classes.wrapper}>
@@ -94,6 +102,25 @@ export default function JogoNumeros() {
                         </div>
                     </DndContext>
                 </section>
+=======
+        <>
+            <div className={classes.bodyGame}>
+                <div className={classes.game}>
+                    <section className={classes.container}>
+                        <h1 className={classes.heading}>Jogo dos Números</h1>
+                        <p className={classes.paragraph}>Arraste os números para cima na sequência correta.</p>
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCorners}
+                            onDragEnd={handleDragEnd}>
+                            <DroppableArea id="droppable-area" />
+                            <div className={classes.numberGrid}>
+                                {listElements}
+                            </div>
+                        </DndContext>
+                    </section>
+                </div>
+>>>>>>> 5e1fc147aff1122ed12ac63c44b1b939ce9711d7
             </div>
             <div className="enabled">
                 <div className="active" vw-access-button></div>

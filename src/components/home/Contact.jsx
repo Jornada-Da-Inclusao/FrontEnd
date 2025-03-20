@@ -56,10 +56,11 @@ const Contact = () => {
           name="Mensagem"
           placeholder="Sua mensagem"
           rows="5"
+          className="formfield -textarea"
           required
         ></textarea>
 
-        <button type="submit">Enviar</button>
+        <button type="submit" role='button' className='button'>Enviar</button>
       </form>
     </section>
   );

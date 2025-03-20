@@ -7,6 +7,14 @@ import memory from '../../assets/images/memory.jpg';
 import number from '../../assets/images/numbers.png';
 
 const Cards = () => {
+    const cards = cardsData.map(element =>
+        <>
+            <Link style={{ textDecoration: "none" }} key={element.id} to={element.explicacao}>
+                <Card key={element.id} image={element.img} alt={element.alt} title={element.title} desc={element.desc} />
+            </Link>
+        </>
+    );
+
     return (
         <div className={styles.cardsContainer} id='lista-jogos'>
             <Link className={styles.linkStyles} to="/jogo-numeros">
