@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // se estiver usando React Router
 import styles from '../assets/styles/jogoMemoria.module.css';
@@ -116,17 +115,3 @@ const JogoMemoria = () => {
 };
 
 export default JogoMemoria;
-=======
-import React from 'react';
-
-const JogoMemoria = () => {
-  return (
-    <div>
-      <h1>Página de JogoMemoria</h1>
-    </div>
-  );
-};
-
-export default JogoMemoria;
-
->>>>>>> 5e1fc147aff1122ed12ac63c44b1b939ce9711d7
