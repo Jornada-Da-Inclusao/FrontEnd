@@ -4,6 +4,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import UsuarioLogin from '../../models/UsuarioLogin';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import React from 'react';
+import styles from '../../assets/styles/login.module.css'
 
 function Login() {
   // Hook para navegar entre as páginas, usado para redirecionar o usuário após o login.
@@ -42,35 +43,37 @@ function Login() {
 
   return (
     <>
-      <div className="bodyLogin">
-        <div id="login-container" className="login-card">
+      <div className={styles.bodyLogin}>
+        <div className={styles.loginContainer}>
           <h1></h1>
-          <form id="login-form" onSubmit={login} className="login-form">
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className='formfield'
-              placeholder="Digite seu e-mail"
-              required
-              value={usuarioLogin.email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
-            />
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              name="senha"
-              id="senha"
-              className='formfield'
-              placeholder="Digite sua senha"
-              required
-              value={usuarioLogin.senha}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
-            />
-            <input className="btn-login" type="submit" value="Entrar" />
-            <p className='login-paragraph'><a href="/cadastro">Cadastrar-se</a></p>
-            <p className='login-paragraph'><a href="/">Home</a></p>
+          <form id="loginForm" onSubmit={login}>
+            <div className={styles.fullBox}>
+              <label htmlFor="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                required
+                value={usuarioLogin.email}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+              />
+            </div>
+            <div className={styles.fullBox}>
+              <label htmlFor="password">Senha</label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                placeholder="Digite sua senha"
+                required
+                value={usuarioLogin.senha}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+              />
+            </div>
+            <input type="submit" value="Entrar" />
+            <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
+            <p><a href="/">Voltar Para Home</a></p>
           </form>
         </div>
       </div>
@@ -88,5 +91,4 @@ function Login() {
     </>
   )
 }
-
 export default Login
