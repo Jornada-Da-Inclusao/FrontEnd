@@ -20,7 +20,7 @@ const Carousel = () => {
   // TODO: Turn this into an accessible carousel according to W3 guidelines
   // (https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)
   return (
-    <div className={styles.carousel} id="pagina-principal">
+    <div className={styles.carouselSection} id="pagina-principal">
       <input type="radio" name="carousel" id="item-1" className={styles.item1} checked={currentIndex === 0} readOnly />
       <input type="radio" name="carousel" id="item-2" className={styles.item2} checked={currentIndex === 1} readOnly />
       <input type="radio" name="carousel" id="item-3" className={styles.item3} checked={currentIndex === 2} readOnly />
