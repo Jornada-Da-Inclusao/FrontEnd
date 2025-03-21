@@ -3,16 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Home from './pages/home.jsx';
+import Home from './pages/home/Home.jsx';
 import Cadastro from './pages/cadastro/Cadastro.tsx';
-import JogoCores from './pages/jogoCores.jsx';
-import JogoMemoria from './pages/jogoMemoria.jsx';
-import Resultados from './pages/resultados.jsx';
-import Perfil from './pages/perfil.jsx';
+import JogoCores from './pages/jogos/JogoCores/JogoCores.jsx';
+import JogoMemoria from './pages/jogos/JogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.tsx';
-import FaceJogoVogais from './pages/faceJogoVogais/FaceJogoVogais.jsx';
-import FaceJogoNumeros from './pages/faceJogoNumeros/FaceJogoNumeros';
-import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais } from './pages/explicacaoNumeros.jsx';
+import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
+import FaceJogoNumeros from './pages/jogos/faceJogoNumeros/FaceJogoNumeros.jsx';
+import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais } from './components/explicacoes/Explicacoes.jsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 
 const App = () => (
@@ -31,8 +29,6 @@ const App = () => (
         <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
         <Route path="/jogo-cores" element={<JogoCores />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/perfil" element={<Perfil />} />
-        <Route path="/resultados" element={<Resultados />} />
       </Routes>
     </Router>
   </AuthProvider>
