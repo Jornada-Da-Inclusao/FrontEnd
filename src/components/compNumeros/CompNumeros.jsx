@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core"; // Importa o hook useDraggable da biblioteca @dnd-kit
 import { CSS } from "@dnd-kit/utilities"; // Importa utilidades da biblioteca @dnd-kit
-import Styles from "../../assets/styles/compNumeros.module.css"; // Importa o estilo do componente
+import './compNumeros.css'; // Importa o estilo do componente
 
 // Define o componente Letters, que representa uma letra que pode ser arrastada.
 function CompNumeros({ id, value }) {
@@ -27,7 +27,7 @@ function CompNumeros({ id, value }) {
 
   return (
     <div
-      className={Styles.number}
+      className="number"
       ref={setNodeRef} // Referência para o elemento arrastável
       style={{ ...staticStyles, ...dynamicStyles }} // Aplica estilos estáticos e dinâmicos
       {...attributes} // Adiciona atributos de acessibilidade

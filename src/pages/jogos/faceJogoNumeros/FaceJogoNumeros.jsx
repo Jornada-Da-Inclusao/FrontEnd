@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import { DropBox } from '../components/jogoNumeros/DropBox'
 // import { NumberBox } from '../components/jogoNumeros/NumberBox.jsx';
 import { Random } from '../../../hooks/Random.jsx'
-import classes from '../../../assets/styles/faceJogoNumeros.module.css'
+import classes from './faceJogoNumeros.module.css'
 import {
     DndContext,
     useDroppable,
@@ -108,4 +108,3 @@ export default function FaceJogoNumeros() {
         </>
     )
 };
-
