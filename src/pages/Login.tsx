@@ -1,4 +1,4 @@
-import styles from '../assets/styles/login.module.css'
+import styles from '../assets/styles/login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import UsuarioLogin from '../models/UsuarioLogin';

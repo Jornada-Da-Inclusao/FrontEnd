@@ -1,7 +1,3 @@
-.result {
-  min-height: 300px;
-}
-
 .resultLetter {
   z-index: 1;
   position: relative;
@@ -10,6 +6,19 @@
   width: 70%;
   border-radius: 1em;
   border: 1px solid var(--clr-primary-600);
+}
+
+.bodyGame {
+  font-family: "Comic Neue";
+  color: var(--clr-neutral-500);
+
+  height: 100%;
+  width: 100%;
+  background-color: var(--clr-neutral-100);
+}
+
+.game {
+  display: grid;
 }
 
 .gameContent {
@@ -21,24 +30,21 @@
   padding: 2em;
 }
 
-.game {
-  display: grid;
-}
-
-.bgImage {
-  position: absolute;
-  object-fit: contain;
-  /* background-position: center; */
-  background-repeat: no-repeat;
-  height: 290px;
-  translate: 440px -270px;
+.result {
+  height: 300px;
 }
 
 .phrase {
-  text-align: start;
   width: 100%;
-  height: 50px;
-  align-content: center;
+  height: 100px;
+}
+
+.dropaArea {
+  min-height: 50px;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  gap: 10px;
 }
 
 .letterInDroppable {
@@ -52,14 +58,29 @@
   box-sizing: border-box;
 }
 
-.dropaArea {
-  padding: 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-  gap: 10px;
+.vogaisHeading {
+  font-size: var(--fs-800);
+  font-weight: var(--fw-bold);
+}
+
+.vogaisParagraph {
+  font-size: var(--fs-700);
+}
+
+.bgImage {
+  position: absolute;
+  object-fit: contain;
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  height: 290px;
+  translate: 440px -270px;
 }
 
 @media screen and (max-width: 800px) {
+  .bgImage {
+    display: none;
+  }
+
   .resultLetter {
     width: auto;
   }

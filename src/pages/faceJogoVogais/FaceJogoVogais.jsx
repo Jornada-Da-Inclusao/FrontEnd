@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './faceJogoVogais.css';
+import classes from './faceJogoVogais.module.css';
 import {
     DndContext,
     useDroppable,
@@ -35,17 +35,17 @@ function FaceJogoVogais() {
 
         return (
             <>
-                <div ref={setNodeRef} className="resultLetter">
-                    <div className='dropaArea'>
+                <div ref={setNodeRef} className={classes.resultLetter}>
+                    <div className={classes.dropaArea}>
                         {/* Exibe as letras que foram arrastadas para a área de soltura. */}
                         {droppedLetters.map(letter => (
-                            <div key={letter.id} id={"num" + letter.id} className="letterInDroppable">
+                            <div key={letter.id} id={"num" + letter.id} className={classes.letterInDroppable}>
                                 {String.fromCharCode(64 + letter.value)} {/* Converte o valor numérico para a letra correspondente. */}
                             </div>
                         ))}
                     </div>
                 </div>
-                <img className='bgImage' src="/src/assets/images/jacare-removebg.png" alt="" />
+                <img className={classes.bgImage} src="/src/assets/images/jacare-removebg.png" alt="" />
             </>
         );
     };
@@ -72,12 +72,12 @@ function FaceJogoVogais() {
 
     return (
         <>
-            <div className='bodyGame'>
-                <div className='game'>
-                    <div className='gameContent'>
-                        <div className="vogaisText">
-                            <h1 className='vogaisHeading'>Jogo das Vogais</h1>
-                            <p className='vogaisParagraph'>ARRASTE PARA CIMA APENAS AS LETRAS VOGAIS</p>
+            <div className={classes.bodyGame}>
+                <div className={classes.game}>
+                    <div className={classes.gameContent}>
+                        <div className={classes.vogaisText}>
+                            <h1 className={classes.vogaisHeading}>Jogo das Vogais</h1>
+                            <p className={classes.vogaisParagraph}>ARRASTE PARA CIMA APENAS AS LETRAS VOGAIS</p>
                         </div>
                         <DndContext
                             sensors={sensors}
