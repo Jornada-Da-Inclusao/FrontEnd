@@ -55,7 +55,7 @@ label {
   margin-bottom: 5px;
 }
 
-input[type="email"],
+input[type="usuario"],
 input[type="password"] {
   padding: 10px;
   /* Inputs maiores */
@@ -76,7 +76,7 @@ form {
   /* Centraliza os elementos do formulário, incluindo o botão */
 }
 
-input[type="submit"] {
+.btnSubmit {
   background-color: #e60000;
   color: #fff;
   border: none;
@@ -92,7 +92,7 @@ input[type="submit"] {
   /* Ajustar o padding para reduzir o tamanho geral */
 }
 
-input[type="submit"]:hover {
+.btnSubmit:hover {
   background-color: #770c0c;
 }
 

@@ -17,9 +17,10 @@ function Cadastro() {
   // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
   const [usuario, setUsuario] = useState<Usuario>({
     id: 0,
-    nomeResponsavel: '',
-    email: '',
+    nome: '',
+    usuario: '',
     senha: '',
+    foto: ''
   })
 
   // Hook de efeito que monitora a mudança no ID do usuário.
@@ -83,24 +84,24 @@ function Cadastro() {
                 <input
                   className={styles.inputCad}
                   type="text"
-                  name="nomeResponsavel"
+                  name="nome"
                   id="parent-name"
                   placeholder="Digite o nome do pai ou responsável"
                   required
-                  value={usuario.nomeResponsavel}
+                  value={usuario.nome}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
               <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-email">E-mail</label>
+                <label className={styles.labelCad} htmlFor="parent-usuario">E-mail</label>
                 <input
                   className={styles.inputCad}
-                  type="email"
-                  name="email"
-                  id="parent-email"
+                  type="usuario"
+                  name="usuario"
+                  id="parent-usuario"
                   placeholder="Digite o e-mail do pai ou responsável"
                   required
-                  value={usuario.email}
+                  value={usuario.usuario}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
