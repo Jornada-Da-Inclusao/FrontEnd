@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // Importa React e o hook useState que será usado para gerenciar o estado do componente.
-import Style from '../../assets/styles/jogoVogais.module.css'; // Importa o arquivo CSS que contém os estilos específicos do componente.
+import Style from './jogoVogais.module.css'; // Importa o arquivo CSS que contém os estilos específicos do componente.
 import {
     DndContext, // Importa o contexto de drag-and-drop da biblioteca `@dnd-kit/core` que permite a implementação da funcionalidade de arrastar e soltar.
     useDroppable, // Importa o hook que permite criar uma área "droppable" (onde os itens podem ser soltos).

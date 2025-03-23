@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core"; // Importa o hook useDraggable da biblioteca @dnd-kit para tornar o componente arrastável.
 import { CSS } from "@dnd-kit/utilities"; // Importa utilitários da biblioteca @dnd-kit, neste caso, para manipulação de transformações CSS.
-import Style from '../../assets/styles/letras.module.css'; // Importa o arquivo CSS contendo os estilos para o componente Letras.
+import Style from './compLetras.module.css'; // Importa o arquivo CSS contendo os estilos para o componente Letras.
 
 function CompLetras({ id, value }) {
   // Usa o hook useDraggable para tornar o componente arrastável.

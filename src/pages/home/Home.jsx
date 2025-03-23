@@ -4,7 +4,7 @@ import Cards from "../../components/home/card/Cards.jsx";
 import Contact from "../../components/home/contato/Contact.jsx";
 import About from "../../components/home/sobre/About.jsx";
 import Footer from "../../components/home/footer/Footer.jsx";
-import styles from "../../assets/styles/home.module.css";
+import styles from "./home.module.css";
 
 
 const Home = () => (

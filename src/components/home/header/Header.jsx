@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../../assets/styles/header-footer.module.css';
+import styles from './header-footer.module.css';
 import PiLogo from '../../../assets/images/nano-icon.png';
 
 export default function Header() {
