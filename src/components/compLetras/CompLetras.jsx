@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core"; // Importa o hook useDraggable da biblioteca @dnd-kit para tornar o componente arrastável.
 import { CSS } from "@dnd-kit/utilities"; // Importa utilitários da biblioteca @dnd-kit, neste caso, para manipulação de transformações CSS.
-import Style from './compLetras.module.css'; // Importa o arquivo CSS contendo os estilos para o componente Letras.
+import style from './compLetras.module.css'; // Importa o arquivo CSS contendo os estilos para o componente Letras.
 
 function CompLetras({ id, value }) {
   // Usa o hook useDraggable para tornar o componente arrastável.
@@ -24,16 +24,14 @@ function CompLetras({ id, value }) {
   };
 
   return (
-    <div className={Style.letras}>
-      <div
-        className={Style.letra} // Aplica o estilo CSS específico para a letra no componente.
-        ref={setNodeRef} // Associa a referência ao elemento para o `@dnd-kit` gerenciar o arrasto.
-        style={{ ...staticStyles, ...dynamicStyles }} // Aplica os estilos estáticos e dinâmicos ao componente.
-        {...attributes} // Adiciona atributos de acessibilidade ao elemento, como os dados de aria.
-        {...listeners} // Adiciona os listeners necessários para gerenciar os eventos de arrasto (como onMouseDown, onDrag).
-      >
-        {String.fromCharCode(64 + value)} {/* Converte o valor numérico em uma letra (1 = 'A', 2 = 'B', etc.). */}
-      </div>
+    <div
+      className={style.letter} // Aplica o estilo CSS específico para a letra no componente.
+      ref={setNodeRef} // Associa a referência ao elemento para o `@dnd-kit` gerenciar o arrasto.
+      style={{ ...staticStyles, ...dynamicStyles }} // Aplica os estilos estáticos e dinâmicos ao componente.
+      {...attributes} // Adiciona atributos de acessibilidade ao elemento, como os dados de aria.
+      {...listeners} // Adiciona os listeners necessários para gerenciar os eventos de arrasto (como onMouseDown, onDrag).
+    >
+      {String.fromCharCode(64 + value)} {/* Converte o valor numérico em uma letra (1 = 'A', 2 = 'B', etc.). */}
     </div>
   );
 }

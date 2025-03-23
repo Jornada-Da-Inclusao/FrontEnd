@@ -1,5 +1,5 @@
 import React from 'react';
-import Numbers from '../../../components/compNumeros/compNumeros';
+import Numbers from '../../../components/compNumeros/CompNumeros.jsx';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 import './gameNumbers.css';
