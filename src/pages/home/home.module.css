@@ -1,4 +1,4 @@
-@import url("color_pallete.css");
+@import url('../../assets/styles/color_pallete.css');
 
 div.home {
   background-image: url(../src/assets/images/background-home.jpg);

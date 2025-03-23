@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classes from '../../../assets/styles/faceJogoVogais.module.css';
+import classes from './faceJogoVogais.module.css';
 import {
     DndContext,
     useDroppable,

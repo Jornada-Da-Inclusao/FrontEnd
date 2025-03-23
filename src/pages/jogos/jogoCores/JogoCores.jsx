@@ -11,7 +11,7 @@ import {
 } from '@dnd-kit/core'
 import { CSS } from "@dnd-kit/utilities";
 import { random } from "../../../hooks/utils.js"
-import classes from '../../../assets/styles/jogoCores.module.css'
+import classes from './jogoCores.module.css'
 
 export default function JogoNumeros() {
     const [colors, setColors] = useState(

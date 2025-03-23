@@ -1,7 +1,7 @@
 // import 
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import Styles from '../../../assets/styles/cards.module.css'
+import Styles from './cards.module.css'
 import Card from './Card.jsx';
 import { Link } from 'react-router-dom';
 import { cardsData } from '../data.js';

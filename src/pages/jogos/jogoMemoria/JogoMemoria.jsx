@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // se estiver usando React Router
-import styles from '../../../assets/styles/jogoMemoria.module.css';
+import styles from './jogoMemoria.module.css';
 
 // Importando imagens
 import img1 from '../../../assets/images/memoria/pequena.png';

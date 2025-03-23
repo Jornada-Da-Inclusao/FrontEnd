@@ -2,7 +2,7 @@ import React from 'react';
 import CompLetras from '../../../components/compLetras/CompLetras';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
-import classes from '../../../assets/styles/gameVogais.module.css';
+import classes from './gameVogais.module.css';
 
 function GameVogais({ letters }) {
     // Função para converter um número em uma letra do alfabeto (0 = A, 1 = B, etc.).

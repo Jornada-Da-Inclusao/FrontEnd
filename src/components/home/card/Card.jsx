@@ -1,5 +1,5 @@
 import React from 'react';
-import Styles from '../../../assets/styles/cards.module.css'
+import Styles from './cards.module.css'
 
 export default function Card({ image, alt, title, desc }) {
   return (

@@ -4,7 +4,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import UsuarioLogin from '../../models/UsuarioLogin';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import React from 'react';
-import styles from '../../assets/styles/login.module.css'
+import styles from './login.module.css'
 import { RotatingLines } from 'react-loader-spinner';
 
 function Login() {

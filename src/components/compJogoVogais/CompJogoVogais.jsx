@@ -1,7 +1,7 @@
 import React from 'react'; // Importa o React para utilizar JSX e criar o componente.
 import CompLetras from '../letras/CompLetras'; // Importa o componente CompLetras, que representa cada letra arrastável.
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'; // Importa as funcionalidades de ordenação do @dnd-kit, que permitem tornar os itens ordenáveis.
-import Style from '../../assets/styles/compJogoVogais.module.css'; // Importa o arquivo de estilos CSS específico para este componente.
+import Style from './compJogoVogais.module.css'; // Importa o arquivo de estilos CSS específico para este componente.
 
 function CompJogoVogais({ Letras }) {
     // Função para converter um número em uma letra do alfabeto (0 = A, 1 = B, etc.).

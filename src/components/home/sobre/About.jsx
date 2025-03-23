@@ -1,4 +1,4 @@
-import styles from '../../../assets/styles/about.module.css';
+import styles from './about.module.css';
 import card1 from '../../../assets/images/card1.jpeg';
 import card2 from '../../../assets/images/card2.jpeg';
 import card3 from '../../../assets/images/card3.jpeg';
