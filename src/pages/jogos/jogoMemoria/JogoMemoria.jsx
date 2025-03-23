@@ -54,11 +54,11 @@ const JogoMemoria = () => {
 
     const checkForMatch = () => {
         const [optionOneId, optionTwoId] = cardsChosenId;
-    
+
         if (optionOneId >= 0 && optionTwoId >= 0 && optionOneId < cards.length && optionTwoId < cards.length) {
             const optionOneName = cards[optionOneId]?.name;
             const optionTwoName = cards[optionTwoId]?.name;
-    
+
             if (optionOneId === optionTwoId) {
                 setPopupMessage('Você clicou na mesma imagem');
                 setShowPopup(true); // Exibe o popup apenas para a mesma imagem
@@ -71,7 +71,7 @@ const JogoMemoria = () => {
             console.error('IDs escolhidos estão fora do intervalo válido:', optionOneId, optionTwoId);
         }
     };
-    
+
 
     const clearChosenCards = () => {
         setCardsChosen([]);
@@ -88,7 +88,7 @@ const JogoMemoria = () => {
     return (
         <div className={styles.gameContainer}>
             <div className={styles.resultContainer}>
-                <span id="result">Cartas combinadas: {cardsWon.length / 2}/{cards.length / 2}</span>
+                <span className={styles.result}>Cartas combinadas: {cardsWon.length / 2}/{cards.length / 2}</span>
             </div>
             <div className={styles.board}>
                 {cards.map((card, index) => (
