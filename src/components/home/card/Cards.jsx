@@ -1,7 +1,7 @@
 // import 
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import Styles from './cards.module.css'
+import styles from './cards.module.css'
 import Card from './Card.jsx';
 import { Link } from 'react-router-dom';
 import { cardsData } from '../data.js';
@@ -16,7 +16,7 @@ const Cards = () => {
     );
 
     return (
-        <div id='games-section' className={Styles.cardsContainer}>
+        <div id='games-section' className={styles.cardsContainer}>
             {cards}
         </div>
     );

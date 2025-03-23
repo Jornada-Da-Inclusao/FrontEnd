@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import { DropBox } from '../components/jogoNumeros/DropBox'
 // import { NumberBox } from '../components/jogoNumeros/NumberBox.jsx';
 import { Random } from '../../../hooks/Random.jsx'
-import classes from './faceJogoNumeros.module.css'
+import styles from './faceJogoNumeros.module.css'
 import {
     DndContext,
     useDroppable,
@@ -78,11 +78,11 @@ export default function FaceJogoNumeros() {
 
     return (
         <>
-            <div className={classes.bodyGame}>
-                <div className={classes.game}>
-                    <section className={classes.container}>
-                        <h1 className={classes.heading}>Jogo dos Números</h1>
-                        <p className={classes.paragraph}>Arraste os números para cima na sequência correta.</p>
+            <div className={styles.bodyGame}>
+                <div className={styles.game}>
+                    <section className={styles.container}>
+                        <h1 className={styles.heading}>Jogo dos Números</h1>
+                        <p className={styles.paragraph}>Arraste os números para cima na sequência correta.</p>
                         <DndContext
                             sensors={sensors}
                             collisionDetection={closestCorners}

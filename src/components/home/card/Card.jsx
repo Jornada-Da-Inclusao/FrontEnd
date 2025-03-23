@@ -1,13 +1,13 @@
 import React from 'react';
-import Styles from './cards.module.css'
+import styles from './cards.module.css'
 
 export default function Card({ image, alt, title, desc }) {
   return (
-    <div className={Styles.cardComponent} id='lista-jogos'>
-      <img className={Styles.image} src={image} alt={alt} />
-      <div className={Styles.cardText}>
-        <h3 className={Styles.title}>{title}</h3>
-        <p className={Styles.description}>{desc}</p>
+    <div className={styles.cardComponent} id='lista-jogos'>
+      <img className={styles.image} src={image} alt={alt} />
+      <div className={styles.cardText}>
+        <h3 className={styles.title}>{title}</h3>
+        <p className={styles.description}>{desc}</p>
       </div>
     </div>
   );

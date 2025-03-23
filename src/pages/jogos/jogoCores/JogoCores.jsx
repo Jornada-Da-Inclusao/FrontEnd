@@ -11,7 +11,7 @@ import {
 } from '@dnd-kit/core'
 import { CSS } from "@dnd-kit/utilities";
 import { random } from "../../../hooks/utils.js"
-import classes from './jogoCores.module.css'
+import styles from './jogoCores.module.css'
 
 export default function JogoNumeros() {
     const [colors, setColors] = useState(
@@ -31,7 +31,7 @@ export default function JogoNumeros() {
         });
 
         return (
-            <div key={props.id} id={props.id} ref={setNodeRef} className={classes.dropArea}>
+            <div key={props.id} id={props.id} ref={setNodeRef} className={styles.dropArea}>
                 {props.children}
             </div>
         )
@@ -62,7 +62,7 @@ export default function JogoNumeros() {
 
     const Card = ({ animal }) => {
         return (
-            <div className={classes.card}>
+            <div className={styles.card}>
                 <Image animal={animal} />
                 <DroppableArea key={animal.id + 1} id={animal.id + 1}>
                     {droppedColors.find(color => color.id === animal.id) ? (
@@ -95,7 +95,7 @@ export default function JogoNumeros() {
 
         return (
             <div
-                className={classes.square}
+                className={styles.square}
                 id={id}
                 ref={setNodeRef}
                 style={{
@@ -119,7 +119,7 @@ export default function JogoNumeros() {
     }
 
     const Description = ({ animal, color, string }) => {
-        return <p className={classes.paragraph}>{animal.article} <b>{animal.name}</b> {string.body} {color.name}</p>
+        return <p className={styles.paragraph}>{animal.article} <b>{animal.name}</b> {string.body} {color.name}</p>
     }
 
     const Descriptions = () => {
@@ -142,25 +142,25 @@ export default function JogoNumeros() {
 
     return (
         <>
-            <div className={classes.gameBody}>
-                <div className={classes.game}>
+            <div className={styles.gameBody}>
+                <div className={styles.game}>
                     <DndContext
                         sensors={sensors}
                         collisionDetection={closestCorners}
                         onDragEnd={handleDragEnd}
                     >
-                        <div className={classes.infoArea}>
-                            <h1 className={classes.heading}>Jogo das Cores</h1>
-                            <p className={classes.paragraph}>Arraste as cores para seus respectivos animais.</p>
-                            <div className={classes.info}>
+                        <div className={styles.infoArea}>
+                            <h1 className={styles.heading}>Jogo das Cores</h1>
+                            <p className={styles.paragraph}>Arraste as cores para seus respectivos animais.</p>
+                            <div className={styles.info}>
                                 <Descriptions />
-                                <p className={classes.paragraph}>Coloque a cor favorita em cada bichinho.</p>
+                                <p className={styles.paragraph}>Coloque a cor favorita em cada bichinho.</p>
                             </div>
-                            <div className={classes.colorArea}>
+                            <div className={styles.colorArea}>
                                 <Colors />
                             </div>
                         </div>
-                        <div className={classes.cardGrid}>
+                        <div className={styles.cardGrid}>
                             <Cards />
                         </div>
                     </DndContext>
