@@ -1,9 +1,15 @@
+<<<<<<< HEAD:src/pages/Login.tsx
 import '../assets/styles/login.css'
+=======
+
+>>>>>>> b3060c15b582d20a1dcc9a176aa533c8ab3f0fca:src/pages/login/Login.tsx
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import UsuarioLogin from '../models/UsuarioLogin';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import React from 'react';
+import styles from './login.module.css'
+import { RotatingLines } from 'react-loader-spinner';
 
 function Login() {
   // Hook para navegar entre as páginas, usado para redirecionar o usuário após o login.
@@ -37,28 +43,30 @@ function Login() {
   // Previne o comportamento padrão do formulário (recarregar a página) e chama a função `handleLogin`.
   function login(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
+    console.log(usuarioLogin);
+    
     handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
   }
 
   return (
     <>
-      <div className="bodyLogin">
-        <div id="login-container">
+      <div className={styles.bodyLogin}>
+        <div className={styles.loginContainer}>
           <h1></h1>
-          <form id="login-form" onSubmit={login}>
-            <div className="full-box">
-              <label htmlFor="email">E-mail</label>
+          <form id="loginForm" onSubmit={login}>
+            <div className={styles.fullBox}>
+              <label htmlFor="usuario">E-mail</label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="usuario"
+                id="usuario"
+                name="usuario"
                 placeholder="Digite seu e-mail"
                 required
-                value={usuarioLogin.email}
+                value={usuarioLogin.usuario}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
             </div>
-            <div className="full-box">
+            <div className={styles.fullBox}>
               <label htmlFor="password">Senha</label>
               <input
                 type="password"
@@ -70,7 +78,20 @@ function Login() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
             </div>
-            <input type="submit" value="Entrar" />
+            <button className={styles.btnSubmit}
+              type="submit" value="Entrar"
+            >
+
+              {isLoading ? <RotatingLines
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="24"
+                visible={true}
+              /> :
+                <span>Entrar</span>
+              }
+            </button>
             <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
             <p><a href="/">Voltar Para Home</a></p>
           </form>
@@ -90,5 +111,4 @@ function Login() {
     </>
   )
 }
-
 export default Login

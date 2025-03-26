@@ -1,8 +1,8 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Usuario from '../models/Usuario'
-import { cadastrarUsuario } from '../services/Service'
-import '../assets/styles/Cadastro.css'
+import Usuario from '../../models/Usuario'
+import { cadastrarUsuario } from '../../services/Service'
+import styles from './cadastro.module.css';
 import React from 'react'
 
 function Cadastro() {
@@ -17,9 +17,10 @@ function Cadastro() {
   // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
   const [usuario, setUsuario] = useState<Usuario>({
     id: 0,
-    nomeResponsavel: '',
-    email: '',
+    nome: '',
+    usuario: '',
     senha: '',
+    foto: ''
   })
 
   // Hook de efeito que monitora a mudança no ID do usuário.
@@ -73,54 +74,54 @@ function Cadastro() {
 
   return (
     <>
-      <div className="bodyCad">
-        <div id="login-container" className="form-container">
+      <div className={styles.bodyCad}>
+        <div id="login-container" className={styles.formContainer}>
           <h1></h1>
-          <form className='formCad' id="login-form" onSubmit={cadastrarNovoUsuario}>
+          <form className={styles.formCad} id="login-form" onSubmit={cadastrarNovoUsuario}>
             <div className="half-box">
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-name">Nome do Pai/Responsável</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-name">Nome do Pai/Responsável</label>
                 <input
-                  className='inputCad'
+                  className={styles.inputCad}
                   type="text"
-                  name="nomeResponsavel"
+                  name="nome"
                   id="parent-name"
                   placeholder="Digite o nome do pai ou responsável"
                   required
-                  value={usuario.nomeResponsavel}
+                  value={usuario.nome}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-email">E-mail</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-usuario">E-mail</label>
                 <input
-                  className='inputCad'
-                  type="email"
-                  name="email"
-                  id="parent-email"
+                  className={styles.inputCad}
+                  type="usuario"
+                  name="usuario"
+                  id="parent-usuario"
                   placeholder="Digite o e-mail do pai ou responsável"
                   required
-                  value={usuario.email}
+                  value={usuario.usuario}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-password">Senha</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-password">Senha</label>
                 <input
                   type="password"
                   id="parent-password"
                   name="senha"
                   placeholder="Digite a senha do pai ou responsável"
-                  className="inputCad"
+                  className={styles.inputCad}
                   required
                   value={usuario.senha}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
-              <div className="full-box">
-                <label className='labelCad' htmlFor="parent-password-confirmation">Confirmar Senha</label>
+              <div className={styles.fullBox}>
+                <label className={styles.labelCad} htmlFor="parent-password-confirmation">Confirmar Senha</label>
                 <input
-                  className='inputCad'
+                  className={styles.inputCad}
                   type="password"
                   name="senha"
                   id="parent-password-confirmation"
@@ -139,8 +140,8 @@ function Cadastro() {
         </div>
       </div>
       <div className="enabled">
-        <div className="active" vw-access-button></div>
-        <div vw-plugin-wrapper>
+        <div className="active" vw-access-button='true'></div>
+        <div vw-plugin-wrapper="true">
           <div className="vw-plugin-top-wrapper"></div>
         </div>
       </div>
