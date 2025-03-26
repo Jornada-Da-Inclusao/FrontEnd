@@ -81,35 +81,3 @@ input[type="radio"] {
 .item3:checked ~ .controls label[for="item-3"] {
   background-color: #333;
 }
-
-/* Media Queries para Responsividade */
-@media (max-width: 768px) {
-  .carousel {
-    height: 60vh;
-  }
-
-  .controls {
-    bottom: 5px; 
-  }
-
-  .controls label {
-    width: 8px; 
-    height: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel {
-    height: 50vh; 
-    padding-top: 40px; 
-  }
-
-  .controls {
-    bottom: 5px; 
-  }
-
-  .controls label {
-    width: 6px; 
-    height: 6px;
-  }
-}

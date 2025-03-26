@@ -17,34 +17,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
-<<<<<<< HEAD:src/assets/styles/About.css
-
-  .about-image {
-    width: 100%;
-    height: auto;
-    max-width: 300px;
-
-    .about-item p {
-      font-size: 1rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .about-container {
-      padding: 20px;
-    }
-
-    .about-container h2 {
-      font-size: 1.5rem;
-    }
-
-    .about-item p {
-      font-size: 0.9rem;
-    }
-  }
-}
-=======
   
   .aboutItem {
     display: flex;
@@ -114,4 +88,3 @@
   }
 }
   
->>>>>>> b3060c15b582d20a1dcc9a176aa533c8ab3f0fca:src/components/home/sobre/about.module.css

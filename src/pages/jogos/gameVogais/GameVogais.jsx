@@ -1,15 +1,8 @@
 import React from 'react';
-<<<<<<<< HEAD:src/pages/GameVogais.jsx
-import Letters from '../components/letters/Letters';
-import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
-
-import '../assets/styles/gameVogais.css';
-========
 import CompLetras from '../../../components/compLetras/CompLetras';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 import styles from './gameVogais.module.css';
->>>>>>>> b3060c15b582d20a1dcc9a176aa533c8ab3f0fca:src/pages/jogos/gameVogais/GameVogais.jsx
 
 function GameVogais({ letters }) {
     // Função para converter um número em uma letra do alfabeto (0 = A, 1 = B, etc.).
