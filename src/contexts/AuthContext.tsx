@@ -25,6 +25,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id: 0, // ID do usuário, inicia como 0.
         nome: "", // Nome do usuário, inicia como uma string vazia.
         email: "", // E-mail do usuário, inicia como uma string vazia.
+        usuario: "", // Login do usuário, inicia como uma string vazia.
+        foto: "", // Foto do usuário, inicia como uma string vazia.
         senha: "", // Senha do usuário, inicia como uma string vazia.
         token: "" // Token de autenticação, inicia como uma string vazia.
     });
@@ -47,11 +49,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Método para realizar o logout do usuário.
     function handleLogout() {
         setUsuario({
-            id: 0, // Reseta o ID do usuário para 0.
-            nome: "", // Reseta o nome do usuário para uma string vazia.
-            email: "", // Reseta o e-mail do usuário para uma string vazia.
-            senha: "", // Reseta a senha do usuário para uma string vazia.
-            token: "" // Reseta o token do usuário para uma string vazia.
+            id: 0,
+            nome: "",
+            email: "",
+            usuario: "",
+            foto: "",
+            senha: "",
+            token: ""
         });
     }
 
