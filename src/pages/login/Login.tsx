@@ -40,7 +40,7 @@ function Login() {
   function login(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(usuarioLogin);
-    
+
     handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
   }
 
@@ -58,7 +58,7 @@ function Login() {
                 name="usuario"
                 placeholder="Digite seu e-mail"
                 required
-                value={usuarioLogin.usuario}
+                value={(usuarioLogin.usuario as string)}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
             </div>
@@ -70,7 +70,7 @@ function Login() {
                 name="senha"
                 placeholder="Digite sua senha"
                 required
-                value={usuarioLogin.senha}
+                value={(usuarioLogin.senha) as string}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
             </div>
