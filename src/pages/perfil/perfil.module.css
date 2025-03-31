@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    width: 100%;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 60px;
+    margin-left: 250px;
+  }
+
+  body{
+    background-image: none;
+  }

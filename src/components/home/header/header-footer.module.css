@@ -7,13 +7,17 @@ div.head {
     align-items: center;
     gap: 5%;
     background-color: var(--white);
-    padding: 10px;
+    padding: 12px;
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
     position: fixed; /* Adiciona posição fixa */
     top: 0; /* Fixa o cabeçalho ao topo */
     left: 0; /* Alinha à esquerda */
     right: 0; /* Alinha à direita */
     z-index: 1000; /* Mantém o cabeçalho acima de outros elementos */
+}
+
+.head li{
+    margin-bottom: 0;
 }
 
 li > img {
@@ -29,7 +33,7 @@ li > img {
     cursor: pointer;
 }
 
-.linkStyles:last-child{
+.linkStylesLast{
     background-color: var(--red);
     padding: 10px 30px;
     border-radius: 25px;
@@ -38,7 +42,27 @@ li > img {
     transition: 0.5s;
 }
 
-.linkStyles:last-child:hover{
+.linkStylesLast:hover{
+    background-color: var(--white);
+    color: var(--red);
+    transition: 0.5s;
+}
+
+.linkStylesLast2{
+    background-color: var(--red);
+    flex-direction: row;
+    gap: 15px;
+    display: flex;
+    align-self: center;
+    padding: 10px 30px;
+    border-radius: 25px 0 0 25px;
+    color: var(--white);
+    border: 2px solid var(--red);
+    transition: 0.5s;
+}
+
+.linkStylesLast2:hover{
+    text-decoration: none;
     background-color: var(--white);
     color: var(--red);
     transition: 0.5s;
@@ -92,8 +116,36 @@ li {
     vertical-align: middle;
 }
 
+.logoutButton {
+    background-color: var(--red);
+    padding: 8px 30px;
+    border-radius:0 25px 25px 0;
+    color: var(--white);
+    border: 2px solid var(--red);
+    transition: 0.5s;
+  }
+  
+  .logoutButton:hover {
+    background-color: var(--white);
+    color: var(--red);
+    transition: 0.5s;
+  }
+  
+
 @media (max-width: 480px) {
     div.head {
         gap: 10px;
     }
 }
+
+.userArea {
+    display: flex;
+    gap: 2px; /* Espaçamento entre a imagem e o nome */
+  }
+  
+  .profileImage {
+    width: 25px; /* Ajuste o tamanho da imagem conforme necessário */
+    height: 25px; /* Ajuste o tamanho da imagem conforme necessário */
+    border-radius: 50%; /* Tornar a imagem redonda */
+    object-fit: cover; /* Para garantir que a imagem se ajuste corretamente */
+  }
