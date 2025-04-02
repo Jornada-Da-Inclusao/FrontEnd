@@ -96,6 +96,11 @@ form {
   background-color: #770c0c;
 }
 
+.btnSubmit svg{
+  align-self: center;
+  justify-self: center;
+}
+
 p {
   margin-top: 15px;
 }

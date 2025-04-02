@@ -4,9 +4,8 @@
   font-family: sans-serif;
     width: 325px;
     background: var(--red);
-    padding: 50px ; 
+    padding: 30px; 
     height: 100%;
-    transition: transform 0.3s ease;
     color: #333;
     position: fixed;
     text-align: center;
@@ -15,9 +14,10 @@
   .sidebar ul{
     display: flex;
     flex-direction: column;
-    gap: 20px;
     text-align: left;
     font-weight: bold;
+    gap: 10px;
+    font-size: small;
   }
 
   .sidebar ul a:hover{
@@ -30,7 +30,7 @@
 
   .sidebar .options{
     border-bottom: 3px solid white;
-    margin-top: 25%;
+    margin-top: 20px;
     font-size: x-large;
   }
 
@@ -45,7 +45,6 @@
     border-radius: 50%;
     cursor: pointer;
     font-size: 18px;
-    z-index: 1000;
   }
   
   .profilePicture {

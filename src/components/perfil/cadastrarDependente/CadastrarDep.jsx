@@ -1,5 +1,5 @@
-// src/components/CadastroForm.js
 import React, { useState } from "react";
+import styles from "../cadastrarDependente/cadastrarDep.module.css"
 
 const CadastroForm = () => {
     const [formData, setFormData] = useState({
@@ -20,18 +20,24 @@ const CadastroForm = () => {
     };
 
     return (
-        <div className="form-container">
-            <h1>Cadastro para Jogos Educativos</h1>
-            <p>Cadastre seu filho para participar das atividades interativas.</p>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="nome">Nome da Criança:</label>
-                <input type="text" id="nome" name="nome" value={formData.nome} onChange={handleChange} required />
+        <div className={styles.container}>
+            <div className={styles.content}>
+                <h2>Cadastrar dependentes</h2>
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="nome">Nome da Criança:</label>
+                    <input type="text" />
+                    <label htmlFor="idade">Idade:</label>
+                    <input type="number" min={3} max={10} />
+                    <label htmlFor="idade">Sexo:</label>
+                    <select name="" id="">
+                        <option value="" disabled>- escolha</option>
+                        <option value="">Masculino</option>
+                        <option value="">Feminino</option>
+                    </select>
 
-                <label htmlFor="idade">Idade:</label>
-                <input type="number" id="idade" name="idade" min="3" value={formData.idade} onChange={handleChange} required />
-
-                <button type="submit">Cadastrar</button>
-            </form>
+                    <button type="submit">Cadastrar</button>
+                </form>
+            </div>
         </div>
     );
 };
