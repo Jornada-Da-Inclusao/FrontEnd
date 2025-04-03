@@ -99,6 +99,7 @@ form {
 .btnSubmit svg{
   align-self: center;
   justify-self: center;
+  height: 100%;
 }
 
 p {
