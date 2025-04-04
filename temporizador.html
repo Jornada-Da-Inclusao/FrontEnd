@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Temporizador Tons Pastéis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3e4dc; /* tom pastel suave */
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+  
+    .clock-container {
+      width: 80px;
+      height: 80px;
+      background: conic-gradient(#db2d09 100%, #f1c5b5 0%);
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.5s ease;
+    }
+  
+    .clock-inner {
+      width: 65px;
+      height: 65px;
+      background: linear-gradient(45deg, #db2d09, #f1c5b5);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+  
+    #timer {
+      font-size: 0.9em;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      position: absolute;
+    }
+  
+    .alerta-final {
+      animation: pulse 1s infinite;
+    }
+  
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 5px 2px #db2d09;
+      }
+      50% {
+        box-shadow: 0 0 10px 4px #f45d3b;
+      }
+      100% {
+        box-shadow: 0 0 5px 2px #db2d09;
+      }
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="clock-container" id="progressCircle">
+    <div class="clock-inner">
+      <div id="timer">03:00</div>
+    </div>
+  </div>
+
+  <script>
+    const totalTime = 180;
+    let remainingTime = totalTime;
+
+    function updateDisplay() {
+      let minutes = Math.floor(remainingTime / 60);
+      let seconds = remainingTime % 60;
+      let formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById('timer').innerText = formattedTime;
+
+      let progress = (remainingTime / totalTime) * 100;
+      let circle = document.getElementById('progressCircle');
+      circle.style.background = `conic-gradient(#db2d09 ${progress}%, #f1c5b5 ${progress}%)`;
+    }
+
+    const countdown = setInterval(() => {
+      if (remainingTime <= 0) {
+        clearInterval(countdown);
+        document.getElementById("progressCircle").classList.add("alerta-final");
+        return;
+      }
+      remainingTime--;
+      updateDisplay();
+    }, 1000);
+
+    updateDisplay();
+  </script>
+</body>
+</html>
