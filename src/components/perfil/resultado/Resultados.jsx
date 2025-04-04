@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import styles1 from "../resultado/Resultados.module.css"; // Importando os estilos
-import styles2 from "../sidebar/Sidebar.module.css";  // Certifique-se de que o CSS está correto
+import styles1 from "../resultado/Resultados.module.css"; 
+import styles2 from "../sidebar/Sidebar.module.css";  
 
 
 const Resultados = () => {
@@ -24,16 +24,6 @@ const Resultados = () => {
 
     return (
         <div className={styles1.container}>
-            <aside className={styles1.sidebar}>
-                <nav className={styles2.menu}>
-                    <h2>Menu</h2>
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/resultados">Resultados</a></li>
-                    </ul>
-                </nav>
-            </aside>
-
             <main className={styles2.content}>
                 <header>
                     <h1>Resultados dos Jogos</h1>

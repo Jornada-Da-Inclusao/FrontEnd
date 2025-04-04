@@ -13,9 +13,10 @@ const Perfil = () => {
             <Sidebar />
             <main className={styles.content}>
                 <Routes>
+                    <Route path="/" element={<EditarUsuario />} />
+                    <Route path="/editar-usuario" element={<EditarUsuario />} />
                     <Route path="/cadastrar-dependente" element={<CadastroForm />} />
                     <Route path="/resultados" element={<Resultados />} />
-                    <Route path="/editar-usuario" element={<EditarUsuario />} />
                     <Route path="/editar-dependente" element={<EditarDep />} />
                 </Routes>
             </main>

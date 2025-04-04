@@ -1,5 +1,10 @@
 @import url('../../../assets/styles/color_pallete.css');
 
+h2,h3, input, label, select{
+    color: black;
+    background-color: transparent;
+}
+
 .container{
 align-items: center;
 justify-items: center;

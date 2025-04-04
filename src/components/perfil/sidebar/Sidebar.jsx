@@ -7,6 +7,7 @@ import { useContext } from "react";
 const Sidebar = () => {
     const { usuario, handleLogout } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(true);
+    const [fotoPerfil, setFotoPerfil] = useState(usuario?.foto || "/default-profile.png");
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);

@@ -2,6 +2,7 @@ import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Usuario from '../../models/Usuario'
 import { cadastrarUsuario } from '../../services/Service'
+import { RotatingLines } from 'react-loader-spinner'
 import styles from './cadastro.module.css'
 import React from 'react'
 
@@ -12,6 +13,9 @@ function Cadastro() {
 
   // Estado para armazenar a confirmação de senha.
   const [confirmaSenha, setConfirmaSenha] = useState<string>("")
+
+  const [loading, setLoading] = useState(false)
+
 
   // Estado que armazena os dados do usuário a ser cadastrado.
   // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
@@ -53,24 +57,24 @@ function Cadastro() {
 
   // Função assíncrona que é chamada ao enviar o formulário de cadastro.
   async function cadastrarNovoUsuario(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault() // Previne o comportamento padrão do formulário (recarregar a página).
-
-    // Verifica se a senha e a confirmação são iguais e se a senha possui ao menos 8 caracteres.
+    e.preventDefault()
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
       try {
-        // Tenta cadastrar o usuário usando a função `cadastrarUsuario`.
+        setLoading(true) // Ativa o spinner
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
         alert('Usuário cadastrado com sucesso!')
       } catch (error) {
         alert('Erro ao cadastrar o usuário!')
+      } finally {
+        setLoading(false) // Desativa o spinner
       }
     } else {
-      // Exibe um alerta caso as senhas sejam diferentes ou a senha seja menor que 8 caracteres.
       alert('Dados do usuário inconsistentes! Verifique as informações do cadastro.')
-      setUsuario({ ...usuario, senha: '' }) // Limpa a senha do usuário.
-      setConfirmaSenha('') // Limpa a confirmação de senha.
+      setUsuario({ ...usuario, senha: '' })
+      setConfirmaSenha('')
     }
   }
+  
 
   return (
     <>
@@ -131,8 +135,21 @@ function Cadastro() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => handleConfirmarSenha(e)}
                 />
               </div>
-              <input type="submit" value="Cadastrar" />
-
+              
+              <button type="submit" className={styles.btnSubmit} disabled={loading}>
+                {loading ? (
+                  <RotatingLines
+                    strokeColor="white"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="24"
+                    visible={true}
+                  />
+                ) : (
+                  "Cadastrar"
+                )}
+              </button>
+              
               <p>Já tem cadastro?<a href="/login">  Faça seu login</a></p>
               <p><a href="/">Voltar Para Home</a></p>
             </div>

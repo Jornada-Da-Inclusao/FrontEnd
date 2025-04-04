@@ -1,5 +1,7 @@
+@import url('./../../assets/styles/color_pallete.css');
+
 .bodyCad {
-  background-color: #f0f0f0;
+  background-color: var(--white);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,6 +34,10 @@
   display: flex;
   flex-direction: column;
   align-items: stretch; /* Alinha os inputs à largura do container */
+}
+
+.formCad input{
+  background-color: white;
 }
 
 .fullBox {
@@ -90,4 +96,30 @@ a {
 
 a:hover {
   text-decoration: underline; /* Adiciona sublinhado ao passar o mouse sobre o link */
+}
+
+.btnSubmit {
+  background-color: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  height: 35px;
+  /* Diminuir a altura do botão */
+  width: 100%;
+  /* Definir uma largura fixa */
+  cursor: pointer;
+  font-size: 0.9rem;
+  /* Reduzir o tamanho da fonte */
+  padding: 10px 10px;
+  /* Ajustar o padding para reduzir o tamanho geral */
+}
+
+.btnSubmit:hover {
+  background-color: #770c0c;
+}
+
+.btnSubmit svg{
+  align-self: center;
+  justify-self: center;
+  height: 100%;
 }

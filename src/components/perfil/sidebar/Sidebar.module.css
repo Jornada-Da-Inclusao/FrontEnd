@@ -55,7 +55,7 @@
     display: block;
     margin: 0 auto 10px auto;
     object-fit: cover;
-    border: 3px solid #D90404;
+    border: 2px solid var(--white);
   }
   
   .uploadContainer label {
