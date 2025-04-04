@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // se estiver usando React Router
+import { useNavigate } from 'react-router-dom';
 import styles from './jogoMemoria.module.css';
 
 // Importando imagens
@@ -10,7 +10,7 @@ import img4 from '../../../assets/images/memoria/pequena5.png';
 import imgPlaceholder from '../../../assets/images/memoria/rosa.png';
 
 const JogoMemoria = () => {
-    const navigate = useNavigate(); // Para redirecionamento
+    const navigate = useNavigate();
     const cardsData = [
         { name: "imagem1", img: img1 },
         { name: "imagem3", img: img2 },
@@ -28,6 +28,8 @@ const JogoMemoria = () => {
     const [cardsWon, setCardsWon] = useState([]);
     const [popupMessage, setPopupMessage] = useState('');
     const [showPopup, setShowPopup] = useState(false);
+    const [acertos, setAcertos] = useState(0);
+    const [erros, setErros] = useState(0);
 
     useEffect(() => {
         const shuffledCards = [...cardsData].sort(() => Math.random() - 0.5);
@@ -41,14 +43,13 @@ const JogoMemoria = () => {
         }
     }, [cardsChosenId]);
 
-    // Verifica se o jogo foi concluído, mas apenas se houver cartas combinadas
     useEffect(() => {
-        if (cardsWon.length > 0 && cardsWon.length === cards.length) {
+        if (cardsWon.length === 8) { // 4 combinações corretas = 8 índices
             setPopupMessage('Missão concluída!');
             setShowPopup(true);
-            setTimeout(() => navigate('/'), 2000); // Altere o caminho conforme necessário
+            setTimeout(() => navigate('/'), 2000);
         }
-    }, [cardsWon, cards.length, navigate]);
+    }, [cardsWon, navigate]);
 
     const handlePopupClose = () => setShowPopup(false);
 
@@ -61,17 +62,18 @@ const JogoMemoria = () => {
 
             if (optionOneId === optionTwoId) {
                 setPopupMessage('Você clicou na mesma imagem');
-                setShowPopup(true); // Exibe o popup apenas para a mesma imagem
+                setShowPopup(true);
             } else if (optionOneName === optionTwoName) {
                 setCardsWon(prev => [...prev, optionOneId, optionTwoId]);
-                // Não exibe popup para combinações corretas
+                setAcertos(prev => prev + 1); // Mantém acertos para controle em JS/Banco
+            } else {
+                setErros(prev => prev + 1); // Mantém erros para controle em JS/Banco
             }
             clearChosenCards();
         } else {
             console.error('IDs escolhidos estão fora do intervalo válido:', optionOneId, optionTwoId);
         }
     };
-
 
     const clearChosenCards = () => {
         setCardsChosen([]);
