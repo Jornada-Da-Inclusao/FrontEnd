@@ -1,7 +1,7 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Usuario from '../../models/Usuario'
-import { cadastrarUsuario } from '../../services/Service'
+import Usuario from '../../models/Usuario.js'
+import { cadastrarUsuario } from '../../services/Service.jsx'
 import styles from './cadastro.module.css';
 import React from 'react'
 
@@ -11,17 +11,11 @@ function Cadastro() {
   const navigate = useNavigate()
 
   // Estado para armazenar a confirmação de senha.
-  const [confirmaSenha, setConfirmaSenha] = useState<string>("")
+  const [confirmaSenha, setConfirmaSenha] = useState("")
 
   // Estado que armazena os dados do usuário a ser cadastrado.
   // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
-  const [usuario, setUsuario] = useState<Usuario>({
-    id: 0,
-    nome: '',
-    usuario: '',
-    senha: '',
-    foto: ''
-  })
+  const [usuario, setUsuario] = useState(Usuario)
 
   // Hook de efeito que monitora a mudança no ID do usuário.
   // Se o ID for diferente de zero, significa que o usuário foi cadastrado com sucesso,
@@ -37,22 +31,32 @@ function Cadastro() {
     navigate('/login')
   }
 
-  // Função que atualiza o estado do `usuario` com base nos valores digitados nos campos do formulário.
-  // O nome do campo (atributo `name`) é usado para identificar qual propriedade deve ser atualizada.
-  function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
+  /**
+    * Função que atualiza o estado do `usuario` com base nos valores digitados nos campos do formulário.
+    * O nome do campo (atributo `name`) é usado para identificar qual propriedade deve ser atualizada.
+    *
+    * @param {import("react").ChangeEvent} e
+    */
+  function atualizarEstado(e) {
     setUsuario({
       ...usuario,
       [e.target.name]: e.target.value
     })
   }
 
-  // Função que atualiza o estado da `confirmaSenha` quando o usuário digita na confirmação de senha.
-  function handleConfirmarSenha(e: ChangeEvent<HTMLInputElement>) {
+  /**
+    * Função que atualiza o estado da `confirmaSenha` quando o usuário digita na confirmação de senha.
+    * @param {import("react").ChangeEvent} e
+    */
+  function handleConfirmarSenha(e) {
     setConfirmaSenha(e.target.value)
   }
 
-  // Função assíncrona que é chamada ao enviar o formulário de cadastro.
-  async function cadastrarNovoUsuario(e: FormEvent<HTMLFormElement>) {
+  /**
+    * Função assíncrona que é chamada ao enviar o formulário de cadastro.
+    * @param {import("react").ChangeEvent} e
+    */
+  async function cadastrarNovoUsuario(e) {
     e.preventDefault() // Previne o comportamento padrão do formulário (recarregar a página).
 
     // Verifica se a senha e a confirmação são iguais e se a senha possui ao menos 8 caracteres.
@@ -89,7 +93,7 @@ function Cadastro() {
                   placeholder="Digite o nome do pai ou responsável"
                   required
                   value={usuario.nome}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={(e) => atualizarEstado(e)}
                 />
               </div>
               <div className={styles.fullBox}>
@@ -102,7 +106,7 @@ function Cadastro() {
                   placeholder="Digite o e-mail do pai ou responsável"
                   required
                   value={usuario.usuario}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={(e) => atualizarEstado(e)}
                 />
               </div>
               <div className={styles.fullBox}>
@@ -115,7 +119,7 @@ function Cadastro() {
                   className={styles.inputCad}
                   required
                   value={usuario.senha}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={(e) => atualizarEstado(e)}
                 />
               </div>
               <div className={styles.fullBox}>
@@ -128,7 +132,7 @@ function Cadastro() {
                   placeholder="Digite novamente a senha"
                   required
                   value={confirmaSenha}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleConfirmarSenha(e)}
+                  onChange={(e) => handleConfirmarSenha(e)}
                 />
               </div>
               <input type="submit" value="Cadastrar" />

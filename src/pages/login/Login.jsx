@@ -1,8 +1,7 @@
-
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import UsuarioLogin from '../../models/UsuarioLogin';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import styles from './login.module.css'
 import { RotatingLines } from 'react-loader-spinner';
@@ -15,8 +14,8 @@ function Login() {
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
   // Estado para armazenar os dados de login do usuário, como e-mail e senha.
-  const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>(
-    {} as UsuarioLogin // Inicializa o estado com um objeto vazio que segue a interface `UsuarioLogin`.
+  const [usuarioLogin, setUsuarioLogin] = useState(
+    UsuarioLogin // Inicializa o estado com um objeto vazio que segue a interface `UsuarioLogin`.
   );
 
   // Hook de efeito que redireciona o usuário para a página '/home' se o login for bem-sucedido e um token for retornado.
@@ -26,21 +25,29 @@ function Login() {
     }
   }, [usuario, navigate]);
 
-  // Função que atualiza o estado `usuarioLogin` quando os campos do formulário mudam.
-  // Cada alteração nos campos de entrada é armazenada no estado usando o `name` dos inputs para definir a chave.
-  function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
+  /**
+    * Função que atualiza o estado `usuarioLogin` quando os campos do formulário mudam.
+    * Cada alteração nos campos de entrada é armazenada no estado usando o `name` dos inputs para definir a chave.
+    *
+    * @param {import("react").ChangeEvent} e
+    */
+  function atualizarEstado(e) {
     setUsuarioLogin({
       ...usuarioLogin,
       [e.target.name]: e.target.value
     });
   }
 
-  // Função que é chamada ao submeter o formulário de login.
-  // Previne o comportamento padrão do formulário (recarregar a página) e chama a função `handleLogin`.
-  function login(e: ChangeEvent<HTMLFormElement>) {
+  /**
+    * Função que é chamada ao submeter o formulário de login.
+    * Previne o comportamento padrão do formulário (recarregar a página) e chama a função `handleLogin`.
+    *
+    * @param {import("react").ChangeEvent} e
+    */
+  function login(e) {
     e.preventDefault();
     console.log(usuarioLogin);
-    
+
     handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
   }
 
@@ -59,7 +66,7 @@ function Login() {
                 placeholder="Digite seu e-mail"
                 required
                 value={usuarioLogin.usuario}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                onChange={(e) => atualizarEstado(e)}
               />
             </div>
             <div className={styles.fullBox}>
@@ -71,7 +78,7 @@ function Login() {
                 placeholder="Digite sua senha"
                 required
                 value={usuarioLogin.senha}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                onChange={(e) => atualizarEstado(e)}
               />
             </div>
             <button className={styles.btnSubmit}

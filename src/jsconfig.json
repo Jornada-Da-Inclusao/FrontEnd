@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "checkJs": true
+    "strictNullChecks": true
+  }
+  "exclude": ["node_modules", "docs"]
+}
