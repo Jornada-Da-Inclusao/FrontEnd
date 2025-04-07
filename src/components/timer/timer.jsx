@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import "./timer.css";
 
-const Timer = ({ isActive, resetTrigger }) => {
+const Timer = ({ isActive, resetTrigger, onTimeUpdate }) => {
   const totalTime = 180;
   const [remainingTime, setRemainingTime] = useState(totalTime);
 
-  // Reinicia o timer quando o resetTrigger muda
   useEffect(() => {
     setRemainingTime(totalTime);
   }, [resetTrigger]);
 
-  // Lógica do timer
   useEffect(() => {
     if (!isActive || remainingTime <= 0) return;
 
@@ -21,13 +19,19 @@ const Timer = ({ isActive, resetTrigger }) => {
     return () => clearInterval(countdown);
   }, [isActive, remainingTime]);
 
-  // Formata tempo
   const minutes = Math.floor(remainingTime / 60);
   const seconds = remainingTime % 60;
   const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-  // Estilo visual
+  // Envia o tempo formatado para o componente pai a cada atualização
+  useEffect(() => {
+    if (onTimeUpdate) {
+      onTimeUpdate(formattedTime);
+    }
+  }, [formattedTime, onTimeUpdate]); // Atualiza sempre que o tempo muda
+
   const progress = (remainingTime / totalTime) * 100;
+
   const circleStyle = {
     width: "80px",
     height: "80px",
@@ -42,8 +46,6 @@ const Timer = ({ isActive, resetTrigger }) => {
     right: "20px",
     transition: "all 0.5s ease",
   };
-
-  <Timer tempoInicial={60} />
 
   return (
     <div style={circleStyle} className={remainingTime === 0 ? "alerta-final" : ""}>

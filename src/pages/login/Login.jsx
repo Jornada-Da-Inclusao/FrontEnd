@@ -11,7 +11,7 @@ function Login() {
   const navigate = useNavigate();
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
-  const [usuarioLogin, setUsuarioLogin] = useState({ email: '', senha: '' });
+  const [usuarioLogin, setUsuarioLogin] = useState({ usuario: '', senha: '' });
 
   useEffect(() => {
     if (usuario && usuario.token !== '') {
@@ -42,10 +42,10 @@ function Login() {
               <input
                 type="email"
                 id="email"
-                name="email"
+                name="usuario"
                 placeholder="Digite seu e-mail"
                 required
-                value={usuarioLogin.email}
+                value={usuarioLogin.usuario}
                 onChange={atualizarEstado}
               />
             </div>

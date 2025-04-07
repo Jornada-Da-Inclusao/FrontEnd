@@ -73,3 +73,12 @@ export const atualizar = async (url: string, dados: Object, setDados: Function, 
 export const deletar = async (url: string, header: Object) => {
     await api.delete(url, header); // Envia uma requisição DELETE para o servidor.
 };
+
+
+
+// jogo da memoria
+
+export const registrarJogo = async (url: string, dados: Object, setDados: Function, header: Object) => {
+    const resposta = await api.post(url, dados, header)
+    setDados(resposta.data)
+}
