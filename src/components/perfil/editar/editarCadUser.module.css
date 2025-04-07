@@ -25,7 +25,8 @@ justify-items: center;
 .content form h2{
     font-size: x-large;
     font-weight: bolder;
-    align-self: center;
+    width: 100%;
+    text-align: center;
     border-bottom: 3px solid var(--red);
 }
 
@@ -53,4 +54,16 @@ justify-items: center;
     border: 2px solid var(--red);
     color: var(--red);
     transition: 0.2s;
+}
+
+.content button{
+    width: 100%;
+    color: var(--red);
+    margin-top: 10px;
+    background-color: transparent;
+    border: none;
+}
+
+.content button:hover{
+    text-decoration: underline;
 }

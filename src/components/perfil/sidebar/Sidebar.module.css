@@ -60,7 +60,7 @@
   
   .uploadContainer label {
     display: block;
-    background: #D90404;
+    background: var(--red);
     border: 2px solid var(--white);
     color: var(--white);
     padding: 8px 12px;

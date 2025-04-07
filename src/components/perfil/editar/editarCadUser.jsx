@@ -16,6 +16,7 @@ const EditarUsuario = () => {
                     <input type="password" />
                     <button>Alterar dados</button>
                 </form>
+                    <button>Deletar Conta</button>  
             </div>
         </div>
     )
