@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './faceJogoVogais.module.css';
+import image from '../../../assets/images/jacare-removebg.png'
 import {
     DndContext,
     useDroppable,
@@ -45,7 +46,7 @@ function FaceJogoVogais() {
                         ))}
                     </div>
                 </div>
-                <img className={styles.bgImage} src="/src/assets/images/jacare-removebg.png" alt="" />
+                <img className={styles.bgImage} src={image} alt="" />
             </>
         );
     };
