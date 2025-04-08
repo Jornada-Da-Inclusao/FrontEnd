@@ -1,26 +1,20 @@
 import React, { useState } from "react";
-import styles from "../cadastrarDependente/cadastrarDep.module.css"
+import styles from "../cadastrarDependente/cadastrarDep.module.css";
+import axios from "axios";
 
 const CadastroForm = () => {
-    const [formData, setFormData] = useState({
-        nome: "",
-        idade: ""
-    });
+    const [nome, setNome] = useState("");
+    const [dataNascimento, setDataNascimento] = useState("");
+    const [sexo, setSexo] = useState("");
+    const [avatarSelecionado, setAvatarSelecionado] = useState("");
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+    const hoje = new Date();
+    const anoAtual = hoje.getFullYear();
+    const dataMinima = new Date(anoAtual - 10, hoje.getMonth(), hoje.getDate());
+    const dataMaxima = new Date(anoAtual - 3, hoje.getMonth(), hoje.getDate());
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        alert("Cadastro realizado com sucesso!");
-    };
+    const formatarData = (data) => data.toISOString().split('T')[0];
 
-
-    // lugar de onde tirei os icones: https://www.svgrepo.com/svg/420338/avatar-person-pilot
     const icons = [
         "https://www.svgrepo.com/show/420338/avatar-person-pilot.svg",
         "https://www.svgrepo.com/show/420345/fighter-luchador-man.svg",
@@ -34,20 +28,64 @@ const CadastroForm = () => {
         "https://www.svgrepo.com/show/420334/avatar-bad-breaking.svg",
         "https://www.svgrepo.com/show/420343/avatar-joker-squad.svg",
         "https://www.svgrepo.com/show/420347/avatar-einstein-professor.svg"
-    ]
+    ];
 
+    const calcularIdade = (nascimento) => {
+        const dataNasc = new Date(nascimento);
+        const diff = hoje - dataNasc;
+        const idade = new Date(diff).getUTCFullYear() - 1970;
+        return idade;
+    };
 
-    // checa a idade pela data e impede menor de 3 e maior de 10
-    const hoje = new Date()
-    const anoAtual = hoje.getFullYear()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const dataMinima = new Date(anoAtual - 10, hoje.getMonth(), hoje.getDate())
-    const dataMaxima = new Date(anoAtual - 3, hoje.getMonth(), hoje.getDate())
+        if (!avatarSelecionado || !nome || !dataNascimento || !sexo) {
+            alert("Preencha todos os campos e selecione um avatar.");
+            return;
+        }
 
-    const formatarData = (data) => data.toISOString().split('T')[0]
+        const idade = calcularIdade(dataNascimento);
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        const usuarioId = usuario?.id;
 
-    // seleciona o icone e guarda sua url no avatarSelecionado
-    const [avatarSelecionado, setAvatarSelecionado] = useState("");
+        if (!usuarioId) {
+            alert("Erro: usuário não encontrado.");
+            return;
+        }
+
+        const dependente = { // mudar o back pra receber so o valor do id, e tbm permitir enviar a url do avatar
+            nome,
+            idade,
+            sexo,
+            usuario_id_fk: {
+                id: usuarioId
+              }           
+        };     
+
+        const token = localStorage.getItem("token");
+
+        try {
+
+            const response = await axios.post(
+                "https://backend-9qjw.onrender.com/dependente",
+                dependente,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            alert("Cadastro realizado com sucesso!");
+            console.log(response.data); 
+
+        } catch (error) {
+            alert("Erro ao cadastrar dependente");
+            console.error(error);
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -61,6 +99,7 @@ const CadastroForm = () => {
                             <img
                                 src={icon}
                                 className={avatarSelecionado === icon ? styles.avatarSelecionado : ""}
+                                alt={`avatar ${index}`}
                             />
                         </button>
                     ))}
@@ -68,18 +107,28 @@ const CadastroForm = () => {
 
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="nome">Nome da Criança:</label>
-                    <input type="text" />
-                    <label htmlFor="idade">Data de nascimento (minimo 3 anos, maximo 10 anos):</label>
+                    <input
+                        type="text"
+                        name="nome"
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                        required
+                    />
+
+                    <label htmlFor="dataNascimento">Data de nascimento (mínimo 3 anos, máximo 10 anos):</label>
                     <input
                         type="date"
                         name="dataNascimento"
                         min={formatarData(dataMinima)}
                         max={formatarData(dataMaxima)}
+                        value={dataNascimento}
+                        onChange={(e) => setDataNascimento(e.target.value)}
                         required
                     />
+
                     <label htmlFor="sexo">Sexo:</label>
-                    <select name="" id="">
-                        <option value="" disabled selected>--- escolha ---</option>
+                    <select value={sexo} onChange={(e) => setSexo(e.target.value)} required>
+                        <option value="" disabled>--- escolha ---</option>
                         <option value="M">Masculino</option>
                         <option value="F">Feminino</option>
                     </select>
@@ -87,7 +136,7 @@ const CadastroForm = () => {
                     <button type="submit">Cadastrar</button>
                 </form>
             </div>
-        </div >
+        </div>
     );
 };
 

@@ -1,25 +1,16 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Usuario from '../../models/Usuario'
 import { cadastrarUsuario } from '../../services/Service'
 import { RotatingLines } from 'react-loader-spinner'
 import styles from './cadastro.module.css'
-import React from 'react'
 
 function Cadastro() {
-
-  // Hook para navegar entre as páginas, usado para redirecionar o usuário.
   const navigate = useNavigate()
 
-  // Estado para armazenar a confirmação de senha.
-  const [confirmaSenha, setConfirmaSenha] = useState<string>("")
-
+  const [confirmaSenha, setConfirmaSenha] = useState("")
   const [loading, setLoading] = useState(false)
 
-
-  // Estado que armazena os dados do usuário a ser cadastrado.
-  // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
-  const [usuario, setUsuario] = useState<Usuario>({
+  const [usuario, setUsuario] = useState({
     id: 0,
     nome: '',
     usuario: '',
@@ -27,46 +18,38 @@ function Cadastro() {
     foto: ''
   })
 
-  // Hook de efeito que monitora a mudança no ID do usuário.
-  // Se o ID for diferente de zero, significa que o usuário foi cadastrado com sucesso,
-  // então redireciona para a página de login.
   useEffect(() => {
     if (usuario.id !== 0) {
-      retornar() // Chama a função que redireciona para o login.
+      retornar()
     }
   }, [usuario])
 
-  // Função que redireciona para a página de login.
   function retornar() {
     navigate('/login')
   }
 
-  // Função que atualiza o estado do `usuario` com base nos valores digitados nos campos do formulário.
-  // O nome do campo (atributo `name`) é usado para identificar qual propriedade deve ser atualizada.
-  function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
+  function atualizarEstado(e) {
     setUsuario({
       ...usuario,
       [e.target.name]: e.target.value
     })
   }
 
-  // Função que atualiza o estado da `confirmaSenha` quando o usuário digita na confirmação de senha.
-  function handleConfirmarSenha(e: ChangeEvent<HTMLInputElement>) {
+  function handleConfirmarSenha(e) {
     setConfirmaSenha(e.target.value)
   }
 
-  // Função assíncrona que é chamada ao enviar o formulário de cadastro.
-  async function cadastrarNovoUsuario(e: FormEvent<HTMLFormElement>) {
+  async function cadastrarNovoUsuario(e) {
     e.preventDefault()
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
       try {
-        setLoading(true) // Ativa o spinner
+        setLoading(true)
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
         alert('Usuário cadastrado com sucesso!')
       } catch (error) {
         alert('Erro ao cadastrar o usuário!')
       } finally {
-        setLoading(false) // Desativa o spinner
+        setLoading(false)
       }
     } else {
       alert('Dados do usuário inconsistentes! Verifique as informações do cadastro.')
@@ -74,7 +57,6 @@ function Cadastro() {
       setConfirmaSenha('')
     }
   }
-  
 
   return (
     <>
@@ -93,7 +75,7 @@ function Cadastro() {
                   placeholder="Digite o nome do pai ou responsável"
                   required
                   value={usuario.nome}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={atualizarEstado}
                 />
               </div>
               <div className={styles.fullBox}>
@@ -106,7 +88,7 @@ function Cadastro() {
                   placeholder="Digite o e-mail do pai ou responsável"
                   required
                   value={usuario.usuario}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={atualizarEstado}
                 />
               </div>
               <div className={styles.fullBox}>
@@ -119,7 +101,7 @@ function Cadastro() {
                   className={styles.inputCad}
                   required
                   value={usuario.senha}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={atualizarEstado}
                 />
               </div>
               <div className={styles.fullBox}>
@@ -132,10 +114,10 @@ function Cadastro() {
                   placeholder="Digite novamente a senha"
                   required
                   value={confirmaSenha}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleConfirmarSenha(e)}
+                  onChange={handleConfirmarSenha}
                 />
               </div>
-              
+
               <button type="submit" className={styles.btnSubmit} disabled={loading}>
                 {loading ? (
                   <RotatingLines
@@ -149,13 +131,14 @@ function Cadastro() {
                   "Cadastrar"
                 )}
               </button>
-              
+
               <p>Já tem cadastro?<a href="/login">  Faça seu login</a></p>
               <p><a href="/">Voltar Para Home</a></p>
             </div>
           </form>
         </div>
       </div>
+
       <div className="enabled">
         <div className="active" vw-access-button='true'></div>
         <div vw-plugin-wrapper="true">
@@ -164,10 +147,9 @@ function Cadastro() {
       </div>
       <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
       <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
+        {`new window.VLibras.Widget('https://vlibras.gov.br/app');`}
       </script>
       <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
-
     </>
   )
 }
