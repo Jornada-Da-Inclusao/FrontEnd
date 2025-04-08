@@ -39,6 +39,7 @@ const JogoMemoria = () => {
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
     const idJogoMemoria = 1
+    const idDependente = 1
     const {registrarInfos } = useContext(JogoContext);
     const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     const { usuario } = useContext(AuthContext)
@@ -65,10 +66,7 @@ const JogoMemoria = () => {
         setTime(newTime);  // Atualiza o estado com o novo tempo
     };
 
-    function registrarInfosJogo() {   
-        console.log(infoJogoMemoria);
-        console.log(token);
-             
+    function registrarInfosJogo() {                
         registrarInfos(infoJogoMemoria,token);
     }
 
@@ -96,7 +94,11 @@ const JogoMemoria = () => {
             erros: erros,
             infoJogos_id_fk: {
                 id: idJogoMemoria
+            },
+            dependente: {
+                id: idDependente
             }
+            
         });
         if (cardsWon.length === 8) { // Quando 8 cartas forem combinadas (4 pares de cartas)
             console.log(infoJogoMemoria);

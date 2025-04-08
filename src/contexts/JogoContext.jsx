@@ -14,6 +14,9 @@ export function JogoProvider({ children }) {
         "erros": 0,
         "infoJogos_id_fk": {
           "id": 0
+        },
+        "dependente": {
+            "id": 0
         }
     });
     // Função para registrar as informações do jogo
