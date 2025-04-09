@@ -46,8 +46,6 @@ function Login() {
     */
   function login(e) {
     e.preventDefault();
-    console.log(usuarioLogin);
-
     handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
   }
 

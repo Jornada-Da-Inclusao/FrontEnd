@@ -10,7 +10,7 @@ import axios from "axios";
 const api = axios.create({
     // A URL base é definida usando uma variável de ambiente ou um valor padrão.
     // Aqui, está sendo utilizada uma URL local para desenvolvimento.
-    baseURL: 'https://backend-9qjw.onrender.com/'
+    baseURL: 'http://localhost:8080/'
 });
 
 /**
@@ -78,3 +78,10 @@ export const atualizar = async (url, dados, setDados, header) => {
 export const deletar = async (url, header) => {
     await api.delete(url, header); // Envia uma requisição DELETE para o servidor.
 };
+
+
+// jogos
+export const registrarJogo = async (url, dados, setDados, header) => {
+    const resposta = await api.post(url, dados, header)
+    setDados(resposta.data)
+}
