@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+  * @param {any[]} arr - Array to be randomized
+  * @returns {any[]}
+  */
 export function Random(arr) {
 	let currIndex = arr.length;
 
