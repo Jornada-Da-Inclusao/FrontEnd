@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     DndContext,
@@ -8,14 +8,19 @@ import {
     PointerSensor,
 } from "@dnd-kit/core";
 
+import { JogoContext } from '@/contexts/JogoContext';
+import { AuthContext } from '@/contexts/AuthContext';
 import { randomizeArr } from '@/utils/utils.js'
 import NumerosGrid from '@components/jogoNumeros/NumerosGrid/NumerosGrid.jsx';
-import styles from './JogoNumeros.module.css'
+import Timer from "@components/timer/Timer.jsx";
+import styles from './JogoNumeros.module.css';
 
 export default function JogoNumeros() {
     const dialog = useRef(HTMLDialogElement)
     const navigate = useNavigate();
     const sensors = useSensors(useSensor(PointerSensor));
+    const [popupMessage, setPopupMessage] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
     const [numbers, setNumbers] = useState(
         Array.from({ length: 10 }, (_, index) => ({
             id: index + 1, // Identificador único para cada número.
@@ -25,16 +30,59 @@ export default function JogoNumeros() {
     const [droppedNumbers, setDroppedNumbers] = useState([]);
     const [acertos, setAcertos] = useState(0);
     const [erros, setErros] = useState(0);
-    const [popupMessage, setPopupMessage] = useState('');
-    const [showPopup, setShowPopup] = useState(false);
+    const [tentativas, setTentativas] = useState(0);
+    const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
+    const idJogoNumeros = 2;
+    const idDependente = 1;
+    const { registrarInfos } = useContext(JogoContext);
+    const [infoJogoNumeros, setInfoJogoNumeros] = useState({});
+    const { usuario } = useContext(AuthContext);
 
     useEffect(() => {
-        const shuffledNumbers = randomizeArr([...numbers])
+        if (usuario.token === "") {
+            alert("Você precisa estar logado");
+            navigate("/");
+        }
+    }, [usuario.token]);
+    const token = usuario.token;
+
+    useEffect(() => {
+        const shuffledNumbers = randomizeArr([...numbers]);
         setNumbers(shuffledNumbers);
     }, []);
 
+    const convertToMinutes = (time) => {
+        // Divide o tempo em minutos e segundos
+        const [minutes, seconds] = time.split(":").map(Number);
+
+        // Converte tudo para minutos, incluindo os segundos
+        return minutes + seconds / 60;
+    };
+
+    const handleTimeUpdate = (newTime) => {
+        setTime(newTime);  // Atualiza o estado com o novo tempo
+    };
+
+    function registrarInfosJogo() {
+        registrarInfos(infoJogoNumeros, token);
+    }
+
     useEffect(() => {
+        setInfoJogoNumeros({
+            tempoTotal: convertToMinutes(time),
+            tentativas: tentativas,
+            acertos: acertos,
+            erros: erros,
+            infoJogos_id_fk: {
+                id: idJogoNumeros
+            },
+            dependente: {
+                id: idDependente
+            }
+        });
+
         if (droppedNumbers.length === 10) {
+            registrarInfosJogo();
             setPopupMessage('Missão concluída!');
             setShowPopup(true);
         }
@@ -42,9 +90,9 @@ export default function JogoNumeros() {
 
     useEffect(() => {
         if (dialog.current?.open && !showPopup) {
-            dialog.current?.close()
+            dialog.current?.close();
         } else if (!dialog.current?.open && showPopup) {
-            dialog.current?.showModal()
+            dialog.current?.showModal();
         }
     }, [showPopup])
 
@@ -74,6 +122,8 @@ export default function JogoNumeros() {
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
+        setTentativas(prev => prev + 1);
+
         // Se o item não for solto sobre uma área válida, incremente erros.
         if (!over) {
             setErros(prev => prev + 1);
@@ -84,10 +134,12 @@ export default function JogoNumeros() {
 
         if (!numberToDrop) return;
 
-        // Se há números anteriores ao número arrastado, não faça nada
+        // Se há números anteriores ao número arrastado, incremente erros.
         const less = numbers.find(number => number.value < numberToDrop.value);
-
-        if (less) return;
+        if (less) {
+            setErros(prev => prev + 1);
+            return;
+        }
 
         setDroppedNumbers(prev => [...prev, numberToDrop]);
         setNumbers(prevNumbers => prevNumbers.filter(number => number.id !== numberToDrop.id));
@@ -96,6 +148,7 @@ export default function JogoNumeros() {
 
     return (
         <>
+            <Timer isActive={true} resetTrigger={false} onTimeUpdate={handleTimeUpdate} />
             <div className={styles.gameWrapper}>
                 <section className={styles.container}>
                     <h1 className={styles.heading}>Jogo dos Números</h1>

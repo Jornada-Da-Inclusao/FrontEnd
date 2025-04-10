@@ -1,0 +1,16 @@
+.alerta-final {
+    animation: pulse 1s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 5px 2px #db2d09;
+    }
+    50% {
+      box-shadow: 0 0 10px 4px #f45d3b;
+    }
+    100% {
+      box-shadow: 0 0 5px 2px #db2d09;
+    }
+  }
+  

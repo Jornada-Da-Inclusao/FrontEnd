@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode } from "react";
-import UsuarioLogin from "@/models/UsuarioLogin";
-import { login } from "@/services/Service";
+import UsuarioLogin from "../models/UsuarioLogin";
+import { login } from "../services/Service";
 
 /**
   * Define a interface para o contexto de autenticação, incluindo o estado do usuário e métodos de login e logout.
@@ -42,6 +42,8 @@ export function AuthProvider({ children }) {
             await login(`/usuarios/logar`, usuarioLogin, setUsuario); // Chama o método de login.
             alert("O Usuário foi autenticado com sucesso!"); // Mensagem de sucesso.
         } catch (error) {
+          console.log(error);
+          
             alert("Os Dados do usuário estão inconsistentes!"); // Mensagem de erro caso o login falhe.
         }
         setIsLoading(false); // Finaliza a operação de login.

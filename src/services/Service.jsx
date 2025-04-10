@@ -78,3 +78,10 @@ export const atualizar = async (url, dados, setDados, header) => {
 export const deletar = async (url, header) => {
     await api.delete(url, header); // Envia uma requisição DELETE para o servidor.
 };
+
+
+// jogos
+export const registrarJogo = async (url, dados, setDados, header) => {
+    const resposta = await api.post(url, dados, header)
+    setDados(resposta.data)
+}
