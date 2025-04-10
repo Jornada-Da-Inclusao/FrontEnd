@@ -9,7 +9,7 @@ import {
     closestCorners, // Importa a estratégia de detecção de colisão que identifica quando um item está próximo dos cantos de outra área.
 } from "@dnd-kit/core"; // Importa os componentes essenciais para drag-and-drop da biblioteca `@dnd-kit/core`.
 
-import CompJogoVogais from '../../../../components/compJogoVogais/CompJogoVogais'; // Importa o componente que renderiza as letras arrastáveis do jogo.
+import CompJogoVogais from '@components/compJogoVogais/CompJogoVogais'; // Importa o componente que renderiza as letras arrastáveis do jogo.
 
 
 function JogoVogais() {
@@ -24,7 +24,7 @@ function JogoVogais() {
 
     // Estado que armazena as letras que foram arrastadas e soltas na área de destino.
     const [droppedLetras, setDroppedLetras] = useState([]);
-    
+
     // Configura os sensores de arraste com o `PointerSensor`, que detecta interações de mouse ou toque.
     const sensors = useSensors(useSensor(PointerSensor));
 
@@ -46,7 +46,7 @@ function JogoVogais() {
                     ))}
                 </div>
                 <div className={Style.bgImage}>
-                    <img src="'../../assets/images/jacare-removebg.png" alt="" />
+                    <img src="'@assets/images/jacare-removebg.png" alt="" />
                 </div>
             </div>
         );
@@ -65,9 +65,9 @@ function JogoVogais() {
             const letraToDrop = letras.find(letra => letra.id === active.id);
 
             // Verifica se a letra ainda não foi solta e se é uma vogal.
-            if (letraToDrop && !droppedLetras.some(letra => letra.id === letraToDrop.id) && 
+            if (letraToDrop && !droppedLetras.some(letra => letra.id === letraToDrop.id) &&
                 (letraToDrop.id === 1 || letraToDrop.id === 5 || letraToDrop.id === 9 || letraToDrop.id === 15 || letraToDrop.id === 21)) {
-                
+
                 // Adiciona a letra à lista de letras que foram soltas.
                 setDroppedLetras(prev => [...prev, letraToDrop]);
                 // Remove a letra da lista de letras arrastáveis.

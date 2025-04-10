@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@pages/*": ["./src/pages/*"]
+    },
     "checkJs": true,
     "jsx": "react",
     "strictNullChecks": true
   },
-  "exclude": ["node_modules", "**/node_modules/*", "docs"]
+  "exclude": ["node_modules", "**/node_modules/*", "build", "dist", "docs"]
 }

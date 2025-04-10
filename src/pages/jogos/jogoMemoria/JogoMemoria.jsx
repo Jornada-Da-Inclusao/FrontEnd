@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'; // se estiver usando React Route
 import styles from './jogoMemoria.module.css';
 
 // Importando imagens
-import img1 from '../../../assets/images/memoria/pequena.png';
-import img2 from '../../../assets/images/memoria/pequena3.png';
-import img3 from '../../../assets/images/memoria/pequena4.png';
-import img4 from '../../../assets/images/memoria/pequena5.png';
-import imgPlaceholder from '../../../assets/images/memoria/rosa.png';
+import img1 from '@assets/images/memoria/pequena.png';
+import img2 from '@assets/images/memoria/pequena3.png';
+import img3 from '@assets/images/memoria/pequena4.png';
+import img4 from '@assets/images/memoria/pequena5.png';
+import imgPlaceholder from '@assets/images/memoria/rosa.png';
 
 const JogoMemoria = () => {
     const navigate = useNavigate(); // Para redirecionamento

@@ -1,7 +1,7 @@
 import React from "react";
-import { random } from "../../hooks/utils.js"
+import { randomizeArr } from "@/utils/utils.js"
 import { colors } from "./Data.jsx"
-import styles from '../../assets/styles/jogoCores.module.css'
+import styles from '@assets/styles/jogoCores.module.css'
 
 function ColorSqr({ color }) {
   return (
@@ -18,5 +18,5 @@ export function Colors() {
     <ColorSqr color={element} />
   )
 
-  return random(colorSqrs)
+  return randomizeArr(colorSqrs)
 }

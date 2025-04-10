@@ -1,9 +1,9 @@
-import imgCoelho from "../../assets/images/animals/coelho.png"
-import imgBorboleta from "../../assets/images/animals/borboleta.png"
-import imgSapo from "../../assets/images/animals/sapo.png"
-import imgLeao from "../../assets/images/animals/leao.png"
-import imgPeixinho from "../../assets/images/animals/peixinho.png"
-import imgJoaninha from "../../assets/images/animals/joaninha.png"
+import imgCoelho from "@assets/images/animals/coelho.png"
+import imgBorboleta from "@assets/images/animals/borboleta.png"
+import imgSapo from "@assets/images/animals/sapo.png"
+import imgLeao from "@assets/images/animals/leao.png"
+import imgPeixinho from "@assets/images/animals/peixinho.png"
+import imgJoaninha from "@assets/images/animals/joaninha.png"
 
 export const animalsData = [
   { id: 0, name: "Coelho", article: "O", img: imgCoelho },

@@ -1,10 +1,9 @@
-import React from 'react';
-
 /**
+  * Randomize an array
   * @param {any[]} arr - Array to be randomized
   * @returns {any[]}
   */
-export function Random(arr) {
+export function randomizeArr(arr) {
 	let currIndex = arr.length;
 
 	while (currIndex != 0) {
@@ -17,4 +16,13 @@ export function Random(arr) {
 	}
 
 	return arr;
+}
+
+/**
+  * Generate a random number limited to num
+  * @param {Number} num - Limit
+  * @returns {Number}
+  */
+export function randomizeNum(num) {
+	return Math.floor(Math.random() * num)
 }

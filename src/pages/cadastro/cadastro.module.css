@@ -19,7 +19,7 @@
 
 /* Título do formulário */
 .bodyCad h1 {
-  background-image: url("../../assets/images/LOGO.png");
+  background-image: url("@/assets/images/LOGO.png");
   background-size: contain; /* Mantém a proporção da imagem */
   background-repeat: no-repeat; /* Evita que a imagem se repita */
   background-position: center;

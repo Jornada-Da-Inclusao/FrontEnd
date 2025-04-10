@@ -1,0 +1,14 @@
+.numberDragList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 2em;
+
+  /* TODO: Encontrar uma lógica para o tamanho da margem. No momento, os números a serem arrastados entram em contato
+    com a área de números arrastados caso margin-top não seja especificado */
+  margin-inline: auto;
+  margin-block: 1rem;
+  margin-top: 3rem;
+  width: 95%;
+
+  font-weight: var(--fw-bold);
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import CompLetras from '../../../components/compLetras/CompLetras';
+import CompLetras from '@components/compLetras/CompLetras';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 import styles from './gameVogais.module.css';

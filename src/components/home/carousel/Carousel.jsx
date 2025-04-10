@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './carousel.module.css';
 
-import img1 from '../../../assets/images/img1.jpeg';
-import img2 from '../../../assets/images/img2.jpeg';
-import img3 from '../../../assets/images/img3.jpeg';
+import img1 from '@assets/images/img1.jpeg';
+import img2 from '@assets/images/img2.jpeg';
+import img3 from '@assets/images/img3.jpeg';
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,7 +14,7 @@ const Carousel = () => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000); // Troca a imagem a cada 3 segundos
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [images.length]);
 
   // TODO: Turn this into an accessible carousel according to W3 guidelines

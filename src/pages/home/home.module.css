@@ -1,7 +1,7 @@
-@import url("../../assets/styles/color_pallete.css");
+@import url("@assets/styles/color_pallete.css");
 
 div.home {
-  background-image: url("../../assets/images/background-home.jpg");
+  background-image: url("@assets/images/background-home.jpg");
   background-size: 50%;
   background-position: top;
   background-repeat: repeat;

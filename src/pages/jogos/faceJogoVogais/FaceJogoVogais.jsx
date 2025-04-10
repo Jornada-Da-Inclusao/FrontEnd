@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './faceJogoVogais.module.css';
-import image from '../../../assets/images/jacare-removebg.png'
+import image from '@assets/images/jacare-removebg.png'
 import {
     DndContext,
     useDroppable,

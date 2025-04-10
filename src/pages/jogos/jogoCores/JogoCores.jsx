@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { animalsData, colorsData, stringsData } from '../../../components/jogoCores/Data.jsx'
 import {
     DndContext,
     useDroppable,
@@ -10,7 +9,10 @@ import {
     useDraggable
 } from '@dnd-kit/core'
 import { CSS } from "@dnd-kit/utilities";
-import { random } from "../../../hooks/utils.js"
+
+import { randomizeNum } from "@/utils/utils.js"
+import { animalsData, colorsData, stringsData } from '@components/jogoCores/Data.jsx'
+
 import styles from './jogoCores.module.css'
 
 export default function JogoNumeros() {
@@ -125,7 +127,7 @@ export default function JogoNumeros() {
     const Descriptions = () => {
         const descriptions = animalsData.map(element => {
             const color = colorsData.at(element.id);
-            const string = stringsData.at(element.id) || stringsData.at(random(stringsData.length));
+            const string = stringsData.at(element.id) || stringsData.at(randomizeNum(stringsData.length));
 
             return (
                 <Description

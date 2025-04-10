@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode } from "react";
-import UsuarioLogin from "../models/UsuarioLogin";
-import { login } from "../services/Service";
+import UsuarioLogin from "@/models/UsuarioLogin";
+import { login } from "@/services/Service";
 
 /**
   * Define a interface para o contexto de autenticação, incluindo o estado do usuário e métodos de login e logout.

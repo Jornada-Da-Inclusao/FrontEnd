@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Usuario from '../../models/Usuario.js'
-import { cadastrarUsuario } from '../../services/Service.jsx'
+import Usuario from '@/models/Usuario.js'
+import { cadastrarUsuario } from '@/services/Service.jsx'
 import styles from './cadastro.module.css';
 import React from 'react'
 

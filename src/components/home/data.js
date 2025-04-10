@@ -1,7 +1,7 @@
-import imgCores from "../../assets/images/cores.jpg"
-import imgMemoria from "../../assets/images/memoria.png"
-import imgNumeros from "../../assets/images/numeros.png"
-import imgVogais from "../../assets/images/vogais.jpg"
+import imgCores from "@assets/images/cores.jpg"
+import imgMemoria from "@assets/images/memoria.png"
+import imgNumeros from "@assets/images/numeros.png"
+import imgVogais from "@assets/images/vogais.jpg"
 
 export const cardsData = [
 	{
