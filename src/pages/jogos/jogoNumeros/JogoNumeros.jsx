@@ -38,12 +38,12 @@ export default function JogoNumeros() {
   const [infoJogoNumeros, setInfoJogoNumeros] = useState({});
   const { usuario } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (usuario.token === "") {
-      alert("Você precisa estar logado");
-      navigate("/");
-    }
-  }, [usuario.token]);
+  // useEffect(() => {
+  //   if (usuario.token === "") {
+  //     alert("Você precisa estar logado");
+  //     navigate("/");
+  //   }
+  // }, [usuario.token]);
   const token = usuario.token;
 
   useEffect(() => {
@@ -63,26 +63,26 @@ export default function JogoNumeros() {
     setTime(newTime); // Atualiza o estado com o novo tempo
   };
 
-  function registrarInfosJogo() {
-    registrarInfos(infoJogoNumeros, token);
-  }
+  // function registrarInfosJogo() {
+  //   registrarInfos(infoJogoNumeros, token);
+  // }
 
   useEffect(() => {
-    setInfoJogoNumeros({
-      tempoTotal: convertToMinutes(time),
-      tentativas: tentativas,
-      acertos: acertos,
-      erros: erros,
-      infoJogos_id_fk: {
-        id: idJogoNumeros,
-      },
-      dependente: {
-        id: idDependente,
-      },
-    });
+    // setInfoJogoNumeros({
+    //   tempoTotal: convertToMinutes(time),
+    //   tentativas: tentativas,
+    //   acertos: acertos,
+    //   erros: erros,
+    //   infoJogos_id_fk: {
+    //     id: idJogoNumeros,
+    //   },
+    //   dependente: {
+    //     id: idDependente,
+    //   },
+    // });
 
     if (droppedNumbers.length === 10) {
-      registrarInfosJogo();
+      // registrarInfosJogo();
       setPopupMessage("Missão concluída!");
       setShowPopup(true);
     }
