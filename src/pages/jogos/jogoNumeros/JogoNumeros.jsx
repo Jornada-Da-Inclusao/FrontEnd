@@ -16,7 +16,7 @@ import Timer from "@components/timer/Timer.jsx";
 import styles from "./JogoNumeros.module.css";
 
 export default function JogoNumeros() {
-  const dialog = useRef(new HTMLDialogElement);
+  const dialog = useRef(Object.prototype.constructor(HTMLDialogElement));
   const navigate = useNavigate();
   const sensors = useSensors(useSensor(PointerSensor));
   const [popupMessage, setPopupMessage] = useState("");

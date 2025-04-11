@@ -34,7 +34,7 @@ export default function Login() {
   function atualizarEstado(e) {
     setUsuarioLogin({
       ...usuarioLogin,
-      [e.target]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   }
 
@@ -54,11 +54,11 @@ export default function Login() {
       <div className={styles.bodyLogin}>
         <div className={styles.loginContainer}>
           <h1></h1>
-          <form id="loginForm" onSubmit={(login)}>
+          <form id="loginForm" onSubmit={login}>
             <div className={styles.fullBox}>
               <label htmlFor="usuario">E-mail</label>
               <input
-                type="usuario"
+                type="email"
                 id="usuario"
                 name="usuario"
                 placeholder="Digite seu e-mail"

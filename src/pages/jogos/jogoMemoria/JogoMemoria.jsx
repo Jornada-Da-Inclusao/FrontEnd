@@ -98,6 +98,7 @@ export default function JogoMemoria() {
         id: idDependente,
       },
     });
+
     if (cardsWon.length === 8) {
       // Quando 8 cartas forem combinadas (4 pares de cartas)
       console.log(infoJogoMemoria);
