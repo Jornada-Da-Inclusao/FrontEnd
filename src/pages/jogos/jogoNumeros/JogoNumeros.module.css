@@ -16,6 +16,7 @@
   border-radius: 1em;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
   padding: 2rem;
+  padding-bottom: 0px;
   width: min(800px, 100%);
 
   > .heading {
