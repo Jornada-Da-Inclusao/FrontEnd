@@ -100,7 +100,7 @@ function Cadastro() {
                 <label className={styles.labelCad} htmlFor="parent-usuario">E-mail</label>
                 <input
                   className={styles.inputCad}
-                  type="usuario"
+                  type="email"
                   name="usuario"
                   id="parent-usuario"
                   placeholder="Digite o e-mail do pai ou responsável"
