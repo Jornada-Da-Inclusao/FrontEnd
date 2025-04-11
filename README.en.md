@@ -49,7 +49,7 @@ This project aims to contribute directly to the following SDG:
 
 ## Team Members
 
-- [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo) 
+- [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo)
 - [Manuela Tenorio da Silva](https://github.com/ManuelaTenorio)
 - [Marcos Vinícius de Oliveira](https://github.com/ViniMarkos283)
 - [Pedro Henrique Santos Bernardo](https://github.com/Pedro-HSB)
@@ -67,7 +67,7 @@ This project aims to contribute directly to the following SDG:
 
 ### IDEs
 
-[![My Skills](https://skillicons.dev/icons?i=vscode,neovim,idea&perline=3)](https://skillicons.dev) 
+[![My Skills](https://skillicons.dev/icons?i=vscode,neovim,idea&perline=3)](https://skillicons.dev)
 
 ### Frameworks
 
@@ -79,16 +79,16 @@ This project aims to contribute directly to the following SDG:
 
 ## Color Palette
 
-| Color      | Hexadecimal                                                |
-|------------|------------------------------------------------------------|
-| Color 1    | ![#f0f0f0](https://via.placeholder.com/10/f0f0f0?text=+) `#f0f0f0` |
-| Color 2    | ![#d9d9d9](https://via.placeholder.com/10/d9d9d9?text=+) `#d9d9d9` |
-| Color 3    | ![#bfbfbf](https://via.placeholder.com/10/bfbfbf?text=+) `#bfbfbf` |
-| Color 4    | ![#a6a6a6](https://via.placeholder.com/10/a6a6a6?text=+) `#a6a6a6` |
-| Color 5    | ![#8c8c8c](https://via.placeholder.com/10/8c8c8c?text=+) `#8c8c8c` |
-| White      | ![#ffffff](https://via.placeholder.com/10/ffffff?text=+) `#ffffff` |
-| Black      | ![#000000](https://via.placeholder.com/10/000000?text=+) `#000000` |
-| Red        | ![#FF0000](https://via.placeholder.com/10/FF0000?text=+) `#FF0000` |
+| Color   | Hexadecimal                                                        |
+| ------- | ------------------------------------------------------------------ |
+| Color 1 | ![#f0f0f0](https://via.placeholder.com/10/f0f0f0?text=+) `#f0f0f0` |
+| Color 2 | ![#d9d9d9](https://via.placeholder.com/10/d9d9d9?text=+) `#d9d9d9` |
+| Color 3 | ![#bfbfbf](https://via.placeholder.com/10/bfbfbf?text=+) `#bfbfbf` |
+| Color 4 | ![#a6a6a6](https://via.placeholder.com/10/a6a6a6?text=+) `#a6a6a6` |
+| Color 5 | ![#8c8c8c](https://via.placeholder.com/10/8c8c8c?text=+) `#8c8c8c` |
+| White   | ![#ffffff](https://via.placeholder.com/10/ffffff?text=+) `#ffffff` |
+| Black   | ![#000000](https://via.placeholder.com/10/000000?text=+) `#000000` |
+| Red     | ![#FF0000](https://via.placeholder.com/10/FF0000?text=+) `#FF0000` |
 
 ## Usage
 
@@ -160,6 +160,5 @@ The system is hosted via Firebase Hosting and can be accessed through the follow
 - Adjustments needed for the overall layout responsiveness of the system.
 
 ## Final Considerations
+
 We, maintainers of the "Journey of Inclusion" project, thank the contributions and guidance from the instructors whose subjects took part in the Integrating Project subject, and our classmates from other cycles who attended our presentation and accessed this repository to better understand our project.
-
-

@@ -1,13 +1,15 @@
-import React from "react"
+import React from "react";
 import { useDraggable } from "@dnd-kit/core"; // Importa o hook useDraggable da biblioteca @dnd-kit
 import { CSS } from "@dnd-kit/utilities"; // Importa utilidades da biblioteca @dnd-kit
 
-import styles from './Numero.module.css'; // Importa o estilo do componente
+import styles from "./Numero.module.css"; // Importa o estilo do componente
 
 // Define o componente Letters, que representa uma letra que pode ser arrastada.
 function Numeros({ id, value }) {
   // Usa o hook useDraggable para tornar o componente arrastável.
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: id });
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: id,
+  });
 
   // Define estilos dinâmicos que mudam com a transformação.
   const dynamicStyles = {
@@ -28,4 +30,4 @@ function Numeros({ id, value }) {
   );
 }
 
-export default Numeros
+export default Numeros;

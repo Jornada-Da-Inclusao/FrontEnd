@@ -67,6 +67,7 @@
       auto-fit,
       minmax(var(--grid-col-min-size-calc), 1fr)
     );
+
     /* Ajusta a altura da área de números arrastados com o container */
     grid-auto-rows: minmax(calc(var(--min-height) / 2 - 2.5rem), 1fr);
     align-content: space-between;

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import styles from './carousel.module.css';
+import React, { useEffect, useState } from "react";
 
-import img1 from '@assets/images/img1.jpeg';
-import img2 from '@assets/images/img2.jpeg';
-import img3 from '@assets/images/img3.jpeg';
+import img1 from "@assets/images/img1.jpeg";
+import img2 from "@assets/images/img2.jpeg";
+import img3 from "@assets/images/img3.jpeg";
+import styles from "./carousel.module.css";
 
-const Carousel = () => {
+export default function Carouse() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [img1, img2, img3];
 
@@ -21,15 +21,36 @@ const Carousel = () => {
   // (https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)
   return (
     <div className={styles.carouselSection} id="pagina-principal">
-      <input type="radio" name="carousel" id="item-1" className={styles.item1} checked={currentIndex === 0} readOnly />
-      <input type="radio" name="carousel" id="item-2" className={styles.item2} checked={currentIndex === 1} readOnly />
-      <input type="radio" name="carousel" id="item-3" className={styles.item3} checked={currentIndex === 2} readOnly />
+      <input
+        type="radio"
+        name="carousel"
+        id="item-1"
+        className={styles.item1}
+        checked={currentIndex === 0}
+        readOnly
+      />
+      <input
+        type="radio"
+        name="carousel"
+        id="item-2"
+        className={styles.item2}
+        checked={currentIndex === 1}
+        readOnly
+      />
+      <input
+        type="radio"
+        name="carousel"
+        id="item-3"
+        className={styles.item3}
+        checked={currentIndex === 2}
+        readOnly
+      />
 
       <div className={styles.carouselInner}>
         {images.map((img, index) => (
           <div
             key={index}
-            className={`${styles.carouselItem} ${index === currentIndex ? styles.active : ''}`}
+            className={`${styles.carouselItem} ${index === currentIndex ? styles.active : ""}`}
           >
             <img src={img} alt={`Slide ${index + 1}`} />
           </div>
@@ -43,6 +64,4 @@ const Carousel = () => {
       </div>
     </div>
   );
-};
-
-export default Carousel;
+}

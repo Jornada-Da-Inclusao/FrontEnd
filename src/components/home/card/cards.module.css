@@ -31,33 +31,32 @@
     transform: translateY(-5px);
   }
 
-  >.image {
+  > .image {
     border-radius: 1em 1em 0 0;
     margin-bottom: 1em;
     width: 100%;
   }
 
-  >.card-text {
+  > .card-text {
     color: var(--clr-neutral-500);
     font-size: var(--fs-600);
     font-weight: var(--fw-semi-bold);
     text-decoration: none;
   }
 
-  >.card-text>.title {
+  > .card-text > .title {
     margin-bottom: 1em;
 
     text-decoration: none;
   }
 
-  >.card-text>.description {
+  > .card-text > .description {
     color: var(--clr-neutral-600);
     font-size: var(--fs-400);
     font-weight: var(--fw-light);
 
     padding: 1em;
   }
-
 }
 
 .card:hover {

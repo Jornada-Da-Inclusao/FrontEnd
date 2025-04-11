@@ -48,7 +48,7 @@ Este projeto visa contribuir diretamente para os seguintes ODS:
 
 ## Integrantes
 
-- [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo) 
+- [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo)
 - [Manuela Tenorio da Silva](https://github.com/ManuelaTenorio)
 - [Marcos Vinícius de Oliveira](https://github.com/ViniMarkos283)
 - [Pedro Henrique Santos Bernardo](https://github.com/Pedro-HSB)
@@ -66,7 +66,7 @@ Este projeto visa contribuir diretamente para os seguintes ODS:
 
 ### IDEs
 
-[![My Skills](https://skillicons.dev/icons?i=vscode,neovim,idea&perline=3)](https://skillicons.dev) 
+[![My Skills](https://skillicons.dev/icons?i=vscode,neovim,idea&perline=3)](https://skillicons.dev)
 
 ### Frameworks
 
@@ -78,16 +78,16 @@ Este projeto visa contribuir diretamente para os seguintes ODS:
 
 ## Paleta de Cores
 
-| Cor        | Hexadecimal                                                |
-|------------|------------------------------------------------------------|
-| Cor 1     | ![#f0f0f0](https://via.placeholder.com/10/f0f0f0?text=+) `#f0f0f0` |
-| Cor 2     | ![#d9d9d9](https://via.placeholder.com/10/d9d9d9?text=+) `#d9d9d9` |
-| Cor 3     | ![#bfbfbf](https://via.placeholder.com/10/bfbfbf?text=+) `#bfbfbf` |
-| Cor 4     | ![#a6a6a6](https://via.placeholder.com/10/a6a6a6?text=+) `#a6a6a6` |
-| Cor 5     | ![#8c8c8c](https://via.placeholder.com/10/8c8c8c?text=+) `#8c8c8c` |
-| Branco     | ![#ffffff](https://via.placeholder.com/10/ffffff?text=+) `#ffffff` |
-| Preto      | ![#000000](https://via.placeholder.com/10/000000?text=+) `#000000` |
-| Vermelho   | ![#FF0000](https://via.placeholder.com/10/FF0000?text=+) `#FF0000` |
+| Cor      | Hexadecimal                                                        |
+| -------- | ------------------------------------------------------------------ |
+| Cor 1    | ![#f0f0f0](https://via.placeholder.com/10/f0f0f0?text=+) `#f0f0f0` |
+| Cor 2    | ![#d9d9d9](https://via.placeholder.com/10/d9d9d9?text=+) `#d9d9d9` |
+| Cor 3    | ![#bfbfbf](https://via.placeholder.com/10/bfbfbf?text=+) `#bfbfbf` |
+| Cor 4    | ![#a6a6a6](https://via.placeholder.com/10/a6a6a6?text=+) `#a6a6a6` |
+| Cor 5    | ![#8c8c8c](https://via.placeholder.com/10/8c8c8c?text=+) `#8c8c8c` |
+| Branco   | ![#ffffff](https://via.placeholder.com/10/ffffff?text=+) `#ffffff` |
+| Preto    | ![#000000](https://via.placeholder.com/10/000000?text=+) `#000000` |
+| Vermelho | ![#FF0000](https://via.placeholder.com/10/FF0000?text=+) `#FF0000` |
 
 ## Utilização
 

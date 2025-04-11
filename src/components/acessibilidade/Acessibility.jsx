@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-const Acessibility = () => {
+export default function Acessibility() {
   useEffect(() => {
-    const script = document.createElement('script');
+    const script = document.createElement("script");
     script.src = "https://website-widgets.pages.dev/dist/sienna.min.js";
     script.defer = true;
     document.body.appendChild(script);
@@ -11,6 +11,4 @@ const Acessibility = () => {
       document.body.removeChild(script);
     };
   }, []);
-};
-
-export default Acessibility;
+}

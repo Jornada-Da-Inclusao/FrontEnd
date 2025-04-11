@@ -1,31 +1,36 @@
-import styles from './contact.module.css';
-import React from 'react';
+import React from "react";
 
-const Contact = () => {
+import styles from "./contact.module.css";
+
+export default function Contact() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = Object.fromEntries(new FormData(event.target));
 
     try {
-      fetch('https://api.sheetmonkey.io/form/8GgQTUFYCm3iY6P6Szkqj3', {
-        method: 'POST',
+      fetch("https://api.sheetmonkey.io/form/8GgQTUFYCm3iY6P6Szkqj3", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       }).then((result) => {
         if (result.ok) {
-          alert('Mensagem enviada com sucesso!');
+          alert("Mensagem enviada com sucesso!");
           event.target.reset();
         } else {
-          console.error('Erro:', result.statusText);
-          alert('Ocorreu um erro ao enviar a mensagem. Tente novamente mais tarde.');
+          console.error("Erro:", result.statusText);
+          alert(
+            "Ocorreu um erro ao enviar a mensagem. Tente novamente mais tarde.",
+          );
         }
       });
     } catch (error) {
-      console.error('Erro:', error);
-      alert('Ocorreu um erro ao enviar a mensagem. Tente novamente mais tarde.');
+      console.error("Erro:", error);
+      alert(
+        "Ocorreu um erro ao enviar a mensagem. Tente novamente mais tarde.",
+      );
     }
   };
 
@@ -58,10 +63,10 @@ const Contact = () => {
           required
         ></textarea>
 
-        <button type="submit" role='button' className='button'>Enviar</button>
+        <button type="submit" role="button" className="button">
+          Enviar
+        </button>
       </form>
     </section>
   );
-};
-
-export default Contact;
+}
