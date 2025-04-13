@@ -40,7 +40,8 @@ const CadastroForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!avatarSelecionado || !nome || !dataNascimento || !sexo) {
+        // !avatarSelecionado || // só add quando tiver o campo
+        if ( !avatarSelecionado || !nome || !dataNascimento || !sexo) {
             alert("Preencha todos os campos e selecione um avatar.");
             return;
         }
@@ -54,43 +55,41 @@ const CadastroForm = () => {
             return;
         }
 
-        const dependente = { // mudar o back pra receber so o valor do id, e tbm permitir enviar a url do avatar
+        const dependente = { 
             nome,
             idade,
             sexo,
+            foto: avatarSelecionado,
             usuario_id_fk: {
                 id: usuarioId
               }           
-        };     
-
+        };  
+        
         const token = localStorage.getItem("token");
 
         try {
-
             const response = await axios.post(
                 "https://backend-9qjw.onrender.com/dependente",
                 dependente,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: token,
                         "Content-Type": "application/json",
                     },
                 }
             );
 
             alert("Cadastro realizado com sucesso!");
-            console.log(response.data); 
 
         } catch (error) {
             alert("Erro ao cadastrar dependente");
-            console.error(error);
         }
     };
 
     return (
         <div className={styles.container}>
             <div className={styles.content}>
-                <h2>Cadastrar dependentes</h2>
+                <h2>Cadastrar crianças</h2>
 
                 <h3>Escolha um avatar:</h3>
                 <div className={styles.figures}>

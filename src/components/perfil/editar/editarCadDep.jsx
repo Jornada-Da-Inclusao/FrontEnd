@@ -7,33 +7,123 @@ const EditarDep = () => {
     dataNascimento: "",
     sexo: "",
   });
-
   const [ids, setIds] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [avatarSelecionado, setAvatarSelecionado] = useState("");
 
+  // Função para buscar usuário e token
+  const getUserData = () => {
+    const usuarioData = localStorage.getItem("usuario");
+    const token = localStorage.getItem("token");
+    if (!usuarioData || !token) {
+      console.error("Usuário ou token não encontrado no localStorage.");
+      return null;
+    }
+    return { usuario: JSON.parse(usuarioData), token };
+  };
+
   useEffect(() => {
-    fetch("http://localhost:3000/api/ids")
-      .then((res) => res.json())
-      .then((data) => setIds(data)) // deve retornar um array de objetos: [{ id: 1, nome: 'Fulano', foto: '...' }]
-      .catch((err) => console.error("Erro ao buscar IDs:", err));
+    const { usuario, token } = getUserData() || {};
+    if (!usuario || !token) return;
+
+    const fetchDependentes = async () => {
+      try {
+        const res = await fetch(
+          `https://backend-9qjw.onrender.com/dependente/getDependenteByIdUsuario/${usuario.id}`,
+          {
+            headers: {
+              "Authorization": token,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
+        const data = await res.json();
+        setIds(data);
+      } catch (err) {
+        console.error("Erro ao buscar IDs:", err);
+      }
+    };
+
+    fetchDependentes();
   }, []);
 
   const handleSelectId = (e) => {
-    setSelectedId(Number(e.target.value));
+    const id = Number(e.target.value);
+    setSelectedId(id);
+
+    const dependente = ids.find((dep) => dep.id === id);
+    if (dependente) {
+      setFormData({
+        nome: dependente.nome,
+        dataNascimento: dependente.dataNascimento,
+        sexo: dependente.sexo,
+      });
+      setAvatarSelecionado(dependente.avatar || ""); // Aqui ajusta o avatar com base no dependente
+    }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Dados alterados com sucesso!");
+
+    const { usuario, token } = getUserData() || {};
+    if (!usuario || !token) return;
+
+    try {
+      const res = await fetch(
+        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Authorization": token,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nome: formData.nome,
+            idade: formData.dataNascimento,
+            sexo: formData.sexo,
+            foto: avatarSelecionado,
+            usuarioId: usuario.id,
+          }),
+        }
+      );
+      if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
+      alert("Dados alterados com sucesso!");
+    } catch (err) {
+      console.error("Erro ao alterar dependente:", err);
+    }
+  };
+
+  const handleRemove = async () => {
+    const confirmDelete = window.confirm("Tem certeza que deseja remover este dependente?");
+    if (!confirmDelete || !selectedId) return;
+
+    const { usuario, token } = getUserData() || {};
+    if (!usuario || !token) return;
+
+    try {
+      const res = await fetch(
+        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Authorization": token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
+      alert("Dependente removido com sucesso!");
+      setFormData({ nome: "", dataNascimento: "", sexo: "" });
+      setSelectedId(null);
+    } catch (err) {
+      console.error("Erro ao remover dependente:", err);
+    }
   };
 
   const hoje = new Date();
@@ -60,8 +150,7 @@ const EditarDep = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h2>Alterar dados dos dependentes</h2>
-
+        <h2>Alterar dados das crianças</h2>
         <h3>Alterar dados de qual criança:</h3>
         <select id="idSelect" value={selectedId ?? ""} onChange={handleSelectId}>
           <option value="" disabled>-- Escolha uma criança --</option>
@@ -124,7 +213,8 @@ const EditarDep = () => {
 
           <button type="submit">Alterar dados</button>
         </form>
-        <button>Remover dependente</button>
+
+        <button onClick={handleRemove}>Remover dependente</button>
       </div>
     </div>
   );

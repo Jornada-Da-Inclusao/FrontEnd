@@ -26,24 +26,17 @@ const Sidebar = () => {
             <aside className={`${styles.sidebar} ${isOpen ? "" : styles.hidden}`}>
                 <div className={styles.uploadContainer}>
                     <h2>Bem vindo, {usuario?.nome || "Usuário"}</h2>
-                    <img
-                        src={usuario?.foto || "/default-profile.png"}
-                        alt="Foto de perfil"
-                        className={styles.profilePicture}
-                        id="profileImage"
-                    />
-                    <label htmlFor="profileUpload">Alterar Foto</label>
-                    <input type="file" id="profileUpload" accept="image/*" onChange={previewImage} />
+                    
                 </div>
                 <nav className={styles.menu}>
                     <h2 className={styles.options}>Menu</h2>
                     <ul>
-                        <li><Link to="/perfil/editar-usuario">✏️ Editar dados do responsável</Link></li>
-                        <li><Link to="/perfil/cadastrar-dependente">📋 Cadastrar dependentes</Link></li>
-                        <li><Link to="/perfil/editar-dependente">✏️ Editar dados de dependentes</Link></li>
-                        <li><Link to="/perfil/resultados">📊 Ver Resultados</Link></li>
-                        <li><Link to="/">🏚️ Voltar à Home</Link></li>
-                        <li><Link to="/" onClick={handleLogout}> 🏃 Fazer Logout</Link></li>
+                        <li><Link to="/perfil/editar-usuario">✏️ - Editar dados do responsável</Link></li>
+                        <li><Link to="/perfil/cadastrar-dependente">📋 - Cadastrar criança</Link></li>
+                        <li><Link to="/perfil/editar-dependente">✏️ - Editar dados da criança</Link></li>
+                        <li><Link to="/perfil/resultados">📊 - Ver Resultados</Link></li>
+                        <li><Link to="/">🏚️ - Voltar à Home</Link></li>
+                        <li><Link to="/" onClick={handleLogout}> 🏃 - Fazer Logout</Link></li>
                     </ul>
                 </nav>
             </aside>
