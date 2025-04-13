@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "@pages/home/Home";
@@ -17,6 +16,8 @@ import {
   ExplicacaoNumeros,
   ExplicacaoVogais,
 } from "@components/explicacoes/Explicacoes";
+import { cardsData } from "@components/home/card/data"
+import "./App.css";
 
 export default function App() {
   return (
@@ -27,14 +28,14 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/jogo-cores-exp" element={<ExplicacaoCores />} />
-            <Route path="/jogo-memoria-exp" element={<ExplicacaoMemoria />} />
-            <Route path="/jogo-numeros-exp" element={<ExplicacaoNumeros />} />
-            <Route path="/jogo-vogais-exp" element={<ExplicacaoVogais />} />
-            <Route path="/jogo-memoria" element={<JogoMemoria />} />
-            <Route path="/jogo-numeros" element={<FaceJogoNumeros />} />
-            <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
-            <Route path="/jogo-cores" element={<JogoCores />} />
+            <Route path={cardsData.cores.explPath} element={<ExplicacaoCores />} />
+            <Route path={cardsData.memoria.explPath} element={<ExplicacaoMemoria />} />
+            <Route path={cardsData.numeros.explPath} element={<ExplicacaoNumeros />} />
+            <Route path={cardsData.vogais.explPath} element={<ExplicacaoVogais />} />
+            <Route path={cardsData.cores.jogoPath} element={<JogoCores />} />
+            <Route path={cardsData.memoria.jogoPath} element={<JogoMemoria />} />
+            <Route path={cardsData.numeros.jogoPath} element={<FaceJogoNumeros />} />
+            <Route path={cardsData.vogais.jogoPath} element={<FaceJogoVogais />} />
             <Route path="/login" element={<Login />} />
           </Routes>
         </Router>

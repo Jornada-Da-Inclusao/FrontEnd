@@ -17,7 +17,8 @@ export default function Carouse() {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  // TODO: Turn this into an accessible carousel according to W3 guidelines
+  // TODO: Transformar isso num carrossel conforme as guidelines de
+  // acessibilidade da w3
   // (https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)
   return (
     <div className={styles.carouselSection} id="pagina-principal">

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import styles from "./Explicacoes.module.css";
+import { cardsData } from "../home/card/data";
 
 export function ExplicacaoCores() {
   return (
@@ -14,7 +15,7 @@ export function ExplicacaoCores() {
             container do animal correspondente.
           </p>
           <div className={styles.choices}>
-            <Link className={styles.inlineButton} to="/jogo-cores">
+            <Link className={styles.inlineButton} to={cardsData.cores.jogoPath}>
               Ir ao Jogo
             </Link>
             <Link className={styles.inlineButton} to="/">
@@ -41,7 +42,7 @@ export function ExplicacaoMemoria() {
             é revelar todas as cartas.
           </p>
           <div className={styles.choices}>
-            <Link className={styles.inlineButton} to="/jogo-memoria">
+            <Link className={styles.inlineButton} to={cardsData.memoria.jogoPath}>
               Ir ao Jogo
             </Link>
             <Link className={styles.inlineButton} to="/">
@@ -65,7 +66,7 @@ export function ExplicacaoNumeros() {
             sequência numérica ao arrastá-los para o container.
           </p>
           <div className={styles.choices}>
-            <Link className={styles.inlineButton} to="/jogo-numeros">
+            <Link className={styles.inlineButton} to={cardsData.numeros.jogoPath}>
               Ir ao Jogo
             </Link>
             <Link className={styles.inlineButton} to="/">
@@ -89,7 +90,7 @@ export function ExplicacaoVogais() {
             inteiro, apenas as letras vogais para o container.
           </p>
           <div className={styles.choices}>
-            <Link className={styles.inlineButton} to="/jogo-vogais">
+            <Link className={styles.inlineButton} to={cardsData.vogais.jogoPath}>
               Ir ao Jogo
             </Link>
             <Link className={styles.inlineButton} to="/">

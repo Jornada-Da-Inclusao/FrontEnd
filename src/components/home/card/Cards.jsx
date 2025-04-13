@@ -4,23 +4,24 @@ import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 
 import Card from "./Card.jsx";
-import { cardsData } from "../data.js";
+import { cardsData } from "./data.js";
 import styles from "./cards.module.css";
 
 export default function Cards() {
-  const cards = cardsData.map((element) => (
+
+  const cards = Object.values(cardsData).map((value) => (
     <>
       <Link
         style={{ textDecoration: "none" }}
-        key={element.id}
-        to={element.explicacao}
+        key={value.id}
+        to={value.explPath}
       >
         <Card
-          key={element.id}
-          image={element.img}
-          alt={element.alt}
-          title={element.title}
-          desc={element.desc}
+          key={value.id}
+          image={value.img}
+          alt={value.alt}
+          title={value.title}
+          desc={value.desc}
         />
       </Link>
     </>
