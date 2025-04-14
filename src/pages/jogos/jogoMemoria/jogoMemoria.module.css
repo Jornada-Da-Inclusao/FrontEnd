@@ -1,19 +1,19 @@
-body {
-  background-color: #fffdfd;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0;
-  padding: 0;
-  background-image: linear-gradient(
-    100deg,
-    #b6d9d4 0%,
-    #fff8f8 35%,
-    #b6d9d4 100%
-  );
-  min-height: 95vh; /* Garante que o body tenha uma altura mínima de 100% da viewport */
-  overflow-y: auto; /* Adiciona rolagem vertical se necessário */
-}
+/* body { */
+/*   background-color: #fffdfd; */
+/*   background-size: cover; */
+/*   background-repeat: no-repeat; */
+/*   background-position: center; */
+/*   margin: 0; */
+/*   padding: 0; */
+/*   background-image: linear-gradient( */
+/*     100deg, */
+/*     #b6d9d4 0%, */
+/*     #fff8f8 35%, */
+/*     #b6d9d4 100% */
+/*   ); */
+/*   min-height: 95vh; /* Garante que o body tenha uma altura mínima de 100% da viewport */
+/*   overflow-y: auto; /* Adiciona rolagem vertical se necessário */
+/* } */
 
 /* Container principal do jogo */
 .gameContainer {

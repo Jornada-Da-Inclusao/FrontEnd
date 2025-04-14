@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
 }
 
 /* Container do formulário */
@@ -18,7 +18,7 @@
 }
 
 /* Título do formulário */
-.bodyCad h1 {
+.logo {
   background-image: url("@/assets/images/LOGO.png");
   background-size: contain; /* Mantém a proporção da imagem */
   background-repeat: no-repeat; /* Evita que a imagem se repita */
@@ -32,24 +32,22 @@
   display: flex;
   flex-direction: column;
   align-items: stretch; /* Alinha os inputs à largura do container */
+  gap: 1rem; /* Aumenta a margem entre os campos */
 }
 
 .fullBox {
-  margin-bottom: 15px; /* Aumenta a margem entre os campos */
 }
 
 .labelCad {
   font-weight: bold;
-  font-size: 0.9rem;
-  margin-left: 0.1cm;
-  text-align: left; /* Alinhar o texto à esquerda */
-  width: 150px; /* Ajustar a largura conforme necessário */
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 .inputCad {
-  padding: 10px; /* Inputs maiores */
+  padding: 0.66rem; /* Inputs maiores */
   font-size: 1rem;
-  border: 5px solid #ddd;
+  border: 3px solid #ddd;
   border-radius: 10px;
   margin-bottom: 10px;
   width: 100%; /* Faz os inputs ocuparem toda a largura do container */

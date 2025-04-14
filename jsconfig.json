@@ -6,6 +6,7 @@
       "@assets/*": ["./src/assets/*"],
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@ui/*": ["./src/components/ui/*"],
       "@pages/*": ["./src/pages/*"]
     },
     "checkJs": true,

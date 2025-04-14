@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import Usuario from "@/models/Usuario.js";
 import { cadastrarUsuario } from "@/services/Service.jsx";
+import Button from "@ui/form/Button";
 import styles from "./cadastro.module.css";
 
 function Cadastro() {
@@ -81,85 +82,83 @@ function Cadastro() {
     <>
       <div className={styles.bodyCad}>
         <div id="login-container" className={styles.formContainer}>
-          <h1></h1>
+          <h1 className={styles.logo}></h1>
           <form
             className={styles.formCad}
             id="login-form"
             onSubmit={cadastrarNovoUsuario}
           >
-            <div className="half-box">
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-name">
-                  Nome do Pai/Responsável
-                </label>
-                <input
-                  className={styles.inputCad}
-                  type="text"
-                  name="nome"
-                  id="parent-name"
-                  placeholder="Digite o nome do pai ou responsável"
-                  required
-                  value={usuario.nome}
-                  onChange={(e) => atualizarEstado(e)}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-usuario">
-                  E-mail
-                </label>
-                <input
-                  className={styles.inputCad}
-                  type="email"
-                  name="usuario"
-                  id="parent-usuario"
-                  placeholder="Digite o e-mail do pai ou responsável"
-                  required
-                  value={usuario.usuario}
-                  onChange={(e) => atualizarEstado(e)}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-password">
-                  Senha
-                </label>
-                <input
-                  type="password"
-                  id="parent-password"
-                  name="senha"
-                  placeholder="Digite a senha do pai ou responsável"
-                  className={styles.inputCad}
-                  required
-                  value={usuario.senha}
-                  onChange={(e) => atualizarEstado(e)}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label
-                  className={styles.labelCad}
-                  htmlFor="parent-password-confirmation"
-                >
-                  Confirmar Senha
-                </label>
-                <input
-                  className={styles.inputCad}
-                  type="password"
-                  name="senha"
-                  id="parent-password-confirmation"
-                  placeholder="Digite novamente a senha"
-                  required
-                  value={confirmaSenha}
-                  onChange={(e) => handleConfirmarSenha(e)}
-                />
-              </div>
-              <input type="submit" value="Cadastrar" />
-
-              <p>
-                Já tem cadastro?<a href="/login"> Faça seu login</a>
-              </p>
-              <p>
-                <a href="/">Voltar Para Home</a>
-              </p>
+            <div className={styles.fullBox}>
+              <label className={styles.labelCad} htmlFor="parent-name">
+                Nome do Pai/Responsável
+              </label>
+              <input
+                className={styles.inputCad}
+                type="text"
+                name="nome"
+                id="parent-name"
+                placeholder="Digite o nome do pai ou responsável"
+                required
+                value={usuario.nome}
+                onChange={(e) => atualizarEstado(e)}
+              />
             </div>
+            <div className={styles.fullBox}>
+              <label className={styles.labelCad} htmlFor="parent-usuario">
+                E-mail
+              </label>
+              <input
+                className={styles.inputCad}
+                type="email"
+                name="usuario"
+                id="parent-usuario"
+                placeholder="Digite o e-mail do pai ou responsável"
+                required
+                value={usuario.usuario}
+                onChange={(e) => atualizarEstado(e)}
+              />
+            </div>
+            <div className={styles.fullBox}>
+              <label className={styles.labelCad} htmlFor="parent-password">
+                Senha
+              </label>
+              <input
+                type="password"
+                id="parent-password"
+                name="senha"
+                placeholder="Digite a senha do pai ou responsável"
+                className={styles.inputCad}
+                required
+                value={usuario.senha}
+                onChange={(e) => atualizarEstado(e)}
+              />
+            </div>
+            <div className={styles.fullBox}>
+              <label
+                className={styles.labelCad}
+                htmlFor="parent-password-confirmation"
+              >
+                Confirmar Senha
+              </label>
+              <input
+                className={styles.inputCad}
+                type="password"
+                name="senha"
+                id="parent-password-confirmation"
+                placeholder="Digite novamente a senha"
+                required
+                value={confirmaSenha}
+                onChange={(e) => handleConfirmarSenha(e)}
+              />
+            </div>
+            <Button value="Cadastrar"></Button>
+
+            <p>
+              Já tem cadastro?<a href="/login"> Faça seu login</a>
+            </p>
+            <p>
+              <a href="/">Voltar Para Home</a>
+            </p>
           </form>
         </div>
       </div>

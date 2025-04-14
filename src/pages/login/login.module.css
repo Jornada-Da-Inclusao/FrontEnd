@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .pcls {
@@ -52,7 +52,7 @@ form {
 label {
   font-weight: bold;
   font-size: 0.9rem;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
 }
 
 input[type="email"],

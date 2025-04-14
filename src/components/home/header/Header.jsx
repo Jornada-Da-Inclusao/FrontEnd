@@ -1,7 +1,9 @@
-// BUG: Strange header items misalignment
+// BUG: Erro de alinhamento em itens do Header
+// BUG: Header se torna irresponsivo caso screen size seja abaixo de 350px~
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Button from "@ui/form/Button";
 import PiLogo from "@assets/images/nano-icon.png";
 import styles from "./header-footer.module.css";
 
@@ -11,6 +13,10 @@ export default function Header() {
     if (element) {
       element.scrollIntoView({ behavior: "instant" });
     }
+  }
+
+  const staticStyle = {
+    width: "max(100%, 125px)"
   }
 
   return (
@@ -46,9 +52,7 @@ export default function Header() {
         Contato
       </li>
       <li>
-        <Link className={styles.linkStyles} to="/login">
-          Login
-        </Link>
+        <Button href="/login" style={staticStyle} content="Login"></Button>
       </li>
     </div>
   );

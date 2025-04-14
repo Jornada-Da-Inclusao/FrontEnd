@@ -1,5 +1,6 @@
 import React from "react";
 
+import Button from "@ui/form/Button";
 import styles from "./contact.module.css";
 
 export default function Contact() {
@@ -58,14 +59,12 @@ export default function Contact() {
           id="message"
           name="Message"
           placeholder="Sua mensagem"
-          rows="5"
+          rows={5}
           className="formfield -textarea"
           required
         ></textarea>
 
-        <button type="submit" role="button" className="button">
-          Enviar
-        </button>
+        <Button content="Enviar"></Button>
       </form>
     </section>
   );

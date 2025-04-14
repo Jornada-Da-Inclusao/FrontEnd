@@ -49,26 +49,6 @@
   resize: none;
 }
 
-.contactForm button {
-  background-color: var(--red);
-  padding: 10px 180px;
-  border-radius: 25px;
-  color: var(--white);
-  border: 2px solid var(--red);
-  transition: 0.5s;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bolder;
-  font-family: sans-serif;
-  transition: background-color 0.3s ease;
-}
-
-.contactForm button:hover {
-  background-color: var(--white);
-  color: var(--red);
-  transition: 0.5s;
-}
-
 /* Media Queries para Responsividade */
 @media (max-width: 768px) {
   .contactContainer {
