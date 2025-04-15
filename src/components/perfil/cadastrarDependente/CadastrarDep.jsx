@@ -114,7 +114,7 @@ const CadastroForm = () => {
                         required
                     />
 
-                    <label htmlFor="dataNascimento">Data de nascimento (mínimo 3 anos, máximo 10 anos):</label>
+                    <label htmlFor="dataNascimento">Data de nascimento (intervalo entre 3 anos a 10 anos):</label>
                     <input
                         type="date"
                         name="dataNascimento"
