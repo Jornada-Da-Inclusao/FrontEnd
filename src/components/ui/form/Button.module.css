@@ -1,6 +1,6 @@
 .btn {
   background-color: var(--clr-info-800);
-  border: 2px solid var(--clr-info-800);
+  border: none;
   border-radius: 1.25rem;
   padding: 0.625rem;
   width: 100%;
@@ -17,9 +17,7 @@
 
   &:hover,
   &:focus-visible {
-    background-color: var(--clr-neutral-100);
-
-    color: var(--clr-info-800);
+    background-color: color-mix(in srgb, var(--clr-info-800), black 20%);
 
     transition-duration: 0.5s;
   }

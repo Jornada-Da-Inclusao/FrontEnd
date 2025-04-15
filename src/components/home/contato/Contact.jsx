@@ -1,6 +1,6 @@
 import React from "react";
 
-import Button from "@ui/form/Button";
+import { Button, Input } from "@ui/form/Form";
 import styles from "./contact.module.css";
 
 export default function Contact() {
@@ -39,22 +39,8 @@ export default function Contact() {
     <section className={styles.contactContainer} id="contato">
       <h2>Entre em Contato Conosco</h2>
       <form className={styles.contactForm} onSubmit={handleSubmit}>
-        <input
-          type="text"
-          id="name"
-          name="Name"
-          placeholder="Seu nome"
-          required
-        />
-
-        <input
-          type="email"
-          id="email"
-          name="Email"
-          placeholder="Seu e-mail"
-          required
-        />
-
+        <Input attributes={{ type: "text", id: "name", name: "name", placeholder: "Seu nome", required: {} }} />
+        <Input attributes={{ type: "email", id: "email", name: "email", placeholder: "Seu e-mail", required: {} }} />
         <textarea
           id="message"
           name="Message"
@@ -63,8 +49,7 @@ export default function Contact() {
           className="formfield -textarea"
           required
         ></textarea>
-
-        <Button content="Enviar"></Button>
+        <Button>Enviar</Button>
       </form>
     </section>
   );

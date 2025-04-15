@@ -4,6 +4,7 @@ import { RotatingLines } from "react-loader-spinner";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import UsuarioLogin from "../../models/UsuarioLogin";
+import { Button, Input } from "@ui/form/Form"
 import styles from "./login.module.css";
 
 export default function Login() {
@@ -79,7 +80,7 @@ export default function Login() {
                 onChange={(e) => atualizarEstado(e)}
               />
             </div>
-            <button className={styles.btnSubmit} type="submit" value="Entrar">
+            <Button attributes={{ style: { width: "40%", alignSelf: "center" }, value: "Entrar" }}>
               {isLoading ? (
                 <RotatingLines
                   strokeColor="white"
@@ -91,7 +92,7 @@ export default function Login() {
               ) : (
                 <span>Entrar</span>
               )}
-            </button>
+            </Button>
             <p>
               Não tem uma conta? <a href="/cadastro">Cadastre-se</a>
             </p>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import Usuario from "@/models/Usuario.js";
 import { cadastrarUsuario } from "@/services/Service.jsx";
-import Button from "@ui/form/Button";
+import { Button, Input } from "@ui/form/Form";
 import styles from "./cadastro.module.css";
 
 function Cadastro() {
@@ -151,7 +151,7 @@ function Cadastro() {
                 onChange={(e) => handleConfirmarSenha(e)}
               />
             </div>
-            <Button value="Cadastrar"></Button>
+            <Button attributes={{ style: { width: "40%", alignSelf: "center" }, value: "Cadastrar" }} ></Button>
 
             <p>
               Já tem cadastro?<a href="/login"> Faça seu login</a>

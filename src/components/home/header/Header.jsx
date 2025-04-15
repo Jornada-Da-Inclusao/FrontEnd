@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Button from "@ui/form/Button";
+import { Button, Input } from "@ui/form/Form";
 import PiLogo from "@assets/images/nano-icon.png";
 import styles from "./header-footer.module.css";
 
@@ -52,7 +52,7 @@ export default function Header() {
         Contato
       </li>
       <li>
-        <Button href="/login" style={staticStyle} content="Login"></Button>
+        <Button attributes={{ href: "/login", style: staticStyle }}>Login</Button>
       </li>
     </div>
   );
