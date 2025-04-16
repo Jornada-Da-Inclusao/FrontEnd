@@ -1,0 +1,69 @@
+@import url('../../../assets/styles/color_pallete.css');
+
+h2,h3, input, label, select{
+    color: black;
+    background-color: transparent;
+}
+
+.container{
+align-items: center;
+justify-items: center;
+}
+
+.content{
+    background-color: white;
+    width: min-content;
+    padding: 20px;
+    border-radius: 18px;
+}
+
+.content form{
+    gap: 10px;
+    align-items: baseline;
+}
+
+.content form h2{
+    font-size: x-large;
+    font-weight: bolder;
+    width: 100%;
+    text-align: center;
+    border-bottom: 3px solid var(--red);
+}
+
+.content form input{
+    padding: 10px;
+    width: 40vw;
+    border-radius: 12px;
+    border: 3px solid #ddd;
+    
+}
+
+.content form button{
+    background-color: var(--red);
+    border: none;
+    padding: 10px;
+    width: 100%;
+    color: var(--white);
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: 0.2s;
+}
+
+.content form button:hover{
+    background-color: var(--white);
+    border: 2px solid var(--red);
+    color: var(--red);
+    transition: 0.2s;
+}
+
+.content button{
+    width: 100%;
+    color: var(--red);
+    margin-top: 10px;
+    background-color: transparent;
+    border: none;
+}
+
+.content button:hover{
+    text-decoration: underline;
+}

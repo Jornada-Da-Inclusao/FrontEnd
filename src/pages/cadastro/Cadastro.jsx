@@ -6,8 +6,6 @@ import styles from './cadastro.module.css';
 import React from 'react'
 
 function Cadastro() {
-
-  // Hook para navegar entre as páginas, usado para redirecionar o usuário.
   const navigate = useNavigate()
 
   // Estado para armazenar a confirmação de senha.
@@ -17,16 +15,14 @@ function Cadastro() {
   // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
   const [usuario, setUsuario] = useState(Usuario)
 
-  // Hook de efeito que monitora a mudança no ID do usuário.
-  // Se o ID for diferente de zero, significa que o usuário foi cadastrado com sucesso,
-  // então redireciona para a página de login.
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
     if (usuario.id !== 0) {
-      retornar() // Chama a função que redireciona para o login.
+      retornar()
     }
   }, [usuario])
 
-  // Função que redireciona para a página de login.
   function retornar() {
     navigate('/login')
   }
@@ -62,84 +58,86 @@ function Cadastro() {
     // Verifica se a senha e a confirmação são iguais e se a senha possui ao menos 8 caracteres.
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
       try {
-        // Tenta cadastrar o usuário usando a função `cadastrarUsuario`.
+        setLoading(true)
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
         alert('Usuário cadastrado com sucesso!')
       } catch (error) {
         alert('Erro ao cadastrar o usuário!')
+      } finally {
+        setLoading(false)
       }
     } else {
-      // Exibe um alerta caso as senhas sejam diferentes ou a senha seja menor que 8 caracteres.
       alert('Dados do usuário inconsistentes! Verifique as informações do cadastro.')
-      setUsuario({ ...usuario, senha: '' }) // Limpa a senha do usuário.
-      setConfirmaSenha('') // Limpa a confirmação de senha.
+      setUsuario({ ...usuario, senha: '' })
+      setConfirmaSenha('')
     }
   }
 
   return (
     <>
-      <div className={styles.bodyCad}>
-        <div id="login-container" className={styles.formContainer}>
-          <h1></h1>
-          <form className={styles.formCad} id="login-form" onSubmit={cadastrarNovoUsuario}>
-            <div className="half-box">
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-name">Nome do Pai/Responsável</label>
-                <input
-                  className={styles.inputCad}
-                  type="text"
-                  name="nome"
-                  id="parent-name"
-                  placeholder="Digite o nome do pai ou responsável"
-                  required
-                  value={usuario.nome}
-                  onChange={(e) => atualizarEstado(e)}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-usuario">E-mail</label>
-                <input
-                  className={styles.inputCad}
-                  type="usuario"
-                  name="usuario"
-                  id="parent-usuario"
-                  placeholder="Digite o e-mail do pai ou responsável"
-                  required
-                  value={usuario.usuario}
-                  onChange={(e) => atualizarEstado(e)}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-password">Senha</label>
-                <input
-                  type="password"
-                  id="parent-password"
-                  name="senha"
-                  placeholder="Digite a senha do pai ou responsável"
-                  className={styles.inputCad}
-                  required
-                  value={usuario.senha}
-                  onChange={(e) => atualizarEstado(e)}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-password-confirmation">Confirmar Senha</label>
-                <input
-                  className={styles.inputCad}
-                  type="password"
-                  name="senha"
-                  id="parent-password-confirmation"
-                  placeholder="Digite novamente a senha"
-                  required
-                  value={confirmaSenha}
-                  onChange={(e) => handleConfirmarSenha(e)}
-                />
-              </div>
-              <input type="submit" value="Cadastrar" />
-
-              <p>Já tem cadastro?<a href="/login">  Faça seu login</a></p>
-              <p><a href="/">Voltar Para Home</a></p>
-            </div>
+      <div className={styles.containerGeral}>
+        <div className={styles.imgContainer}></div>
+        <div className={styles.formArea}>
+          <h1 className={styles.titulo}>Integra Kids</h1>
+          <p className={styles.boasVindas}>Bem-vindo!</p>
+          <p className={styles.instrucao}>Crie sua conta para continuar.</p>
+          <form onSubmit={cadastrarNovoUsuario} className={styles.formCad}>
+            <label htmlFor="parent-name">Nome do Pai/Responsável</label>
+            <input
+              type="text"
+              name="nomeResponsavel"
+              id="parent-name"
+              placeholder="Digite o nome do responsável"
+              required
+              value={usuario.nomeResponsavel}
+              onChange={atualizarEstado}
+            />
+            <label htmlFor="parent-email">E-mail</label>
+            <input
+              type="email"
+              name="email"
+              id="parent-email"
+              placeholder="Digite o e-mail"
+              required
+              value={usuario.email}
+              onChange={atualizarEstado}
+            />
+            <label htmlFor="parent-password">Senha</label>
+            <input
+              type="password"
+              id="parent-password"
+              name="senha"
+              placeholder="Digite a senha"
+              required
+              value={usuario.senha}
+              onChange={atualizarEstado}
+            />
+            <label htmlFor="parent-password-confirmation">Confirmar Senha</label>
+            <input
+              type="password"
+              id="parent-password-confirmation"
+              placeholder="Digite novamente a senha"
+              required
+              value={confirmaSenha}
+              onChange={handleConfirmarSenha}
+            />
+            <button type="submit" className={styles.botaoLogin} disabled={loading}>
+                {loading ? (
+                  <RotatingLines
+                    strokeColor="white"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="24"
+                    visible={true}
+                  />
+                ) : (
+                  "Cadastrar"
+                )}
+              </button>
+            <p className={styles.links}>
+              Já tem conta? <a href="/login">Faça login</a>
+            </p>
+            <p className={styles.links}><a href="/">Voltar para Home</a></p>
           </form>
         </div>
       </div>
@@ -151,10 +149,9 @@ function Cadastro() {
       </div>
       <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
       <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
+        {`new window.VLibras.Widget('https://vlibras.gov.br/app');`}
       </script>
       <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
-
     </>
   )
 }

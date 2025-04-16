@@ -1,0 +1,47 @@
+.container {
+    align-items: center;
+    justify-items: center;
+}
+
+.content {
+    width: 40vw;
+    border-radius: 18px;
+    background-color: white;
+    background-image: none;
+    padding: 20px;
+}
+
+.content h3{
+    color: black;
+    text-align: center;
+}
+
+.content h2{
+    font-size: x-large;
+    font-weight: bolder;
+    text-align: center;
+    width: 100%;
+    border-bottom: 3px solid red;
+}
+
+.filter{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.filter select{
+    padding: 10px;
+    border: 3px solid #ddd;
+    border-radius: 12px;
+}
+
+.textContent{
+    padding: 20px;
+}
+
+.textContent h3{
+    font-weight: bold;
+    border-bottom: 2px solid lightgrey;
+}

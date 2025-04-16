@@ -1,18 +1,15 @@
 // @ts-nocheck
 import React, { useState, useEffect, useContext } from 'react'; // Importa os hooks 'useState' e 'useEffect' do React para gerenciar o estado e os efeitos colaterais no componente.
 import { useNavigate } from 'react-router-dom'; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
-import styles from './jogoMemoria.module.css'; // Importa os estilos CSS para estilizar o componente.
 import Timer from "../../../components/timer/timer";
-
-
-// Importando as imagens que serão usadas nas cartas do jogo
-import img1 from '../../../assets/images/memoria/pequena.png';
-import img2 from '../../../assets/images/memoria/pequena3.png';
-import img3 from '../../../assets/images/memoria/pequena4.png';
-import img4 from '../../../assets/images/memoria/pequena5.png';
-import imgPlaceholder from '../../../assets/images/memoria/rosa.png'; // Imagem que será exibida nas cartas viradas para baixo.
-import { JogoContext } from '../../../contexts/JogoContext';
-import { AuthContext } from '../../../contexts/AuthContext';
+import img1 from "@assets/images/memoria/pequena.png";
+import img2 from "@assets/images/memoria/pequena3.png";
+import img3 from "@assets/images/memoria/pequena4.png";
+import img4 from "@assets/images/memoria/pequena5.png";
+import imgPlaceholder from "@assets/images/memoria/rosa.png"; // Imagem que será exibida nas cartas viradas para baixo.
+import styles from "./jogoMemoria.module.css"; // Importa os estilos CSS para estilizar o componente.
+import { JogoContext } from "../../../contexts/JogoContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const JogoMemoria = () => {
     const navigate = useNavigate(); // Usado para navegar para outras páginas quando necessário.
@@ -40,8 +37,8 @@ const JogoMemoria = () => {
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
     const idJogoMemoria = 1
-    const idDependente = 1
-    const {registrarInfos} = useContext(JogoContext);
+    const idDependente = 11
+    const { registrarInfos } = useContext(JogoContext);
     const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     const { usuario } = useContext(AuthContext)
 
@@ -87,33 +84,33 @@ const JogoMemoria = () => {
     }, [cardsChosenId]); // O efeito será executado toda vez que o estado 'cardsChosenId' mudar.
 
     // Hook 'useEffect' para verificar se todas as cartas foram combinadas corretamente.
-    useEffect(() => {
+    
+      useEffect(() => {
         setInfoJogoMemoria({
-            tempoTotal: convertToMinutes(time),
-            tentativas: tentativas,
-            acertos: acertos,
-            erros: erros,
-            infoJogos_id_fk: {
-                id: idJogoMemoria
-            },
-            dependente: {
-                id: idDependente
-            }
-
+          tempoTotal: convertToMinutes(time),
+          tentativas: tentativas,
+          acertos: acertos,
+          erros: erros,
+          infoJogos_id_fk: {
+            id: idJogoMemoria,
+          },
+          dependente: {
+            id: idDependente,
+          },
         });
+    
         if (cardsWon.length === 8) { // Quando 8 cartas forem combinadas (4 pares de cartas)
-            console.log(infoJogoMemoria);
-
-            registrarInfosJogo()
-
-            setPopupMessage('Missão concluída!'); // Define a mensagem de sucesso.
-            setShowPopup(true); // Exibe o popup de conclusão.
-            setTimeout(() => navigate('/'), 2000); // Após 2 segundos, navega para a página inicial.
+          registrarInfosJogo();
+          setPopupMessage("Missão concluída!");
+          setShowPopup(true);
         }
-    }, [cardsWon, navigate]); // O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
+      }, [cardsWon, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
 
     // Função que fecha o popup.
-    const handlePopupClose = () => setShowPopup(false);
+    const handlePopupClose = () => {
+        setShowPopup(false);
+        navigate("/");
+      };
 
     // Função que verifica se as duas cartas escolhidas são iguais ou não.
     const checkForMatch = () => {
