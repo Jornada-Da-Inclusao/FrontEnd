@@ -1,40 +1,21 @@
-<<<<<<< HEAD
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Usuario from '../../models/Usuario.js'
 import { cadastrarUsuario } from '../../services/Service.jsx'
 import styles from './cadastro.module.css';
 import React from 'react'
-=======
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { cadastrarUsuario } from '../../services/Service'
-import { RotatingLines } from 'react-loader-spinner'
-import styles from './cadastro.module.css'
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
 
 function Cadastro() {
   const navigate = useNavigate()
 
-<<<<<<< HEAD
   // Estado para armazenar a confirmação de senha.
   const [confirmaSenha, setConfirmaSenha] = useState("")
 
   // Estado que armazena os dados do usuário a ser cadastrado.
   // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
   const [usuario, setUsuario] = useState(Usuario)
-=======
-  const [confirmaSenha, setConfirmaSenha] = useState("")
-  const [loading, setLoading] = useState(false)
 
-  const [usuario, setUsuario] = useState({
-    id: 0,
-    nome: '',
-    usuario: '',
-    senha: '',
-    foto: ''
-  })
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (usuario.id !== 0) {
@@ -46,15 +27,12 @@ function Cadastro() {
     navigate('/login')
   }
 
-<<<<<<< HEAD
   /**
     * Função que atualiza o estado do `usuario` com base nos valores digitados nos campos do formulário.
     * O nome do campo (atributo `name`) é usado para identificar qual propriedade deve ser atualizada.
     *
     * @param {import("react").ChangeEvent} e
     */
-=======
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
   function atualizarEstado(e) {
     setUsuario({
       ...usuario,
@@ -62,18 +40,14 @@ function Cadastro() {
     })
   }
 
-<<<<<<< HEAD
   /**
     * Função que atualiza o estado da `confirmaSenha` quando o usuário digita na confirmação de senha.
     * @param {import("react").ChangeEvent} e
     */
-=======
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
   function handleConfirmarSenha(e) {
     setConfirmaSenha(e.target.value)
   }
 
-<<<<<<< HEAD
   /**
     * Função assíncrona que é chamada ao enviar o formulário de cadastro.
     * @param {import("react").ChangeEvent} e
@@ -82,10 +56,6 @@ function Cadastro() {
     e.preventDefault() // Previne o comportamento padrão do formulário (recarregar a página).
 
     // Verifica se a senha e a confirmação são iguais e se a senha possui ao menos 8 caracteres.
-=======
-  async function cadastrarNovoUsuario(e) {
-    e.preventDefault()
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
       try {
         setLoading(true)
@@ -120,11 +90,7 @@ function Cadastro() {
                   placeholder="Digite o nome do pai ou responsável"
                   required
                   value={usuario.nome}
-<<<<<<< HEAD
                   onChange={(e) => atualizarEstado(e)}
-=======
-                  onChange={atualizarEstado}
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
                 />
               </div>
               <div className={styles.fullBox}>
@@ -137,11 +103,7 @@ function Cadastro() {
                   placeholder="Digite o e-mail do pai ou responsável"
                   required
                   value={usuario.usuario}
-<<<<<<< HEAD
                   onChange={(e) => atualizarEstado(e)}
-=======
-                  onChange={atualizarEstado}
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
                 />
               </div>
               <div className={styles.fullBox}>
@@ -154,11 +116,7 @@ function Cadastro() {
                   className={styles.inputCad}
                   required
                   value={usuario.senha}
-<<<<<<< HEAD
                   onChange={(e) => atualizarEstado(e)}
-=======
-                  onChange={atualizarEstado}
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
                 />
               </div>
               <div className={styles.fullBox}>
@@ -171,11 +129,7 @@ function Cadastro() {
                   placeholder="Digite novamente a senha"
                   required
                   value={confirmaSenha}
-<<<<<<< HEAD
                   onChange={(e) => handleConfirmarSenha(e)}
-=======
-                  onChange={handleConfirmarSenha}
->>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
                 />
               </div>
 
