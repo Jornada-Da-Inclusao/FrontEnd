@@ -59,12 +59,18 @@ export function LabeledInput({ attributes = {}, id = attributes.id }) {
         attributes.className = styles.input;
     }
 
-    return (
-        <>
-            <label htmlFor={id}>
-                <Input attributes={{ ...attributes, id: id }}></Input>
+    const Label = ({ children }) => {
+        return (
+            <label className={styles.label} htmlFor={id}>
+                {children}
             </label>
-        </>
+        )
+    }
+
+    return (
+        <Label>
+            <Input attributes={{ ...attributes, id: id }}></Input>
+        </Label>
     );
 }
 
@@ -111,22 +117,24 @@ export function Form({ attributes = {}, data }) {
     }
 
     return (
-        <>
-            <Form attributes={{ ...attributes }}>
-                {data.map((element) => {
-                    if (element.type === "button") {
-                        return (
-                            <Button {...element}>{element.children}</Button>
-                        );
-                    } else if (element.type === "field") {
-                        return (
-                            <LabeledInput id={element.attributes.id} {...element}></LabeledInput>
-                        );
-                    } else {
-                        throw Error(`Campo desconhecido: ${element.type}`);
-                    }
-                })}
-            </Form>
-        </>
+        <Form attributes={{ ...attributes }}>
+            {data.map((element) => {
+                if (element.type === "button") {
+                    return (
+                        <Button {...element}>{element.children}</Button>
+                    );
+                } else if (element.type === "field") {
+                    return (
+                        <LabeledInput id={element.attributes.id} {...element}></LabeledInput>
+                    );
+                } else if (element.type === "textarea") {
+                    return (
+                        <textarea name="" id=""></textarea>
+                    )
+                } else {
+                    throw Error(`Campo desconhecido: ${element.type}`);
+                }
+            })}
+        </Form>
     );
 }
