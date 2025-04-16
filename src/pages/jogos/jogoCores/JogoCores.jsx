@@ -10,7 +10,7 @@ import {
     useDraggable
 } from '@dnd-kit/core'
 import { CSS } from "@dnd-kit/utilities";
-import { random } from "../../../hooks/utils.js"
+import { randomizeNum  } from "@/utils/utils.js"
 import styles from './jogoCores.module.css'
 
 export default function JogoNumeros() {

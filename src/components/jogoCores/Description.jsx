@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../assets/styles/jogoCores.module.css'
+import styles from '@/assets/styles/jogoCores.module.css'
 // import { random } from '../../hooks/utils.js'
 // import { animals, colors, strings } from './Data.jsx'
 

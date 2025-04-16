@@ -1,10 +1,17 @@
+import imgCoelho from "../../assets/images/animals/coelho.png"
+import imgBorboleta from "../../assets/images/animals/borboleta.png"
+import imgSapo from "../../assets/images/animals/sapo.png"
+import imgLeao from "../../assets/images/animals/leao.png"
+import imgPeixinho from "../../assets/images/animals/peixinho.png"
+import imgJoaninha from "../../assets/images/animals/joaninha.png"
+
 export const animalsData = [
-  { id: 0, name: "Coelho", article: "O", img: "/src/assets/images/animals/coelho.png" },
-  { id: 1, name: "Borboleta", article: "A", img: "/src/assets/images/animals/borboleta.png" },
-  { id: 2, name: "Sapo", article: "O", img: "/src/assets/images/animals/sapo.png" },
-  { id: 3, name: "Leão", article: "O", img: "/src/assets/images/animals/leao.png" },
-  { id: 4, name: "Peixinho", article: "O", img: "/src/assets/images/animals/peixinho.png" },
-  { id: 5, name: "Joaninha", article: "A", img: "/src/assets/images/animals/joaninha.png" },
+  { id: 0, name: "Coelho", article: "O", img: imgCoelho },
+  { id: 1, name: "Borboleta", article: "A", img: imgBorboleta },
+  { id: 2, name: "Sapo", article: "O", img: imgSapo },
+  { id: 3, name: "Leão", article: "O", img: imgLeao },
+  { id: 4, name: "Peixinho", article: "O", img: imgPeixinho },
+  { id: 5, name: "Joaninha", article: "A", img: imgJoaninha },
 ]
 
 export const colorsData = [
