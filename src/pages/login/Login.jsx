@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+<<<<<<< HEAD
 import UsuarioLogin from '../../models/UsuarioLogin';
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
@@ -19,18 +20,43 @@ function Login() {
   );
 
   // Hook de efeito que redireciona o usuário para a página '/home' se o login for bem-sucedido e um token for retornado.
+=======
+import { useContext, useEffect, useState } from 'react';
+import React from 'react';
+import styles from './login.module.css';
+import { RotatingLines } from 'react-loader-spinner';
+
+function Login() {
+  const navigate = useNavigate();
+
+  const { usuario, handleLogin, isLoading } = useContext(AuthContext);
+
+  const [usuarioLogin, setUsuarioLogin] = useState({
+    id: 0,
+    nome: '',
+    email: '',
+    usuario: '',
+    foto: '',
+    senha: '',
+    token: ''
+  });
+
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
   useEffect(() => {
     if (usuario && usuario.token !== "") {
       navigate('/home');
     }
   }, [usuario, navigate]);
 
+<<<<<<< HEAD
   /**
     * Função que atualiza o estado `usuarioLogin` quando os campos do formulário mudam.
     * Cada alteração nos campos de entrada é armazenada no estado usando o `name` dos inputs para definir a chave.
     *
     * @param {import("react").ChangeEvent} e
     */
+=======
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
   function atualizarEstado(e) {
     setUsuarioLogin({
       ...usuarioLogin,
@@ -38,6 +64,7 @@ function Login() {
     });
   }
 
+<<<<<<< HEAD
   /**
     * Função que é chamada ao submeter o formulário de login.
     * Previne o comportamento padrão do formulário (recarregar a página) e chama a função `handleLogin`.
@@ -47,6 +74,11 @@ function Login() {
   function login(e) {
     e.preventDefault();
     handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
+=======
+  function login(e) {
+    e.preventDefault();
+    handleLogin(usuarioLogin);
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
   }
 
   return (
@@ -58,13 +90,21 @@ function Login() {
             <div className={styles.fullBox}>
               <label htmlFor="usuario">E-mail</label>
               <input
+<<<<<<< HEAD
                 type="usuario"
+=======
+                type="text"
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
                 id="usuario"
                 name="usuario"
                 placeholder="Digite seu e-mail"
                 required
                 value={usuarioLogin.usuario}
+<<<<<<< HEAD
                 onChange={(e) => atualizarEstado(e)}
+=======
+                onChange={atualizarEstado}
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
               />
             </div>
             <div className={styles.fullBox}>
@@ -76,6 +116,7 @@ function Login() {
                 placeholder="Digite sua senha"
                 required
                 value={usuarioLogin.senha}
+<<<<<<< HEAD
                 onChange={(e) => atualizarEstado(e)}
               />
             </div>
@@ -98,6 +139,31 @@ function Login() {
           </form>
         </div>
       </div>
+=======
+                onChange={atualizarEstado}
+              />
+            </div>
+            <button className={styles.btnSubmit} type="submit">
+              {isLoading ? (
+                <RotatingLines
+                  strokeColor="white"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  width="24"
+                  visible={true}
+                />
+              ) : (
+                <span>Entrar</span>
+              )}
+            </button>
+            <p>Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link></p>
+            <p><Link to="/">Voltar Para Home</Link></p>
+          </form>
+        </div>
+      </div>
+
+      {/* VLibras e widgets externos */}
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12
       <div className="enabled">
         <div className="active" vw-access-button></div>
         <div vw-plugin-wrapper>
@@ -106,6 +172,7 @@ function Login() {
       </div>
       <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
       <script>
+<<<<<<< HEAD
         new window.VLibras.Widget('https://vlibras.gov.br/app');
       </script>
       <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
@@ -113,3 +180,13 @@ function Login() {
   )
 }
 export default Login
+=======
+        {`new window.VLibras.Widget('https://vlibras.gov.br/app');`}
+      </script>
+      <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
+    </>
+  );
+}
+
+export default Login;
+>>>>>>> 13177b8724d5cd57b37e8b3292045013ae8afe12

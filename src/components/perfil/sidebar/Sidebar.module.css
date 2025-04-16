@@ -1,0 +1,123 @@
+@import url('../../../assets/styles/color_pallete.css');
+
+.sidebar {
+  font-family: sans-serif;
+    width: 325px;
+    background: var(--red);
+    padding: 30px; 
+    height: 100%;
+    color: #333;
+    position: fixed;
+    text-align: center;
+  }
+
+  .sidebar ul{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    font-weight: bold;
+    gap: 10px;
+    font-size: small;
+  }
+
+  .sidebar ul a:hover{
+    text-decoration: none;
+  }
+
+  .sidebar li a, .sidebar h2{
+    color: var(--white);
+  }
+
+  .sidebar .options{
+    margin-top: 20px;
+    font-size: x-large;
+  }
+
+  .menuToggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #D90404;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .profilePicture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    display: block;
+    margin: 0 auto 10px auto;
+    object-fit: cover;
+    border: 2px solid var(--white);
+  }
+  
+  .uploadContainer label {
+    display: block;
+    background: var(--red);
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+  }
+  
+  .uploadContainer label:hover {
+    background: var(--white);
+    color: var(--red);
+    transition: 0.3s;
+  }
+  
+  .uploadContainer input {
+    display: none;
+  }
+  
+  .formContainer {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .formContainer form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .formContainer input {
+    width: 95%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #D9D9D9;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .formContainer button {
+    background: #D90404;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .formContainer button:hover {
+    background: #A30303;
+  }
+  

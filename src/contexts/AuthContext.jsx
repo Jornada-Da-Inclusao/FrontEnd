@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 import UsuarioLogin from "../models/UsuarioLogin";
 import { login } from "../services/Service";
 
@@ -26,38 +26,64 @@ export const AuthContext = createContext({});
   * @param {import("react").ReactNode} object.children
   */
 export function AuthProvider({ children }) {
-    // Estado que armazena as informações do usuário autenticado.
-    const [usuario, setUsuario] = useState(UsuarioLogin);
 
-    // Estado que indica se o login está em andamento.
-    const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const dadosUsuario = localStorage.getItem("usuario");
 
-    /**
-      * Método para realizar o login do usuário.
-      * @param {UsuarioLogin} usuarioLogin
-      */
-    async function handleLogin(usuarioLogin) {
-        setIsLoading(true); // Indica que a operação de login está em andamento.
-        try {
-            await login(`/usuarios/logar`, usuarioLogin, setUsuario); // Chama o método de login.
-            alert("O Usuário foi autenticado com sucesso!"); // Mensagem de sucesso.
-        } catch (error) {
-          console.log(error);
-          
-            alert("Os Dados do usuário estão inconsistentes!"); // Mensagem de erro caso o login falhe.
-        }
-        setIsLoading(false); // Finaliza a operação de login.
+    if (token && dadosUsuario) {
+      const usuarioParse = JSON.parse(dadosUsuario);
+      setUsuario({
+        ...usuarioParse,
+        token: token
+      });
     }
+  }, []);
 
-    // Método para realizar o logout do usuário.
-    function handleLogout() {
-        setUsuario(UsuarioLogin);
+  // Estado que armazena as informações do usuário autenticado.
+  const [usuario, setUsuario] = useState(UsuarioLogin);
+
+  // Estado que indica se o login está em andamento.
+  const [isLoading, setIsLoading] = useState(false);
+
+  /**
+    * Método para realizar o login do usuário.
+    * @param {UsuarioLogin} usuarioLogin
+    */
+  async function handleLogin(usuarioLogin) {
+    setIsLoading(true); // Indica que a operação de login está em andamento.
+    try {
+      await login(`/usuarios/logar`, usuarioLogin, (resposta) => {
+        setUsuario(resposta);
+
+        // Salvar token e dados essenciais no localStorage
+        localStorage.setItem("token", resposta.token);
+        localStorage.setItem("usuario", JSON.stringify({
+          id: resposta.id,
+          nome: resposta.nome,
+          email: resposta.usuario,
+          foto: resposta.foto
+        }));
+      });
+      alert("O Usuário foi autenticado com sucesso!"); // Mensagem de sucesso.
+    } catch (error) {
+      console.log(error);
+      alert("Os Dados do usuário estão inconsistentes!"); // Mensagem de erro caso o login falhe.
     }
+    setIsLoading(false); // Finaliza a operação de login.
+  }
 
-    // Retorna o provedor de autenticação com o valor do contexto.
-    return (
-        <AuthContext.Provider value={{ usuario, handleLogin, handleLogout, isLoading }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  // Método para realizar o logout do usuário.
+  function handleLogout() {
+    setUsuario(UsuarioLogin);
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+  }
+
+  // Retorna o provedor de autenticação com o valor do contexto.
+  return (
+    <AuthContext.Provider value={{ usuario, handleLogin, handleLogout, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
