@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import styles from './login.module.css'
 import { RotatingLines } from 'react-loader-spinner';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
+import logo from '../../assets/images/LOGO.png';
 
 function Login() {
   // Hook para navegar entre as páginas, usado para redirecionar o usuário após o login.
@@ -51,24 +53,27 @@ function Login() {
 
   return (
     <>
-      <div className={styles.bodyLogin}>
-        <div className={styles.loginContainer}>
-          <h1></h1>
-          <form id="loginForm" onSubmit={login}>
-            <div className={styles.fullBox}>
-              <label htmlFor="usuario">E-mail</label>
+      <div className={styles.container}>
+        <div className={styles.leftSide}></div>
+        <div className={styles.rightSide}>
+          <img src={logo} alt="logo" className={styles.logo} />
+          <h1 className="login-title">Bem-vindo de volta!</h1>
+          <h2 className="login-title">Faça seu login para continuar.</h2>
+          <form onSubmit={login} className={styles.form}>
+            <label htmlFor="usuario">Email</label>
+            <div className={styles.inputGroup}>
               <input
-                type="usuario"
+                type="email"
                 id="usuario"
                 name="usuario"
                 placeholder="Digite seu e-mail"
                 required
                 value={usuarioLogin.usuario}
-                onChange={(e) => atualizarEstado(e)}
+                onChange={atualizarEstado}
               />
             </div>
-            <div className={styles.fullBox}>
-              <label htmlFor="password">Senha</label>
+            <label htmlFor="senha">Senha</label>
+            <div className={styles.inputGroup}>
               <input
                 type="password"
                 id="senha"
@@ -76,25 +81,31 @@ function Login() {
                 placeholder="Digite sua senha"
                 required
                 value={usuarioLogin.senha}
-                onChange={(e) => atualizarEstado(e)}
+                onChange={atualizarEstado}
               />
             </div>
-            <button className={styles.btnSubmit}
-              type="submit" value="Entrar"
-            >
-
-              {isLoading ? <RotatingLines
-                strokeColor="white"
-                strokeWidth="5"
-                animationDuration="0.75"
-                width="24"
-                visible={true}
-              /> :
-                <span>Entrar</span>
-              }
-            </button>
-            <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
-            <p><a href="/">Voltar Para Home</a></p>
+            <div className={styles.extraOptions}>
+              <label>
+                <input type="checkbox" /> Lembrar
+              </label>
+              <a href="#">Esqueci a senha</a>
+            </div>
+        <button className={styles.btnLogin}
+          type="submit" value="Entrar"
+        >
+          {isLoading ? <RotatingLines
+            strokeColor="white"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="24"
+            visible={true}
+          /> :
+            <span>Entrar</span>
+          }
+        </button>
+            <p className={styles.links}>
+              <a href="/cadastro">Faça seu cadastro</a>
+            </p>
           </form>
         </div>
       </div>

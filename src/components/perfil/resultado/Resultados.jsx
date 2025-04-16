@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
     BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Bar, ResponsiveContainer,
 } from "recharts";
-import styles from "../resultado/Resultados.module.css";
+import styles from "./Resultados.module.css";
 
 const Resultados = () => {
     const [nameFilter, setNameFilter] = useState("");

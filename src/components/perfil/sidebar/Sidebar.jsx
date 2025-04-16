@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";  // Importando o Link do React Router
-import styles from "../sidebar/Sidebar.module.css";  // Certifique-se de que o CSS está correto
+import styles from "./Sidebar.module.css";  // Certifique-se de que o CSS está correto
 import { AuthContext } from '../../../contexts/AuthContext'; // Importando o contexto
 import { useContext } from "react";
 

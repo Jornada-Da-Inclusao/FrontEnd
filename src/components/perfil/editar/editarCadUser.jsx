@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from "../editar/editarCadUser.module.css";
+import styles from "./editarCadUser.module.css";
 
 const EditarUsuario = () => {
     const [formData, setFormData] = useState({

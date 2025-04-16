@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../cadastrarDependente/cadastrarDep.module.css";
+import styles from "./cadastrarDep.module.css";
 import axios from "axios";
 
 const CadastroForm = () => {
