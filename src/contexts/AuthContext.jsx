@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { login } from "../services/Service";
+import { login } from "../services/UsuarioService";
 import UsuarioLogin from "../models/UsuarioLogin";
 
 // Cria o contexto com valor inicial vazio

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { cadastrarUsuario } from '../../services/Service'
+import { cadastrarUsuario } from '../../services/usuarioService'
 import { RotatingLines } from 'react-loader-spinner'
 import styles from './cadastro.module.css'
 

@@ -8,6 +8,7 @@ import Cadastro from './pages/cadastro/Cadastro.jsx';
 import JogoCores from './pages/jogos/jogoCores/JogoCores.jsx';
 import JogoMemoria from './pages/jogos/jogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.jsx';
+import SelectPlayer from './pages/jogos/selecionarPlayer/selectPlayer.jsx';
 import Perfil from './pages/perfil/perfil.jsx';
 import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
 import FaceJogoNumeros from './pages/jogos/faceJogoNumeros/FaceJogoNumeros.jsx';
@@ -31,6 +32,7 @@ const App = () => (
         <Route path="/jogo-cores" element={<JogoCores />} />
         <Route path="/login" element={<Login />} />
         <Route path="/perfil/*" element={<Perfil />} />
+        <Route path="/selecionar-jogador" element={<SelectPlayer />} />
         </Routes>
     </Router>
   </AuthProvider>

@@ -1,5 +1,8 @@
+// src/components/EditarDep.jsx
 import React, { useState, useEffect } from "react";
 import styles from "../editar/editarCadDep.module.css";
+import { icons } from "../icons";
+import { getUserData, fetchDependentes, updateDependente, deleteDependente } from "../../../services/dependenteService";
 
 const EditarDep = () => {
   const [formData, setFormData] = useState({
@@ -11,42 +14,19 @@ const EditarDep = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [avatarSelecionado, setAvatarSelecionado] = useState("");
 
-  // Função para buscar usuário e token
-  const getUserData = () => {
-    const usuarioData = localStorage.getItem("usuario");
-    const token = localStorage.getItem("token");
-    if (!usuarioData || !token) {
-      console.error("Usuário ou token não encontrado no localStorage.");
-      return null;
-    }
-    return { usuario: JSON.parse(usuarioData), token };
-  };
-
   useEffect(() => {
-    const { usuario, token } = getUserData() || {};
-    if (!usuario || !token) return;
-
-    const fetchDependentes = async () => {
+    const fetchDependentesData = async () => {
       try {
-        const res = await fetch(
-          `https://backend-9qjw.onrender.com/dependente/getDependenteByIdUsuario/${usuario.id}`,
-          {
-            headers: {
-              "Authorization": token,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
-        const data = await res.json();
+        const data = await fetchDependentes();
         setIds(data);
       } catch (err) {
-        console.error("Erro ao buscar IDs:", err);
+        console.error("Erro ao buscar dependentes:", err);
       }
     };
-
-    fetchDependentes();
+  
+    fetchDependentesData();
   }, []);
+  
 
   const handleSelectId = (e) => {
     const id = Number(e.target.value);
@@ -59,7 +39,7 @@ const EditarDep = () => {
         dataNascimento: dependente.dataNascimento,
         sexo: dependente.sexo,
       });
-      setAvatarSelecionado(dependente.avatar || ""); // Aqui ajusta o avatar com base no dependente
+      setAvatarSelecionado(dependente.avatar || "");
     }
   };
 
@@ -70,54 +50,25 @@ const EditarDep = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const { usuario, token } = getUserData() || {};
-    if (!usuario || !token) return;
-
+  
     try {
-      const res = await fetch(
-        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Authorization": token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nome: formData.nome,
-            idade: formData.dataNascimento,
-            sexo: formData.sexo,
-            foto: avatarSelecionado,
-            usuarioId: usuario.id,
-          }),
-        }
-      );
-      if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
+      await updateDependente(selectedId, formData, avatarSelecionado);
       alert("Dados alterados com sucesso!");
     } catch (err) {
       console.error("Erro ao alterar dependente:", err);
     }
   };
+  
 
   const handleRemove = async () => {
     const confirmDelete = window.confirm("Tem certeza que deseja remover este dependente?");
     if (!confirmDelete || !selectedId) return;
 
-    const { usuario, token } = getUserData() || {};
-    if (!usuario || !token) return;
+    const { token } = getUserData() || {};
+    if (!token) return;
 
     try {
-      const res = await fetch(
-        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Authorization": token,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
+      await deleteDependente(selectedId, token);
       alert("Dependente removido com sucesso!");
       setFormData({ nome: "", dataNascimento: "", sexo: "" });
       setSelectedId(null);
@@ -131,21 +82,6 @@ const EditarDep = () => {
   const dataMinima = new Date(anoAtual - 10, hoje.getMonth(), hoje.getDate());
   const dataMaxima = new Date(anoAtual - 3, hoje.getMonth(), hoje.getDate());
   const formatarData = (data) => data.toISOString().split("T")[0];
-
-  const icons = [
-    "https://www.svgrepo.com/show/420338/avatar-person-pilot.svg",
-    "https://www.svgrepo.com/show/420345/fighter-luchador-man.svg",
-    "https://www.svgrepo.com/show/420315/avatar-cloud-crying.svg",
-    "https://www.svgrepo.com/show/420322/avatar-female-portrait-2.svg",
-    "https://www.svgrepo.com/show/420327/avatar-child-girl.svg",
-    "https://www.svgrepo.com/show/420329/anime-away-face.svg",
-    "https://www.svgrepo.com/show/420323/avatar-avocado-food.svg",
-    "https://www.svgrepo.com/show/420333/afro-avatar-male.svg",
-    "https://www.svgrepo.com/show/420360/avatar-batman-comics.svg",
-    "https://www.svgrepo.com/show/420362/avatar-cacti-cactus.svg",
-    "https://www.svgrepo.com/show/420343/avatar-joker-squad.svg",
-    "https://www.svgrepo.com/show/420347/avatar-einstein-professor.svg"
-];
 
   return (
     <div className={styles.container}>
