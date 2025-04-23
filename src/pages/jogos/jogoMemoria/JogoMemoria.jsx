@@ -36,11 +36,11 @@ const JogoMemoria = () => {
     const [erros, setErros] = useState(0); // Armazena a quantidade de erros no jogo
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
-    const idJogoMemoria = 1
-    const idDependente = 11
+    const idJogoMemoria = 1;
+    const idDependente = 10;
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
-    const { usuario } = useContext(AuthContext)
+    const { usuario } = useContext(AuthContext);
 
     useEffect(() => {
         if (usuario.token === "") {

@@ -54,6 +54,8 @@ const EditarDep = () => {
 
     const dependente = ids.find((dep) => dep.id === id);
     if (dependente) {
+      console.log(dependente.sexo);
+      
       setFormData({
         nome: dependente.nome,
         dataNascimento: dependente.dataNascimento,
@@ -68,24 +70,43 @@ const EditarDep = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Função para calcular idade a partir da data de nascimento
+  const calcularIdade = (dataNascimento) => {
+    if (!dataNascimento) return 0; // Se não houver data, retorna 0
+
+    const dataNascimentoDate = new Date(dataNascimento);
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - dataNascimentoDate.getFullYear();
+    const mes = hoje.getMonth() - dataNascimentoDate.getMonth();
+
+    if (mes < 0 || (mes === 0 && hoje.getDate() < dataNascimentoDate.getDate())) {
+      idade--;
+    }
+
+    return idade;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { usuario, token } = getUserData() || {};
     if (!usuario || !token) return;
 
+    // Calcular a idade com base na dataNascimento
+    const idade = calcularIdade(formData.dataNascimento);
+
     try {
       const res = await fetch(
         `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Authorization": token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             nome: formData.nome,
-            idade: formData.dataNascimento,
+            idade: idade,  // Enviar a idade em vez da data de nascimento
             sexo: formData.sexo,
             foto: avatarSelecionado,
             usuarioId: usuario.id,

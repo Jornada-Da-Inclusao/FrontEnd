@@ -61,8 +61,10 @@ function Cadastro() {
         setLoading(true)
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
         alert('Usuário cadastrado com sucesso!')
+        navigate("/")
       } catch (error) {
         alert('Erro ao cadastrar o usuário!')
+        window.location.reload();
       } finally {
         setLoading(false)
       }
@@ -85,21 +87,21 @@ function Cadastro() {
             <label htmlFor="parent-name">Nome do Pai/Responsável</label>
             <input
               type="text"
-              name="nomeResponsavel"
+              name="nome"
               id="parent-name"
               placeholder="Digite o nome do responsável"
               required
-              value={usuario.nomeResponsavel}
+              value={usuario.nome}
               onChange={atualizarEstado}
             />
             <label htmlFor="parent-email">E-mail</label>
             <input
               type="email"
-              name="email"
+              name="usuario"
               id="parent-email"
               placeholder="Digite o e-mail"
               required
-              value={usuario.email}
+              value={usuario.usuario}
               onChange={atualizarEstado}
             />
             <label htmlFor="parent-password">Senha</label>
