@@ -70,3 +70,51 @@ export const atualizar = async (url, dados, setDados, header) => {
 export const deletar = async (url, header) => {
   await api.delete(url, header);
 };
+
+export const atualizarUsuario = async (dadosAtualizados, token) => {
+  console.log(dadosAtualizados)
+  try {
+    const response = await fetch("https://backend-9qjw.onrender.com/usuarios/atualizar-parcial", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token
+      },
+      body: JSON.stringify(dadosAtualizados)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Detalhes do erro:", errorData);
+      throw new Error("Erro ao atualizar usuário");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro dentro de atualizarUsuario:", error);
+    throw error;
+  }
+};
+
+
+export const deletarUsuario = async (id, token) => {
+  try {
+    const response = await fetch(`https://backend-9qjw.onrender.com/usuarios/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token,
+      },
+    });
+
+    if (!response.ok) {
+      const erro = await response.json();
+      throw new Error(erro.message || "Erro ao deletar usuário");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+

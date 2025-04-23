@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from "../editar/editarCadUser.module.css";
+import { atualizarUsuario, deletarUsuario } from '../../../services/UsuarioService';
 
 const EditarUsuario = () => {
     const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ const EditarUsuario = () => {
     });
 
     const token = localStorage.getItem('token');
-    const usuarioData = JSON.parse(localStorage.getItem("usuario")); // Parse para obter o objeto
+    const usuarioData = JSON.parse(localStorage.getItem("usuario") || "{}");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,76 +22,60 @@ const EditarUsuario = () => {
     };
 
     const handleSubmit = async (e) => {
+        if (formData.senha && formData.senha !== formData.confirmarSenha) {
+            alert("As senhas não coincidem!");
+            return;
+        }
+
         e.preventDefault();
 
-        const dataToSend = {};
+        if (!token) {
+            console.error('Token de autenticação não encontrado');
+            return;
+        }
 
-        // Verificar se os campos têm valor antes de enviar
+        if (formData.senha && formData.senha !== formData.confirmarSenha) {
+            alert("As senhas não coincidem!");
+            return;
+        }
+
+        const dataToSend = {id: usuarioData?.id};
         if (formData.nome) dataToSend.nome = formData.nome;
         if (formData.email) dataToSend.email = formData.email;
         if (formData.senha) dataToSend.senha = formData.senha;
 
-        // Verificar se o token está presente antes de enviar a requisição
-        if (!token) {
-            console.error('Token de autenticação não encontrado');
-            return;
-        }
-
         try {
-            const response = await fetch('https://backend-9qjw.onrender.com/usuarios/atualizar', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token, // Enviando o token no cabeçalho
-                },
-                body: JSON.stringify(dataToSend),
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Usuário atualizado com sucesso:', result);
-            } else {
-                const error = await response.json();
-                console.error('Erro ao atualizar usuário:', error);
-            }
+            const result = await atualizarUsuario(dataToSend, token);
+            console.log('Usuário atualizado com sucesso:', result);
+            alert("Dados atualizados com sucesso!");
         } catch (error) {
-            console.error('Erro na requisição:', error);
+            console.error('Erro ao atualizar usuário:', error);
+            alert("Erro ao atualizar usuário");
         }
     };
+
 
     const handleDelete = async () => {
-        if (!usuarioData || !usuarioData.id) {
-            console.error('ID do usuário não encontrado');
+        if (!usuarioData?.id || !token) {
+            console.error("Dados do usuário ou token ausentes");
             return;
         }
 
-        if (!token) {
-            console.error('Token de autenticação não encontrado');
-            return;
-        }
+        const confirmar = window.confirm("Tem certeza que deseja excluir sua conta?");
+        if (!confirmar) return;
 
         try {
-            const response = await fetch(`https://backend-9qjw.onrender.com/usuarios/${usuarioData.id}`, {
-                method: 'DELETE',
-                headers: {
-                    "Authorization": token,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Usuário deletado com sucesso:', result);
-            } else {
-                const error = await response.json();
-                console.error('Erro ao deletar usuário:', error);
-            }
+            const result = await deletarUsuario(usuarioData.id, token);
+            console.log('Usuário deletado com sucesso:', result);
+            alert("Conta excluída com sucesso!");
+            // Aqui você pode redirecionar ou limpar o localStorage
         } catch (error) {
-            console.error('Erro na requisição de deleção:', error);
+            console.error('Erro ao deletar usuário:', error);
+            alert("Erro ao deletar usuário");
         }
     };
 
-    return(
+    return (
         <div className={styles.container}>
             <div className={styles.content}>
                 <form onSubmit={handleSubmit}>
@@ -102,6 +87,7 @@ const EditarUsuario = () => {
                         value={formData.nome}
                         onChange={handleChange}
                     />
+
                     <label htmlFor="email">Alterar E-mail:</label>
                     <input
                         type="text"
@@ -109,6 +95,7 @@ const EditarUsuario = () => {
                         value={formData.email}
                         onChange={handleChange}
                     />
+
                     <label htmlFor="senha">Alterar senha:</label>
                     <input
                         type="password"
@@ -116,6 +103,7 @@ const EditarUsuario = () => {
                         value={formData.senha}
                         onChange={handleChange}
                     />
+
                     <label htmlFor="confirmarSenha">Digite a nova senha novamente:</label>
                     <input
                         type="password"
@@ -123,8 +111,10 @@ const EditarUsuario = () => {
                         value={formData.confirmarSenha}
                         onChange={handleChange}
                     />
+
                     <button type="submit">Alterar dados</button>
                 </form>
+
                 <button onClick={handleDelete}>Deletar Conta</button>
             </div>
         </div>

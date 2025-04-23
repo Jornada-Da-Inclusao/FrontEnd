@@ -30,14 +30,6 @@ const Sidebar = () => {
             <aside className={`${styles.sidebar} ${isOpen ? "" : styles.hidden}`}>
                 <div className={styles.uploadContainer}>
                     <h2>Bem-vindo, {usuario?.nome || "Usuário"}</h2>
-                    <img
-                        src={usuario?.foto || "/default-profile.png"}
-                        alt="Foto de perfil"
-                        className={styles.profilePicture}
-                        id="profileImage"
-                    />
-                    <label htmlFor="profileUpload">Alterar Foto</label>
-                    <input type="file" id="profileUpload" accept="image/*" onChange={previewImage} />
                 </div>
                 <nav className={styles.menu}>
                     <h2 className={styles.options}>Menu</h2>

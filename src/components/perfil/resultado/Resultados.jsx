@@ -114,3 +114,7 @@ const Resultados = () => {
 };
 
 export default Resultados;
+
+// add new graphs:
+// https://mui.com/x/react-charts/gauge/    // time for game
+// https://mui.com/x/react-charts/bars/     // tentatives using bar size

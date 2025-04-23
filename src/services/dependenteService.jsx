@@ -70,7 +70,7 @@ export const cadastrarDependente = async (dependente) => {
       const res = await fetch(
         `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Authorization": token,
             "Content-Type": "application/json",
@@ -128,6 +128,7 @@ export const cadastrarDependente = async (dependente) => {
     }
   
     const player = {
+      id: dependente.id,
       nome: dependente.nome,
       foto: dependente.foto
     };

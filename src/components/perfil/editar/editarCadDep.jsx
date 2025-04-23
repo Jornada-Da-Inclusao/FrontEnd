@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../editar/editarCadDep.module.css";
 import { icons } from "../icons";
+import { calcularIdade } from '../calcularIdade';
 import { getUserData, fetchDependentes, updateDependente, deleteDependente } from "../../../services/dependenteService";
 
 const EditarDep = () => {
@@ -23,10 +24,10 @@ const EditarDep = () => {
         console.error("Erro ao buscar dependentes:", err);
       }
     };
-  
+
     fetchDependentesData();
   }, []);
-  
+
 
   const handleSelectId = (e) => {
     const id = Number(e.target.value);
@@ -39,7 +40,7 @@ const EditarDep = () => {
         dataNascimento: dependente.dataNascimento,
         sexo: dependente.sexo,
       });
-      setAvatarSelecionado(dependente.avatar || "");
+      setAvatarSelecionado(dependente.foto || "");
     }
   };
 
@@ -50,15 +51,22 @@ const EditarDep = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      await updateDependente(selectedId, formData, avatarSelecionado);
+      const idade = calcularIdade(formData.dataNascimento);
+
+      const dadosAtualizados = {
+        ...formData,
+        idade,
+      };
+
+      await updateDependente(selectedId, dadosAtualizados, avatarSelecionado);
       alert("Dados alterados com sucesso!");
     } catch (err) {
       console.error("Erro ao alterar dependente:", err);
     }
   };
-  
+
 
   const handleRemove = async () => {
     const confirmDelete = window.confirm("Tem certeza que deseja remover este dependente?");

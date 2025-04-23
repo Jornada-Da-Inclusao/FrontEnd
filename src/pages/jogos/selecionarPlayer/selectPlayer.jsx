@@ -23,7 +23,7 @@ const SelectPlayer = () => {
 
   const selecionarPerfil = (dependente) => {
     escolherDependenteComoPlayer(dependente);
-    window.location.href = "/jogo";
+    // window.location.href = "/jogo";
   };
 
   const adicionarPerfil = () => {
