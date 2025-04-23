@@ -10,7 +10,7 @@ import JogoMemoria from './pages/jogos/jogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.jsx';
 import Perfil from './pages/perfil/perfil.jsx';
 import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
-import FaceJogoNumeros from './pages/jogos/JogoNumeros/JogoNumeros.jsx';
+import FaceJogoNumeros from './pages/jogos/jogoNumeros/JogoNumeros';
 import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais } from './components/explicacoes/Explicacoes.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 import { JogoProvider } from './contexts/JogoContext';

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useContext } from 'react'; // Importa os hooks 'useState' e 'useEffect' do React para gerenciar o estado e os efeitos colaterais no componente.
 import { useNavigate } from 'react-router-dom'; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
-import Timer from "../../../components/timer/timer";
+import Timer from "../../../components/timer/Timer";
 import img1 from "@assets/images/memoria/pequena.png";
 import img2 from "@assets/images/memoria/pequena3.png";
 import img3 from "@assets/images/memoria/pequena4.png";
