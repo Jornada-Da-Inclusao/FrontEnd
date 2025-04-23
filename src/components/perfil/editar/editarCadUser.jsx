@@ -37,14 +37,18 @@ const EditarUsuario = () => {
         }
 
         try {
-            const response = await fetch('https://backend-9qjw.onrender.com/usuarios/atualizar', {
-                method: 'PUT',
+            const response = await fetch('http://localhost:8080/usuarios/atualizar-parcial', {
+                method: "PATCH",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token, // Enviando o token no cabeçalho
+                  'Content-Type': 'application/json',
+                  'Authorization': token, // Enviando o token no cabeçalho
                 },
-                body: JSON.stringify(dataToSend),
-            });
+                body: JSON.stringify({
+                  usuarioId: usuarioData.id,  // Adicionando o ID do usuário
+                  ...dataToSend            // Espalhando os outros dados
+                }),
+              })
+              
 
             if (response.ok) {
                 const result = await response.json();
