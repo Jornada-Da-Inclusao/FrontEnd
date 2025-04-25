@@ -99,51 +99,51 @@ Obs: sujeito à alteração.
 
 ### Página inicial
 
-![localhost_5173_selecionar-jogador](https://github.com/user-attachments/assets/cdfbad6d-e1f0-447d-90c8-55d7aa9674f3)
+![homepage](https://github.com/user-attachments/assets/cdfbad6d-e1f0-447d-90c8-55d7aa9674f3)
 
 ### Login
 
-![image](https://github.com/user-attachments/assets/f621eaa2-22d5-4281-b9be-40d7e59ceaa4)
+![login](https://github.com/user-attachments/assets/f621eaa2-22d5-4281-b9be-40d7e59ceaa4)
 
 ### Cadastro
 
-![localhost_5173_cadastro](https://github.com/user-attachments/assets/bcd5adb8-f875-4d3c-8509-2911c262a7db)
+![signup](https://github.com/user-attachments/assets/bcd5adb8-f875-4d3c-8509-2911c262a7db)
 
 ### Jogo dos Números
 
-![localhost_5173_jogo-cores (1)](https://github.com/user-attachments/assets/228ead33-a785-401f-8aab-286caccdadd7)
+![number](https://github.com/user-attachments/assets/228ead33-a785-401f-8aab-286caccdadd7)
 
 ### Jogo das Cores
 
-![localhost_5173_jogo-cores (3)](https://github.com/user-attachments/assets/75167c20-9bc8-454b-9dae-938bfcf9ae3a)
+![color](https://github.com/user-attachments/assets/75167c20-9bc8-454b-9dae-938bfcf9ae3a)
 
 ### Jogo das Vogais
 
-![localhost_5173_jogo-cores (2)](https://github.com/user-attachments/assets/d6ac96de-1159-412b-9a14-8349ebff3e40)
+![vowel](https://github.com/user-attachments/assets/d6ac96de-1159-412b-9a14-8349ebff3e40)
 
 ### Jogo da Memória
 
-![localhost_5173_](https://github.com/user-attachments/assets/14df4b2f-0b39-455e-a8b5-dfaee8b0f4ee)
+![memory](https://github.com/user-attachments/assets/14df4b2f-0b39-455e-a8b5-dfaee8b0f4ee)
 
 ### Página de edição de perfil
 
-![localhost_5173_selecionar-jogador (1)](https://github.com/user-attachments/assets/ce9f652e-ed3b-42a1-9eaf-35ee24859c1e)
+![profile1](https://github.com/user-attachments/assets/ce9f652e-ed3b-42a1-9eaf-35ee24859c1e)
 
 ### Página de cadastro de crianças
 
-![localhost_5173_selecionar-jogador (3)](https://github.com/user-attachments/assets/deee3051-f60c-4573-8e31-cda844100a43)
+![profile2](https://github.com/user-attachments/assets/deee3051-f60c-4573-8e31-cda844100a43)
 
 ### Página de edição de crianças
 
-![localhost_5173_selecionar-jogador (2)](https://github.com/user-attachments/assets/b4c406b7-fa09-41d5-a8a8-d0e0b185e6f3)
+![profile3](https://github.com/user-attachments/assets/b4c406b7-fa09-41d5-a8a8-d0e0b185e6f3)
 
 ### Página de exibição de resultados
 
-![localhost_5173_selecionar-jogador (4)](https://github.com/user-attachments/assets/9903c4ea-7532-4f49-9f6e-31ca677db54f)
+![profile4](https://github.com/user-attachments/assets/9903c4ea-7532-4f49-9f6e-31ca677db54f)
 
 ### Página de seleção de jogador
 
-![localhost_5173_selecionar-jogador (5)](https://github.com/user-attachments/assets/05054bfd-bfd2-418a-92e6-06bd4d220483)
+![select](https://github.com/user-attachments/assets/05054bfd-bfd2-418a-92e6-06bd4d220483)
 
 ## Hospedagem
 

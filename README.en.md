@@ -16,15 +16,6 @@ Para a versão em português, veja [README.md](README.md).
 - [Color Palette](#color-palette)
 - [Usage](#usage)
 - [Screenshots](#screenshots)
-  - [Home Page](#home-page)
-  - [Login](#login)
-  - [Registration](#registration)
-  - [Number Game](#number-game)
-  - [Color Game](#color-game)
-  - [Vowel Game](#vowel-game)
-  - [Memory Game](#memory-game)
-  - [Profile Page](#profile-page)
-- [Versioning](#versioning)
 - [Hosting](#hosting)
 - [Bugs](#bugs)
 - [Final Considerations](#final-considerations)
@@ -111,48 +102,58 @@ Note: subject to change.
 
 ### Home Page
 
-![Home Page Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/home.png)
+![homepage](https://github.com/user-attachments/assets/cdfbad6d-e1f0-447d-90c8-55d7aa9674f3)
 
 ### Login
 
-![Login Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/login.png)
+![login](https://github.com/user-attachments/assets/f621eaa2-22d5-4281-b9be-40d7e59ceaa4)
 
-### Registration
+### Sign Up
 
-![Registration Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/cadastro.png)
+![singup](https://github.com/user-attachments/assets/bcd5adb8-f875-4d3c-8509-2911c262a7db)
 
-### Number Game
+### Numbers Game
 
-![Number Game Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/numeros.png)
+![number](https://github.com/user-attachments/assets/228ead33-a785-401f-8aab-286caccdadd7)
 
 ### Color Game
 
-![Color Game Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/cores.png)
+![color](https://github.com/user-attachments/assets/75167c20-9bc8-454b-9dae-938bfcf9ae3a)
 
 ### Vowel Game
 
-![Vowel Game Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/vogais.png)
+![vowel](https://github.com/user-attachments/assets/d6ac96de-1159-412b-9a14-8349ebff3e40)
 
 ### Memory Game
 
-![Vowel Game Screenshot](https://github.com/ManuelaTenorio/Jornada-da-inclusao/blob/main/screenshots/memoria.jpeg)
+![localhost_5173_](https://github.com/user-attachments/assets/14df4b2f-0b39-455e-a8b5-dfaee8b0f4ee)
 
-### Profile Page
+### Page to edit profile
 
-[Image to be added]
+![profile1](https://github.com/user-attachments/assets/ce9f652e-ed3b-42a1-9eaf-35ee24859c1e)
 
-## Versioning
+### Page to register children
 
-The project versions can be viewed in `CHANGELOG.md`.
+![profile2](https://github.com/user-attachments/assets/deee3051-f60c-4573-8e31-cda844100a43)
+
+### Page to edit children
+
+![profile3](https://github.com/user-attachments/assets/b4c406b7-fa09-41d5-a8a8-d0e0b185e6f3)
+
+### Page to see results
+
+![profile4](https://github.com/user-attachments/assets/9903c4ea-7532-4f49-9f6e-31ca677db54f)
+
+### Page to select player
+
+![select](https://github.com/user-attachments/assets/05054bfd-bfd2-418a-92e6-06bd4d220483)
+
 
 ## Hosting
 
 The system is hosted via Firebase Hosting and can be accessed through the following link:
-[https://integrakids.web.app](https://integrakids.web.app)
+[https://integra-kids.web.app](https://integra-kids.web.app)
 
-## Bugs
-
-- Adjustments needed for the overall layout responsiveness of the system.
 
 ## Final Considerations
 We, maintainers of the "Journey of Inclusion" project, thank the contributions and guidance from the instructors whose subjects took part in the Integrating Project subject, and our classmates from other cycles who attended our presentation and accessed this repository to better understand our project.
