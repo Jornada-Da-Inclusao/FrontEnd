@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "../cadastrarDependente/cadastrarDep.module.css";
 import { cadastrarDependente } from "../../../services/dependenteService";
 import { calcularIdade } from '../calcularIdade';
+import DependenteModals from '../../../components/Modal-custom-alert/DependenteModal';
 import { icons } from "../icons";
 
 const CadastroForm = () => {
@@ -9,6 +10,10 @@ const CadastroForm = () => {
   const [dataNascimento, setDataNascimento] = useState("");
   const [sexo, setSexo] = useState("");
   const [avatarSelecionado, setAvatarSelecionado] = useState("");
+
+  // Estados para modais
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const hoje = new Date();
   const anoAtual = hoje.getFullYear();
@@ -21,7 +26,7 @@ const CadastroForm = () => {
     e.preventDefault();
 
     if (!avatarSelecionado || !nome || !dataNascimento || !sexo) {
-      alert("Preencha todos os campos e selecione um avatar.");
+      setShowErrorModal(true);
       return;
     }
 
@@ -30,7 +35,7 @@ const CadastroForm = () => {
     const usuarioId = usuario?.id;
 
     if (!usuarioId) {
-      alert("Erro: usuário não encontrado.");
+      setShowErrorModal(true);
       return;
     }
 
@@ -46,10 +51,15 @@ const CadastroForm = () => {
 
     try {
       await cadastrarDependente(dependente);
-      alert("Cadastro realizado com sucesso!");
+      setShowConfirmModal(true);
+      // Limpar formulário após sucesso
+      setNome("");
+      setDataNascimento("");
+      setSexo("");
+      setAvatarSelecionado("");
     } catch (error) {
       console.error(error);
-      alert("Erro ao cadastrar dependente");
+      setShowErrorModal(true);
     }
   };
 
@@ -78,7 +88,7 @@ const CadastroForm = () => {
             name="nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            required
+          
           />
 
           <label htmlFor="dataNascimento">Data de nascimento (intervalo entre 3 anos a 10 anos):</label>
@@ -89,11 +99,11 @@ const CadastroForm = () => {
             max={formatarData(dataMaxima)}
             value={dataNascimento}
             onChange={(e) => setDataNascimento(e.target.value)}
-            required
+          
           />
 
           <label htmlFor="sexo">Sexo:</label>
-          <select value={sexo} onChange={(e) => setSexo(e.target.value)} required>
+          <select value={sexo} onChange={(e) => setSexo(e.target.value)}>
             <option value="" disabled>--- escolha ---</option>
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
@@ -102,6 +112,13 @@ const CadastroForm = () => {
           <button type="submit">Cadastrar</button>
         </form>
       </div>
+
+      <DependenteModals
+        showCreateConfirm={showConfirmModal}
+        setShowCreateConfirm={setShowConfirmModal}
+        showCreateError={showErrorModal}
+        setShowCreateError={setShowErrorModal}
+      />
     </div>
   );
 };

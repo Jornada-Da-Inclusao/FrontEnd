@@ -20,11 +20,6 @@ div.head {
     margin-bottom: 0;
 }
 
-li > img {
-    width: 50px;
-    padding: 5px;
-}
-
 .linkStyles {
     color: var(--black);
     font-family: sans-serif;
@@ -72,7 +67,7 @@ li > select {
     width: 20px;
 }
 
-li:not(:first-child):not(:last-child):hover {
+.linkStyles:hover {
     border-bottom: 2.5px solid var(--red);
     margin-top: 2.5px;
     transition: 0.1s;

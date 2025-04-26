@@ -1,9 +1,9 @@
-// src/components/EditarDep.jsx
 import React, { useState, useEffect } from "react";
 import styles from "../editar/editarCadDep.module.css";
 import { icons } from "../icons";
 import { calcularIdade } from '../calcularIdade';
 import { getUserData, fetchDependentes, updateDependente, deleteDependente } from "../../../services/dependenteService";
+import DependenteModals from "../../../components/Modal-custom-alert/DependenteModal";
 
 const EditarDep = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +14,10 @@ const EditarDep = () => {
   const [ids, setIds] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [avatarSelecionado, setAvatarSelecionado] = useState("");
+
+  // Modais
+  const [showEditConfirm, setShowEditConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     const fetchDependentesData = async () => {
@@ -27,7 +31,6 @@ const EditarDep = () => {
 
     fetchDependentesData();
   }, []);
-
 
   const handleSelectId = (e) => {
     const id = Number(e.target.value);
@@ -51,33 +54,28 @@ const EditarDep = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const idade = calcularIdade(formData.dataNascimento);
-
-      const dadosAtualizados = {
-        ...formData,
-        idade,
-      };
+      const dadosAtualizados = { ...formData, idade };
 
       await updateDependente(selectedId, dadosAtualizados, avatarSelecionado);
-      alert("Dados alterados com sucesso!");
+      setShowEditConfirm(true);
     } catch (err) {
       console.error("Erro ao alterar dependente:", err);
     }
   };
 
+  const handleRemove = () => {
+    if (!selectedId) return;
+    setShowDeleteConfirm(true);
+  };
 
-  const handleRemove = async () => {
-    const confirmDelete = window.confirm("Tem certeza que deseja remover este dependente?");
-    if (!confirmDelete || !selectedId) return;
-
+  const confirmDelete = async () => {
     const { token } = getUserData() || {};
     if (!token) return;
 
     try {
       await deleteDependente(selectedId, token);
-      alert("Dependente removido com sucesso!");
       setFormData({ nome: "", dataNascimento: "", sexo: "" });
       setSelectedId(null);
     } catch (err) {
@@ -95,6 +93,7 @@ const EditarDep = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <h2>Alterar dados das crianças</h2>
+
         <h3>Alterar dados de qual criança:</h3>
         <select id="idSelect" value={selectedId ?? ""} onChange={handleSelectId}>
           <option value="" disabled>-- Escolha uma criança --</option>
@@ -160,6 +159,14 @@ const EditarDep = () => {
 
         <button onClick={handleRemove}>Remover dependente</button>
       </div>
+
+      <DependenteModals
+        showEditConfirm={showEditConfirm}
+        setShowEditConfirm={setShowEditConfirm}
+        showDeleteConfirm={showDeleteConfirm}
+        setShowDeleteConfirm={setShowDeleteConfirm}
+        onConfirmDelete={confirmDelete}
+      />
     </div>
   );
 };

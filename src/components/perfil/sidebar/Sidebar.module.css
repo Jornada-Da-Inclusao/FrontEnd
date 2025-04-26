@@ -30,11 +30,6 @@
     color: var(--white);
   }
 
-  .sidebar li:hover{
-      margin-left: 20px;
-      transition: 0.5s;   
-  }
-
   .sidebar .options{
     margin-top: 20px;
     font-size: xx-large;
@@ -112,4 +107,10 @@
   .formContainer button:hover {
     background: #A30303;
   }
+
+  .ativo {
+    margin-left: 30px;
+    transition: 0.5s;  
+}
+
   

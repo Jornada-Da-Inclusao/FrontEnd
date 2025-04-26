@@ -63,4 +63,20 @@
     background: rgba(255, 255, 255, 0.15);
     border: 2px dashed #fff;
   }
+
+  .perfil.ativo {
+    border: 3px solid #fff; /* Borda branca */
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* Brilho branco */
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo suave */
+  }
+
+  .perfil .selecionado {
+    font-size: 12px;
+    color: #fff;
+    margin-top: 5px; /* Distância entre o nome e o texto "Selecionado" */
+    display: block;
+    text-align: center;
+  }
+
+  
   

@@ -72,7 +72,6 @@ export const deletar = async (url, header) => {
 };
 
 export const atualizarUsuario = async (dadosAtualizados, token) => {
-  console.log(dadosAtualizados)
   try {
     const response = await fetch("https://backend-9qjw.onrender.com/usuarios/atualizar-parcial", {
       method: "PATCH",

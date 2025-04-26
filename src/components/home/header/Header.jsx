@@ -36,11 +36,6 @@ export default function Header() {
         {userLogado && userLogado.token ? (
           <div className={styles.userArea}>
             <Link className={styles.linkStylesLast2} to="/perfil">
-            <img
-                 src={userLogado.foto || PiLogo} // fallback para a imagem
-                 alt={userLogado.nome || "Usuário"}
-                 className={styles.profileImage}
-               />
               {userLogado.nome}
             </Link>
             <button className={styles.logoutButton} onClick={handleLogout}>

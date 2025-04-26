@@ -1,10 +1,10 @@
 import React from 'react';
 import './PerfilCard.css';
 
-const PerfilCard = ({ nome, imagem, onClick, adicionar }) => {
+const PerfilCard = ({ nome, imagem, onClick, adicionar, ativo }) => {
   return (
     <button
-      className={`perfil ${adicionar ? 'adicionar' : ''}`}
+      className={`perfil ${adicionar ? 'adicionar' : ''} ${ativo ? 'ativo' : ''}`}
       onClick={onClick}
       aria-label={`Selecionar ${nome}`}
     >
@@ -12,6 +12,7 @@ const PerfilCard = ({ nome, imagem, onClick, adicionar }) => {
         {adicionar ? '+' : <img src={imagem} alt={nome} />}
       </div>
       <span>{nome}</span>
+      {ativo && <span className="selecionado">Selecionado</span>} {/* Texto "Selecionado" */}
     </button>
   );
 };

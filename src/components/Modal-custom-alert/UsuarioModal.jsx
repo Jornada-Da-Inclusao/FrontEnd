@@ -1,4 +1,4 @@
-import CustomModal from 'CustomModal';
+import { CustomModal } from './CustomModal';
 
 const UsuarioModals = ({
   showConfirm, setShowConfirm,
@@ -12,7 +12,7 @@ const UsuarioModals = ({
         onClose={() => setShowConfirm(false)}
         title="Sucesso!"
         message="Seus dados foram atualizados com sucesso."
-        icon="✅"
+        icon="✔️"
         color="#4caf50"
         doneButton={{
           label: "Fechar",
