@@ -88,7 +88,7 @@ function Login() {
               <label>
                 <input type="checkbox" /> Lembrar
               </label>
-              <a href="#">Esqueci a senha</a>
+              <a href="/sendToken">Esqueci a senha</a>
             </div>
         <button className={styles.btnLogin}
           type="submit" value="Entrar"
