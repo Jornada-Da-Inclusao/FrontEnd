@@ -61,7 +61,7 @@ function Cadastro() {
         setLoading(true)
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
         alert('Usuário cadastrado com sucesso!')
-        navigate("/")
+        navigate("/login")
       } catch (error) {
         alert('Erro ao cadastrar o usuário!')
         window.location.reload();

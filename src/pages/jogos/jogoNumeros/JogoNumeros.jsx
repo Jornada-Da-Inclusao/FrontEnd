@@ -33,7 +33,7 @@ export default function JogoNumeros() {
   const [tentativas, setTentativas] = useState(0);
   const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
   const idJogoNumeros = 2;
-  const idDependente = 10;
+  const idDependente = 14;
   const { registrarInfos } = useContext(JogoContext);
   const [infoJogoNumeros, setInfoJogoNumeros] = useState({});
   const { usuario } = useContext(AuthContext);

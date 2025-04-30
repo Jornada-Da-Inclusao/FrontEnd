@@ -37,7 +37,7 @@ const JogoMemoria = () => {
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
     const idJogoMemoria = 1;
-    const idDependente = 10;
+    const idDependente = 14;
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     const { usuario } = useContext(AuthContext);

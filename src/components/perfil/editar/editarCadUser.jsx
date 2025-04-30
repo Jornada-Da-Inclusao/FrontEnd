@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import styles from "./editarCadUser.module.css";
+import { Navigate } from 'react-router-dom';
 
 const EditarUsuario = () => {
     const [formData, setFormData] = useState({
         nome: '',
-        email: '',
+        usuario: '',
         senha: '',
         confirmarSenha: ''
     });
@@ -27,7 +28,7 @@ const EditarUsuario = () => {
 
         // Verificar se os campos têm valor antes de enviar
         if (formData.nome) dataToSend.nome = formData.nome;
-        if (formData.email) dataToSend.email = formData.email;
+        if (formData.usuario) dataToSend.usuario = formData.usuario;
         if (formData.senha) dataToSend.senha = formData.senha;
 
         // Verificar se o token está presente antes de enviar a requisição
@@ -37,14 +38,14 @@ const EditarUsuario = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/usuarios/atualizar-parcial', {
+            const response = await fetch('https://backend-9qjw.onrender.com/usuarios/atualizar-parcial', {
                 method: "PATCH",
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': token, // Enviando o token no cabeçalho
                 },
                 body: JSON.stringify({
-                  usuarioId: usuarioData.id,  // Adicionando o ID do usuário
+                  id: usuarioData.id,  // Adicionando o ID do usuário
                   ...dataToSend            // Espalhando os outros dados
                 }),
               })
@@ -53,6 +54,7 @@ const EditarUsuario = () => {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Usuário atualizado com sucesso:', result);
+                window.location.reload();
             } else {
                 const error = await response.json();
                 console.error('Erro ao atualizar usuário:', error);
@@ -78,13 +80,13 @@ const EditarUsuario = () => {
                 method: 'DELETE',
                 headers: {
                     "Authorization": token,
-                    "Content-Type": "application/json",
                 },
             });
 
             if (response.ok) {
                 const result = await response.json();
                 console.log('Usuário deletado com sucesso:', result);
+                Navigate("/");
             } else {
                 const error = await response.json();
                 console.error('Erro ao deletar usuário:', error);
@@ -106,11 +108,11 @@ const EditarUsuario = () => {
                         value={formData.nome}
                         onChange={handleChange}
                     />
-                    <label htmlFor="email">Alterar E-mail:</label>
+                    <label htmlFor="usuario">Alterar E-mail:</label>
                     <input
                         type="text"
-                        name="email"
-                        value={formData.email}
+                        name="usuario"
+                        value={formData.usuario}
                         onChange={handleChange}
                     />
                     <label htmlFor="senha">Alterar senha:</label>
