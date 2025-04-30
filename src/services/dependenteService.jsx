@@ -2,21 +2,21 @@ export const cadastrarDependente = async (dependente) => {
     const token = localStorage.getItem("token");
   
     const response = await fetch(
-      `https://backend-9qjw.onrender.com/dependente`,
+      "https://backend-9qjw.onrender.com/dependente",
       {
-        method: 'POST', 
+        method: "POST", 
         headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
+          "Authorization": token,
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(dependente),
+        body: JSON.stringify(dependente)
       }
     );
   
     if (!response.ok) {
       throw new Error(`Erro ${response.status}: ${response.statusText}`);
     }
-  
+
     return await response.json(); 
   };
   
