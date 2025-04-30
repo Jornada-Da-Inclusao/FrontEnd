@@ -8,6 +8,9 @@ import Cadastro from './pages/cadastro/Cadastro.jsx';
 import JogoCores from './pages/jogos/jogoCores/JogoCores.jsx';
 import JogoMemoria from './pages/jogos/jogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.jsx';
+import SendToken from './pages/login/sendToken/SendToken';
+import VerifyToken from './pages/login/verifyToken/VerifyToken';
+import NovaSenha from './pages/login/novaSenha/NovaSenha';
 import Perfil from './pages/perfil/perfil.jsx';
 import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
 import FaceJogoNumeros from './pages/jogos/JogoNumeros/JogoNumeros.jsx';
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
           <Route path="/jogo-cores" element={<JogoCores />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sendToken" element={<SendToken />} />
+          <Route path="/verifyToken" element={<VerifyToken />} />
+          <Route path="/novaSenha" element={<NovaSenha />} />
           <Route path="/perfil/*" element={<Perfil />} />
         </Routes>
       </Router>

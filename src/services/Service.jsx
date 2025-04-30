@@ -85,3 +85,17 @@ export const registrarJogo = async (url, dados, setDados, header) => {
     const resposta = await api.post(url, dados, header)
     setDados(resposta.data)
 }
+
+
+//apiemail
+export const Posttoken = async (url) => {
+    const resposta = await api.post(url);
+    return resposta;
+  }
+  
+
+  export const Gettoken = async (url) => {
+    const resposta = await api.get(url);
+    return resposta;
+  }
+  
