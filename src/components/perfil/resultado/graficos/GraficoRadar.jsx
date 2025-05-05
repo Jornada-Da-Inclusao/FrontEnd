@@ -1,52 +1,63 @@
-// src/components/GraficoRadar.jsx
 import React from "react";
 import {
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, Tooltip, ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Legend,
+  Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 
 const GraficoRadar = ({ dados, nome }) => {
-  // Filtra apenas os jogos da criança selecionada
+  if (!nome || !dados) return null;
+
+  // Mapeamento de jogos para áreas
+  const mapaJogos = {
+    "Jogo da Memória": "Memorização",
+    "Jogo das Letras": "Alfabetização inicial",
+    "Jogo dos Números": "Raciocinio logico-matematico",
+    "Jogo das Cores": "Percepção visual",
+  };
+
+  // Inicializa os dados com 0%
+  const radarData = Object.values(mapaJogos).map((area) => ({
+    area,
+    Porcentagem: 0,
+  }));
+
+  // Agrupa os dados da criança por jogo
   const jogosDaCrianca = dados.filter((d) => d.nome === nome);
 
-  if (!nome || jogosDaCrianca.length === 0) return null;
-
-  // Monta os dados no formato:
-  // [
-  //   { metrica: 'acertos', "Jogo da Memória": 8, "Jogo das Letras": 5, ... },
-  //   { metrica: 'erros', ... },
-  //   { metrica: 'tempo', ... },
-  // ]
-  const metricas = ["acertos", "erros", "tempo"];
-  const radarData = metricas.map((metrica) => {
-    const item = { metrica };
-    jogosDaCrianca.forEach((jogo) => {
-      item[jogo.jogo] = jogo[metrica];
-    });
-    return item;
+  jogosDaCrianca.forEach((jogo) => {
+    const area = mapaJogos[jogo.jogo];
+    if (area) {
+      const index = radarData.findIndex((item) => item.area === area);
+      const total = jogo.acertos + jogo.erros;
+      if (total > 0) {
+        radarData[index].Porcentagem = Math.round((jogo.acertos / total) * 100);
+      }
+    }
   });
-
-  const cores = ["#8884d8", "#82ca9d", "#ffc658", "#f44336", "#2196f3", "#795548"];
 
   return (
     <div style={{ width: "100%", height: 400 }}>
-      <h3>Comparativo de desempenho nos jogos de {nome}</h3>
+      <h3>Desempenho por capacidade de {nome} (%)</h3>
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
           <PolarGrid />
-          <PolarAngleAxis dataKey="metrica" />
-          <PolarRadiusAxis />
-          <Tooltip />
+          <PolarAngleAxis dataKey="area" />
+          <PolarRadiusAxis angle={30} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+          <Tooltip formatter={(value) => `${value}%`} />
           <Legend />
-          {jogosDaCrianca.map((jogo, index) => (
-            <Radar
-              key={jogo.jogo}
-              name={jogo.jogo}
-              dataKey={jogo.jogo}
-              stroke={cores[index % cores.length]}
-              fill={cores[index % cores.length]}
-              fillOpacity={0.4}
-            />
-          ))}
+          <Radar
+            name="Desempenho (%)"
+            dataKey="Porcentagem"
+            stroke="#4CAF50"
+            fill="#4CAF50"
+            fillOpacity={0.6}
+          />
         </RadarChart>
       </ResponsiveContainer>
     </div>

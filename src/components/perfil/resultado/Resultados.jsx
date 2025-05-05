@@ -1,37 +1,43 @@
-// src/pages/Resultados.jsx
 import React, { useState, useEffect } from "react";
 import styles from "../resultado/Resultados.module.css";
-import GraficoDesempenho from "../components/GraficoDesempenho";
-import resultados from "./resultados";
+import resultados from "./dadosFicticios";
+
+// Componentes dos gráficos
+import BarSizeChart from "../resultado/graficos/GraficoBarSize";
+import GaugeChart from "../resultado/graficos/GraficoMedidor";
+import RadarChart from "../resultado/graficos/GraficoRadar";
 
 const Resultados = () => {
-  const [nameFilter, setNameFilter] = useState("");
-  const [viewMode, setViewMode] = useState("individual");
+  const [nameFilter, setNameFilter] = useState(""); // Filtrando por nome da criança
+  const [tipoGrafico, setTipoGrafico] = useState("bar"); // "bar", "gauge" ou "radar"
   const [resultadosFiltrados, setResultadosFiltrados] = useState([]);
 
+  // Obter todos os nomes únicos dos jogadores
+  const nomesUnicos = [...new Set(resultados.map((r) => r.nome))];
+
   useEffect(() => {
-    if (viewMode === "geral") {
-      const agrupados = resultados.reduce((acc, curr) => {
-        const key = curr.jogo;
-        if (!acc[key]) {
-          acc[key] = {
-            jogo: curr.jogo,
-            acertos: 0,
-            erros: 0,
-            tempo: 0,
-          };
-        }
-        acc[key].acertos += curr.acertos;
-        acc[key].erros += curr.erros;
-        acc[key].tempo += curr.tempo;
-        return acc;
-      }, {});
-      setResultadosFiltrados(Object.values(agrupados));
+    if (nameFilter === "") {
+      setResultadosFiltrados([]); // Se não houver filtro, limpar os resultados
     } else {
-      const filtrados = resultados.filter((r) => nameFilter === "" || r.nome === nameFilter);
+      const filtrados = resultados.filter((r) => r.nome === nameFilter);
       setResultadosFiltrados(filtrados);
     }
-  }, [nameFilter, viewMode]);
+  }, [nameFilter]);
+
+  const renderGrafico = () => {
+    if (nameFilter === "") return <p>Selecione uma criança para ver o desempenho.</p>;
+
+    switch (tipoGrafico) {
+      case "bar":
+        return <BarSizeChart dados={resultadosFiltrados} viewMode="individual" />;
+      case "gauge":
+        return <GaugeChart dados={resultadosFiltrados} viewMode="individual" />;
+      case "radar":
+        return <RadarChart dados={resultadosFiltrados} nome={nameFilter} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -40,30 +46,25 @@ const Resultados = () => {
         <h3>Acompanhe o desempenho das crianças nos jogos educativos.</h3>
 
         <section className={styles.filter}>
-          <label>Modo de visualização:</label>
-          <select value={viewMode} onChange={(e) => setViewMode(e.target.value)}>
-            <option value="individual">Resultados por criança</option>
-            <option value="geral">Resultados gerais por jogo</option>
+          <label>Filtrar por nome:</label>
+          <select value={nameFilter} onChange={(e) => setNameFilter(e.target.value)}>
+            <option value="" disabled>Selecione uma criança</option>
+            {nomesUnicos.map((nome) => (
+              <option key={nome} value={nome}>{nome}</option>
+            ))}
           </select>
 
-          {viewMode === "individual" && (
-            <>
-              <label>Filtrar por nome:</label>
-              <select value={nameFilter} onChange={(e) => setNameFilter(e.target.value)}>
-                <option value="">Todos</option>
-                <option value="João">João</option>
-                <option value="Maria">Maria</option>
-                <option value="Lucas">Lucas</option>
-                <option value="Ana">Ana</option>
-                <option value="Carla">Carla</option>
-              </select>
-            </>
-          )}
+          <label>Modo de visualização:</label>
+          <select value={tipoGrafico} onChange={(e) => setTipoGrafico(e.target.value)}>
+            <option value="bar">Tentativas, Acertos e Erros</option>
+            <option value="gauge">Tempo</option>
+            <option value="radar">Desempenho por capacidades</option>
+          </select>
         </section>
 
         {resultadosFiltrados.length > 0 && (
           <section className={styles.textContent}>
-            <GraficoDesempenho dados={resultadosFiltrados} viewMode={viewMode} nome={nameFilter} />
+            {renderGrafico()}
           </section>
         )}
       </div>
