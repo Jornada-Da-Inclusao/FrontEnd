@@ -28,6 +28,7 @@
     font-family: 'Baloo 2', cursive;
     font-size: larger;
     color: var(--white);
+    text-decoration: none;
   }
 
   .sidebar .options{

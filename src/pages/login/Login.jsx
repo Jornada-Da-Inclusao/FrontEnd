@@ -3,36 +3,26 @@ import { AuthContext } from '../../contexts/AuthContext';
 import UsuarioLogin from '../../models/UsuarioLogin';
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
-import styles from './login.module.css'
+import styles from './login.module.css';
 import { RotatingLines } from 'react-loader-spinner';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import logo from '../../assets/images/LOGO.png';
+import { CustomModal } from '../../components/Modal-custom-alert/CustomModal.jsx'
 
 function Login() {
-  // Hook para navegar entre as páginas, usado para redirecionar o usuário após o login.
   const navigate = useNavigate();
-
-  // Obtém o `usuario`, `handleLogin` (função para realizar o login), e `isLoading` (indicador de carregamento) do contexto de autenticação.
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
-  // Estado para armazenar os dados de login do usuário, como e-mail e senha.
-  const [usuarioLogin, setUsuarioLogin] = useState(
-    UsuarioLogin // Inicializa o estado com um objeto vazio que segue a interface `UsuarioLogin`.
-  );
+  const [usuarioLogin, setUsuarioLogin] = useState(UsuarioLogin);
+  const [modalSucesso, setModalSucesso] = useState(false);
+  const [modalErro, setModalErro] = useState({ show: false, message: '' }); // Novo estado
 
-  // Hook de efeito que redireciona o usuário para a página '/home' se o login for bem-sucedido e um token for retornado.
   useEffect(() => {
-    if (usuario && usuario.token !== "") {
-      navigate('/home');
+    if (usuario && usuario.token !== '') {
+      setModalSucesso(true);
     }
-  }, [usuario, navigate]);
+  }, [usuario]);
 
-  /**
-    * Função que atualiza o estado `usuarioLogin` quando os campos do formulário mudam.
-    * Cada alteração nos campos de entrada é armazenada no estado usando o `name` dos inputs para definir a chave.
-    *
-    * @param {import("react").ChangeEvent} e
-    */
   function atualizarEstado(e) {
     setUsuarioLogin({
       ...usuarioLogin,
@@ -40,15 +30,16 @@ function Login() {
     });
   }
 
-  /**
-    * Função que é chamada ao submeter o formulário de login.
-    * Previne o comportamento padrão do formulário (recarregar a página) e chama a função `handleLogin`.
-    *
-    * @param {import("react").ChangeEvent} e
-    */
-  function login(e) {
+  async function login(e) {
     e.preventDefault();
-    handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
+    try {
+      await handleLogin(usuarioLogin);
+    } catch (error) {
+      setModalErro({
+        show: true,
+        message: error.message || 'Erro ao fazer login.'
+      });
+    }
   }
 
   return (
@@ -90,37 +81,60 @@ function Login() {
               </label>
               <a href="/sendToken">Esqueci a senha</a>
             </div>
-        <button className={styles.btnLogin}
-          type="submit" value="Entrar"
-        >
-          {isLoading ? <RotatingLines
-            strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="24"
-            visible={true}
-          /> :
-            <span>Entrar</span>
-          }
-        </button>
-            <p className={styles.links}>
+            <button className={styles.btnLogin} type="submit">
+              {isLoading ? (
+                <RotatingLines
+                  strokeColor="white"
+                  strokeWidth="5"
+                  animationDuration="0.75"
+                  width="24"
+                  visible={true}
+                />
+              ) : (
+                <span>Entrar</span>
+              )}
+            </button>
+            <p className={styles.loglinks}>
               <a href="/cadastro">Faça seu cadastro</a>
             </p>
           </form>
         </div>
       </div>
-      <div className="enabled">
-        <div className="active" vw-access-button></div>
-        <div vw-plugin-wrapper>
-          <div className="vw-plugin-top-wrapper"></div>
-        </div>
-      </div>
-      <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-      <script>
-        new window.VLibras.Widget('https://vlibras.gov.br/app');
-      </script>
-      <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
+
+      <CustomModal
+        show={modalSucesso}
+        onClose={() => {
+          setModalSucesso(false);
+          navigate('/');
+        }}
+        title="Login realizado!"
+        message="Você foi autenticado com sucesso."
+        icon="✔️"
+        color="#4caf50"
+        doneButton={{
+          label: "OK",
+          onClick: () => {
+            setModalSucesso(false);
+            navigate('/');
+          }
+        }}
+      />
+
+      {/* Modal de erro no login */}
+      <CustomModal
+        show={modalErro.show}
+        onClose={() => setModalErro({ show: false, message: '' })}
+        title="Erro ao fazer login"
+        message={modalErro.message}
+        icon="❌"
+        color="#f44336"
+        doneButton={{
+          label: "Tentar novamente",
+          onClick: () => setModalErro({ show: false, message: '' })
+        }}
+      />
     </>
-  )
+  );
 }
-export default Login
+
+export default Login;

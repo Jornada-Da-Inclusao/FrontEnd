@@ -74,7 +74,13 @@
   filter: brightness(1.1);
 }
 
-.links {
-  margin-top: 10px;
-  text-align: center;
+.botaoLogin > svg{
+  height: 50%;
+  width: 100%;
+}
+
+.cadlinks {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 0;
 }

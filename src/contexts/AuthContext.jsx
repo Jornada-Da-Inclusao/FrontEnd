@@ -38,8 +38,7 @@ export function AuthProvider({ children }) {
     try {
       await login("/usuarios/logar", usuarioLogin, (resposta) => {
         setUsuario(resposta);
-
-        // Salvar token e dados essenciais no localStorage
+  
         localStorage.setItem("token", resposta.token);
         localStorage.setItem("usuario", JSON.stringify({
           id: resposta.id,
@@ -48,13 +47,13 @@ export function AuthProvider({ children }) {
           foto: resposta.foto
         }));
       });
-
-      alert("O Usuário foi autenticado com sucesso!");
     } catch (error) {
-      alert("Os Dados do usuário estão inconsistentes!");
+      throw new Error("Usuário ou senha inválidos"); // Deixa o erro ser tratado fora
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
+  
 
   // 🔓 Faz logout e limpa localStorage
   function handleLogout() {
