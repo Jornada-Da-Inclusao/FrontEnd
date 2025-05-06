@@ -11,6 +11,7 @@ import Login from './pages/login/Login.jsx';
 import SendToken from './pages/login/sendToken/SendToken';
 import VerifyToken from './pages/login/verifyToken/VerifyToken';
 import NovaSenha from './pages/login/novaSenha/NovaSenha';
+import SelectPlayer from './pages/jogos/selecionarPlayer/selectPlayer.jsx';
 import Perfil from './pages/perfil/perfil.jsx';
 import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
 import FaceJogoNumeros from './pages/jogos/JogoNumeros/JogoNumeros.jsx';
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/verifyToken" element={<VerifyToken />} />
           <Route path="/novaSenha" element={<NovaSenha />} />
           <Route path="/perfil/*" element={<Perfil />} />
+        <Route path="/selecionar-jogador" element={<SelectPlayer />} />
         </Routes>
       </Router>
     </JogoProvider>

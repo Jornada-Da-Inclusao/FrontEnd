@@ -1,32 +1,24 @@
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { login } from "../services/UsuarioService";
 import UsuarioLogin from "../models/UsuarioLogin";
-import { login } from "../services/Service";
 
-/**
-  * Define a interface para o contexto de autenticação, incluindo o estado do usuário e métodos de login e logout.
-  * @typedef {Object} AuthContextProps
-  * @property {UsuarioLogin} usuario
-  * @property {function} handleLogout
-  * @property {function} handleLogin
-  * @property {boolean} isLoading
-  */
-
-/**
-  * Define a interface para as propriedades do provedor de autenticação.
-  * @typedef {Object} AuthProviderProps
-  * @property {import("react").ReactNode} children
-  */
-
-// Cria o contexto de autenticação com um valor padrão vazio.
+// Cria o contexto com valor inicial vazio
 export const AuthContext = createContext({});
 
-/**
-  * Define o provedor de autenticação, que gerencia o estado de autenticação do usuário.
-  * @param {Object} object
-  * @param {import("react").ReactNode} object.children
-  */
 export function AuthProvider({ children }) {
+  const [usuario, setUsuario] = useState({
+    id: 0,
+    nome: "",
+    email: "",
+    usuario: "",
+    foto: "",
+    senha: "",
+    token: ""
+  });
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 🔁 Recupera usuário do localStorage ao iniciar
   useEffect(() => {
     const token = localStorage.getItem("token");
     const dadosUsuario = localStorage.getItem("usuario");
@@ -40,20 +32,11 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // Estado que armazena as informações do usuário autenticado.
-  const [usuario, setUsuario] = useState(UsuarioLogin);
-
-  // Estado que indica se o login está em andamento.
-  const [isLoading, setIsLoading] = useState(false);
-
-  /**
-    * Método para realizar o login do usuário.
-    * @param {UsuarioLogin} usuarioLogin
-    */
+  // 🔐 Faz login e salva no localStorage
   async function handleLogin(usuarioLogin) {
-    setIsLoading(true); // Indica que a operação de login está em andamento.
+    setIsLoading(true);
     try {
-      await login(`/usuarios/logar`, usuarioLogin, (resposta) => {
+      await login("/usuarios/logar", usuarioLogin, (resposta) => {
         setUsuario(resposta);
 
         // Salvar token e dados essenciais no localStorage
@@ -65,22 +48,30 @@ export function AuthProvider({ children }) {
           foto: resposta.foto
         }));
       });
-      alert("O Usuário foi autenticado com sucesso!"); // Mensagem de sucesso.
+
+      alert("O Usuário foi autenticado com sucesso!");
     } catch (error) {
-      console.log(error);
-      alert("Os Dados do usuário estão inconsistentes!"); // Mensagem de erro caso o login falhe.
+      alert("Os Dados do usuário estão inconsistentes!");
     }
-    setIsLoading(false); // Finaliza a operação de login.
+    setIsLoading(false);
   }
 
-  // Método para realizar o logout do usuário.
+  // 🔓 Faz logout e limpa localStorage
   function handleLogout() {
-    setUsuario(UsuarioLogin);
+    setUsuario({
+      id: 0,
+      nome: "",
+      email: "",
+      usuario: "",
+      foto: "",
+      senha: "",
+      token: ""
+    });
+
     localStorage.removeItem("token");
     localStorage.removeItem("usuario");
   }
 
-  // Retorna o provedor de autenticação com o valor do contexto.
   return (
     <AuthContext.Provider value={{ usuario, handleLogin, handleLogout, isLoading }}>
       {children}
