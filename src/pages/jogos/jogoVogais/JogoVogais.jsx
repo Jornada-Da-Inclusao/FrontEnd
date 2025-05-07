@@ -6,7 +6,6 @@ import {
     useSensor, // Importa o hook que permite definir sensores que detectarão as interações de arraste (ex: mouse, toque).
     useSensors, // Importa o hook que permite criar e gerenciar múltiplos sensores.
     PointerSensor, // Importa o sensor que permite detectar interações de arraste com o mouse ou toque.
-    closestCorners, // Importa a estratégia de detecção de colisão que identifica quando um item está próximo dos cantos de outra área.
 } from "@dnd-kit/core"; // Importa os componentes essenciais para drag-and-drop da biblioteca `@dnd-kit/core`.
 
 import CompJogoVogais from '../../../../components/compJogoVogais/CompJogoVogais'; // Importa o componente que renderiza as letras arrastáveis do jogo.
@@ -89,7 +88,6 @@ function JogoVogais() {
                                 </div>
                                 <DndContext
                                     sensors={sensors} // Passa os sensores de arraste configurados para o DnDContext.
-                                    collisionDetection={closestCorners} // Define a estratégia de detecção de colisão.
                                     onDragEnd={handleDragEnd} // Define a função a ser chamada quando o arraste terminar.
                                 >
                                     <DroppableArea /> {/* Exibe a área onde as letras podem ser soltas. */}

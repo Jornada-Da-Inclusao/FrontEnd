@@ -6,7 +6,6 @@ import {
     useSensor,
     useSensors,
     PointerSensor,
-    closestCorners,
     useDraggable
 } from '@dnd-kit/core'
 import { CSS } from "@dnd-kit/utilities";
@@ -146,7 +145,6 @@ export default function JogoNumeros() {
                 <div className={styles.game}>
                     <DndContext
                         sensors={sensors}
-                        collisionDetection={closestCorners}
                         onDragEnd={handleDragEnd}
                     >
                         <div className={styles.infoArea}>

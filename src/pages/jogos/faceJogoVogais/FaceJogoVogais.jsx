@@ -7,7 +7,6 @@ import {
     useSensor,
     useSensors,
     PointerSensor,
-    closestCorners,
 } from "@dnd-kit/core";
 import GameVogais from '../gameVogais/GameVogais.jsx';
 
@@ -82,7 +81,6 @@ function FaceJogoVogais() {
                         </div>
                         <DndContext
                             sensors={sensors}
-                            collisionDetection={closestCorners}
                             onDragEnd={handleDragEnd}
                         >
                             <DroppableArea />
