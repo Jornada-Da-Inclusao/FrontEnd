@@ -14,27 +14,36 @@ import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
 import FaceJogoNumeros from './pages/jogos/faceJogoNumeros/FaceJogoNumeros.jsx';
 import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais } from './components/explicacoes/Explicacoes.jsx';
 import { AuthProvider } from './contexts/AuthContext';
+import { JogoProvider } from './contexts/JogoContext';
+import SendToken from './components/compLogin/sendToken/SendToken';
+import VerifyToken from './components/compLogin/verifyToken/VerifyToken';
+import NovaSenha from './components/compLogin/novaSenha/NovaSenha';
 
 const App = () => (
   <AuthProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/jogo-cores-exp" element={<ExplicacaoCores />} />
-        <Route path="/jogo-memoria-exp" element={<ExplicacaoMemoria />} />
-        <Route path="/jogo-numeros-exp" element={<ExplicacaoNumeros />} />
-        <Route path="/jogo-vogais-exp" element={<ExplicacaoVogais />} />
-        <Route path="/jogo-memoria" element={<JogoMemoria />} />
-        <Route path="/jogo-numeros" element={<FaceJogoNumeros />} />
-        <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
-        <Route path="/jogo-cores" element={<JogoCores />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/perfil/*" element={<Perfil />} />
-        <Route path="/selecionar-jogador" element={<SelectPlayer />} />
+    <JogoProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/jogo-cores-exp" element={<ExplicacaoCores />} />
+          <Route path="/jogo-memoria-exp" element={<ExplicacaoMemoria />} />
+          <Route path="/jogo-numeros-exp" element={<ExplicacaoNumeros />} />
+          <Route path="/jogo-vogais-exp" element={<ExplicacaoVogais />} />
+          <Route path="/jogo-memoria" element={<JogoMemoria />} />
+          <Route path="/jogo-numeros" element={<FaceJogoNumeros />} />
+          <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
+          <Route path="/jogo-cores" element={<JogoCores />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sendToken" element={<SendToken />} />
+          <Route path="/verifyToken" element={<VerifyToken />} />
+          <Route path="/novaSenha" element={<NovaSenha />} />
+          <Route path="/perfil/*" element={<Perfil />} />
+          <Route path="/selecionar-jogador" element={<SelectPlayer />} />
         </Routes>
-    </Router>
+      </Router>
+    </JogoProvider>
   </AuthProvider>
 );
 

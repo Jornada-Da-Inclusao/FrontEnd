@@ -29,7 +29,7 @@ body {
   border-radius: 10px;
   padding: 10px;
   overflow: auto; /* Adiciona rolagem se o conteúdo exceder o tamanho */
-  background-image: url("../images/memoria/fundo.jpg");
+  background-image: url("../../../assets/images/memoria/fundo.jpg");
   background-size: cover; /* Ajusta a imagem de fundo para cobrir o elemento */
   background-position: center; /* Centraliza a imagem de fundo */
 }

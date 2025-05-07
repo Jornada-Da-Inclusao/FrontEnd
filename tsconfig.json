@@ -1,16 +1,32 @@
 {
-    "compilerOptions": {
-      "target": "ESNext",
-      "useDefineForClassFields": true,
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "strict": true,
-      "jsx": "react-jsx",
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ]
     },
-    "include": ["src"],
-    "exclude": ["node_modules"]
-  }
-  
+    "checkJs": true,
+    "jsx": "react",
+    "strictNullChecks": true
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "build",
+    "dist",
+    "docs"
+  ]
+}

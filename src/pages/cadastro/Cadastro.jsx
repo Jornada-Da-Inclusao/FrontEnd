@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { cadastrarUsuario } from '../../services/usuarioService'
-import { RotatingLines } from 'react-loader-spinner'
-import styles from './cadastro.module.css'
+import Usuario from '../../models/Usuario.js'
+import { cadastrarUsuario } from '../../services/UsuarioService.jsx'
+import styles from './cadastro.module.css';
+import React from 'react'
 
 function Cadastro() {
   const navigate = useNavigate()
 
+  // Estado para armazenar a confirmação de senha.
   const [confirmaSenha, setConfirmaSenha] = useState("")
-  const [loading, setLoading] = useState(false)
 
-  const [usuario, setUsuario] = useState({
-    id: 0,
-    nome: '',
-    usuario: '',
-    senha: '',
-    foto: ''
-  })
+  // Estado que armazena os dados do usuário a ser cadastrado.
+  // Utiliza a interface `Usuario` para garantir que os dados tenham a estrutura correta.
+  const [usuario, setUsuario] = useState(Usuario)
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (usuario.id !== 0) {
@@ -28,6 +27,12 @@ function Cadastro() {
     navigate('/login')
   }
 
+  /**
+    * Função que atualiza o estado do `usuario` com base nos valores digitados nos campos do formulário.
+    * O nome do campo (atributo `name`) é usado para identificar qual propriedade deve ser atualizada.
+    *
+    * @param {import("react").ChangeEvent} e
+    */
   function atualizarEstado(e) {
     setUsuario({
       ...usuario,
@@ -35,19 +40,31 @@ function Cadastro() {
     })
   }
 
+  /**
+    * Função que atualiza o estado da `confirmaSenha` quando o usuário digita na confirmação de senha.
+    * @param {import("react").ChangeEvent} e
+    */
   function handleConfirmarSenha(e) {
     setConfirmaSenha(e.target.value)
   }
 
+  /**
+    * Função assíncrona que é chamada ao enviar o formulário de cadastro.
+    * @param {import("react").ChangeEvent} e
+    */
   async function cadastrarNovoUsuario(e) {
-    e.preventDefault()
+    e.preventDefault() // Previne o comportamento padrão do formulário (recarregar a página).
+
+    // Verifica se a senha e a confirmação são iguais e se a senha possui ao menos 8 caracteres.
     if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
       try {
         setLoading(true)
         await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
         alert('Usuário cadastrado com sucesso!')
+        navigate("/")
       } catch (error) {
         alert('Erro ao cadastrar o usuário!')
+        window.location.reload();
       } finally {
         setLoading(false)
       }
@@ -60,65 +77,53 @@ function Cadastro() {
 
   return (
     <>
-      <div className={styles.bodyCad}>
-        <div id="login-container" className={styles.formContainer}>
-          <h1></h1>
-          <form className={styles.formCad} id="login-form" onSubmit={cadastrarNovoUsuario}>
-            <div className="half-box">
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-name">Nome do Pai/Responsável</label>
-                <input
-                  className={styles.inputCad}
-                  type="text"
-                  name="nome"
-                  id="parent-name"
-                  placeholder="Digite o nome do pai ou responsável"
-                  required
-                  value={usuario.nome}
-                  onChange={atualizarEstado}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-usuario">E-mail</label>
-                <input
-                  className={styles.inputCad}
-                  type="usuario"
-                  name="usuario"
-                  id="parent-usuario"
-                  placeholder="Digite o e-mail do pai ou responsável"
-                  required
-                  value={usuario.usuario}
-                  onChange={atualizarEstado}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-password">Senha</label>
-                <input
-                  type="password"
-                  id="parent-password"
-                  name="senha"
-                  placeholder="Digite a senha do pai ou responsável"
-                  className={styles.inputCad}
-                  required
-                  value={usuario.senha}
-                  onChange={atualizarEstado}
-                />
-              </div>
-              <div className={styles.fullBox}>
-                <label className={styles.labelCad} htmlFor="parent-password-confirmation">Confirmar Senha</label>
-                <input
-                  className={styles.inputCad}
-                  type="password"
-                  name="senha"
-                  id="parent-password-confirmation"
-                  placeholder="Digite novamente a senha"
-                  required
-                  value={confirmaSenha}
-                  onChange={handleConfirmarSenha}
-                />
-              </div>
-
-              <button type="submit" className={styles.btnSubmit} disabled={loading}>
+      <div className={styles.containerGeral}>
+        <div className={styles.imgContainer}></div>
+        <div className={styles.formArea}>
+          <h1 className={styles.titulo}>Integra Kids</h1>
+          <p className={styles.boasVindas}>Bem-vindo!</p>
+          <p className={styles.instrucao}>Crie sua conta para continuar.</p>
+          <form onSubmit={cadastrarNovoUsuario} className={styles.formCad}>
+            <label htmlFor="parent-name">Nome do Pai/Responsável</label>
+            <input
+              type="text"
+              name="nome"
+              id="parent-name"
+              placeholder="Digite o nome do responsável"
+              required
+              value={usuario.nome}
+              onChange={atualizarEstado}
+            />
+            <label htmlFor="parent-email">E-mail</label>
+            <input
+              type="email"
+              name="usuario"
+              id="parent-email"
+              placeholder="Digite o e-mail"
+              required
+              value={usuario.usuario}
+              onChange={atualizarEstado}
+            />
+            <label htmlFor="parent-password">Senha</label>
+            <input
+              type="password"
+              id="parent-password"
+              name="senha"
+              placeholder="Digite a senha"
+              required
+              value={usuario.senha}
+              onChange={atualizarEstado}
+            />
+            <label htmlFor="parent-password-confirmation">Confirmar Senha</label>
+            <input
+              type="password"
+              id="parent-password-confirmation"
+              placeholder="Digite novamente a senha"
+              required
+              value={confirmaSenha}
+              onChange={handleConfirmarSenha}
+            />
+            <button type="submit" className={styles.botaoLogin} disabled={loading}>
                 {loading ? (
                   <RotatingLines
                     strokeColor="white"
@@ -131,14 +136,13 @@ function Cadastro() {
                   "Cadastrar"
                 )}
               </button>
-
-              <p>Já tem cadastro?<a href="/login">  Faça seu login</a></p>
-              <p><a href="/">Voltar Para Home</a></p>
-            </div>
+            <p className={styles.links}>
+              Já tem conta? <a href="/login">Faça login</a>
+            </p>
+            <p className={styles.links}><a href="/">Voltar para Home</a></p>
           </form>
         </div>
       </div>
-
       <div className="enabled">
         <div className="active" vw-access-button='true'></div>
         <div vw-plugin-wrapper="true">

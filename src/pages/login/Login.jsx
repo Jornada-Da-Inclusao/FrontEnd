@@ -1,31 +1,38 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+import UsuarioLogin from '../../models/UsuarioLogin';
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
-import styles from './login.module.css';
+import styles from './login.module.css'
 import { RotatingLines } from 'react-loader-spinner';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
+import logo from '../../assets/images/LOGO.png';
 
 function Login() {
+  // Hook para navegar entre as páginas, usado para redirecionar o usuário após o login.
   const navigate = useNavigate();
 
+  // Obtém o `usuario`, `handleLogin` (função para realizar o login), e `isLoading` (indicador de carregamento) do contexto de autenticação.
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 
-  const [usuarioLogin, setUsuarioLogin] = useState({
-    id: 0,
-    nome: '',
-    email: '',
-    usuario: '',
-    foto: '',
-    senha: '',
-    token: ''
-  });
+  // Estado para armazenar os dados de login do usuário, como e-mail e senha.
+  const [usuarioLogin, setUsuarioLogin] = useState(
+    UsuarioLogin // Inicializa o estado com um objeto vazio que segue a interface `UsuarioLogin`.
+  );
 
+  // Hook de efeito que redireciona o usuário para a página '/home' se o login for bem-sucedido e um token for retornado.
   useEffect(() => {
     if (usuario && usuario.token !== "") {
       navigate('/home');
     }
   }, [usuario, navigate]);
 
+  /**
+    * Função que atualiza o estado `usuarioLogin` quando os campos do formulário mudam.
+    * Cada alteração nos campos de entrada é armazenada no estado usando o `name` dos inputs para definir a chave.
+    *
+    * @param {import("react").ChangeEvent} e
+    */
   function atualizarEstado(e) {
     setUsuarioLogin({
       ...usuarioLogin,
@@ -33,21 +40,30 @@ function Login() {
     });
   }
 
+  /**
+    * Função que é chamada ao submeter o formulário de login.
+    * Previne o comportamento padrão do formulário (recarregar a página) e chama a função `handleLogin`.
+    *
+    * @param {import("react").ChangeEvent} e
+    */
   function login(e) {
     e.preventDefault();
-    handleLogin(usuarioLogin);
+    handleLogin(usuarioLogin); // Chama a função de login com os dados do usuário.
   }
 
   return (
     <>
-      <div className={styles.bodyLogin}>
-        <div className={styles.loginContainer}>
-          <h1></h1>
-          <form id="loginForm" onSubmit={login}>
-            <div className={styles.fullBox}>
-              <label htmlFor="usuario">E-mail</label>
+      <div className={styles.container}>
+        <div className={styles.leftSide}></div>
+        <div className={styles.rightSide}>
+          <img src={logo} alt="logo" className={styles.logo} />
+          <h1 className="login-title">Bem-vindo de volta!</h1>
+          <h2 className="login-title">Faça seu login para continuar.</h2>
+          <form onSubmit={login} className={styles.form}>
+            <label htmlFor="usuario">Email</label>
+            <div className={styles.inputGroup}>
               <input
-                type="text"
+                type="email"
                 id="usuario"
                 name="usuario"
                 placeholder="Digite seu e-mail"
@@ -56,8 +72,8 @@ function Login() {
                 onChange={atualizarEstado}
               />
             </div>
-            <div className={styles.fullBox}>
-              <label htmlFor="password">Senha</label>
+            <label htmlFor="senha">Senha</label>
+            <div className={styles.inputGroup}>
               <input
                 type="password"
                 id="senha"
@@ -68,26 +84,31 @@ function Login() {
                 onChange={atualizarEstado}
               />
             </div>
-            <button className={styles.btnSubmit} type="submit">
-              {isLoading ? (
-                <RotatingLines
-                  strokeColor="white"
-                  strokeWidth="5"
-                  animationDuration="0.75"
-                  width="24"
-                  visible={true}
-                />
-              ) : (
+            <div className={styles.extraOptions}>
+              <label>
+                <input type="checkbox" /> Lembrar
+              </label>
+              <a href="/sendToken">Esqueci a senha</a>
+            </div>
+            <button className={styles.btnLogin}
+              type="submit" value="Entrar"
+            >
+              {isLoading ? <RotatingLines
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="24"
+                visible={true}
+              /> :
                 <span>Entrar</span>
-              )}
+              }
             </button>
-            <p>Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link></p>
-            <p><Link to="/">Voltar Para Home</Link></p>
+            <p className={styles.links}>
+              <a href="/cadastro">Faça seu cadastro</a>
+            </p>
           </form>
         </div>
       </div>
-
-      {/* VLibras e widgets externos */}
       <div className="enabled">
         <div className="active" vw-access-button></div>
         <div vw-plugin-wrapper>
@@ -96,11 +117,10 @@ function Login() {
       </div>
       <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
       <script>
-        {`new window.VLibras.Widget('https://vlibras.gov.br/app');`}
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
       </script>
       <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
     </>
-  );
+  )
 }
-
-export default Login;
+export default Login
