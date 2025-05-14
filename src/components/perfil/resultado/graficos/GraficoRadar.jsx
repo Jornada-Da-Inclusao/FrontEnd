@@ -15,10 +15,10 @@ const GraficoRadar = ({ dados, nome }) => {
 
   // Mapeamento de jogos para áreas
   const mapaJogos = {
-    "Jogo da Memória": "Memorização",
-    "Jogo das Letras": "Alfabetização inicial",
-    "Jogo dos Números": "Raciocinio logico-matematico",
-    "Jogo das Cores": "Percepção visual",
+    "Memória": "Memorização",
+    "Letras": "Alfabetização inicial",
+    "Números": "Raciocinio logico-matematico",
+    "Cores": "Percepção visual",
   };
 
   // Inicializa os dados com 0%

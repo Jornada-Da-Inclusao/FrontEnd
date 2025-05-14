@@ -1,81 +1,103 @@
-.container {
-    display: flex;
-    justify-content: space-between; /* Para espaçar os dois content */
-    align-items: flex-start; /* Alinha no topo */
-    gap: 10px; /* Espaçamento entre as duas divs */
-    margin-left: 5vw;
-  }
+@import url('../../../assets/styles/color_pallete.css');
 
-  .centralizado {
-    justify-content: center; /* centraliza quando só tem um bloco */
-  }
-  
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-left: 5vw;
+  height: 80vh;
+  /* Define uma altura base para o container */
+}
+
+.centralizado {
+  justify-content: center;
+}
 
 .content {
-    border-radius: 18px;
-    background-color: white;
-    background-image: none;
-    padding: 20px;
-    flex: 1; /* Ocupa o espaço disponível */
-    max-width: 40%;
-}
- 
-  .history {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
-  }
-
-.content h3{
-    color: black;
-    text-align: center;
+  border-radius: 18px;
+  background-color: white;
+  padding: 20px;
+  flex: 1;
+  max-width: 50%;
+  max-height: 85vh;
+  /* altura máxima visível */
+  overflow-y: auto;
+  /* permite scroll vertical se o conteúdo ultrapassar */
 }
 
-.content h2{
-    font-size: x-large;
-    font-weight: bolder;
-    text-align: center;
-    width: 100%;
-    border-bottom: 3px solid red;
+
+.history {
+  flex: 1;
+  /* Ocupa o espaço restante no .content */
+  overflow-y: auto;
+  /* Rola se ultrapassar a altura */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
 }
 
-.filter{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
+.content h3 {
+  color: black;
+  text-align: center;
 }
 
-.filter select{
-    padding: 10px;
-    border: 3px solid #ddd;
-    border-radius: 12px;
+.content h2 {
+  font-size: x-large;
+  font-weight: bolder;
+  text-align: center;
+  width: 100%;
+  border-bottom: 3px solid red;
 }
 
-.textContent{
-    padding: 20px;
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 }
 
-.textContent h3{
-    font-weight: bold;
-    border-bottom: 2px solid lightgrey;
+.filter select {
+  padding: 10px;
+  border: 3px solid #ddd;
+  border-radius: 12px;
 }
 
-.content p{
-    color: black;
+.textContent h3 {
+  font-weight: bold;
+  border-bottom: 2px solid lightgrey;
+}
+
+.content p {
+  color: black;
 }
 
 .jogoItem {
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: white;
-  }
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
 
-  .jogoItem p{
-    border-bottom: none;
-  }
-  
+.jogoItem p {
+  border-bottom: none;
+}
+
+.relatory {
+  width: 45%;
+  padding: 10px;
+  margin: 5px;
+  background-color: var(--red);
+  color: var(--white);
+  border: 2px solid var(--red);
+  border-radius: 12px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

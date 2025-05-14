@@ -68,13 +68,26 @@ const Resultados = () => {
 
     console.log("Dados para o gráfico:", jogoSelecionado); // Verifique se os dados estão sendo passados corretamente
 
+    // Função auxiliar para padronizar o nome
+    const padronizarNomeJogo = (nomeOriginal) => {
+      if (!nomeOriginal) return "Desconhecido";
+      const nome = nomeOriginal.toLowerCase();
+
+      if (nome.includes("mem")) return "Memória";
+      if (nome.includes("num")) return "Números";
+      if (nome.includes("let") || nome.includes("vogal")) return "Letras";
+      if (nome.includes("cor")) return "Cores";
+      return nomeOriginal; // fallback
+    };
+
     const dadosGrafico = {
       acertos: jogoSelecionado.acertos,
       erros: jogoSelecionado.erros,
       tentativas: jogoSelecionado.tentativas,
-      tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1, // Substitui 0 por 1
+      tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
+      jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome), // adiciona o nome padronizado
     };
-    
+
 
     console.log("Dados para o gráfico formatados:", dadosGrafico);
 
@@ -89,6 +102,7 @@ const Resultados = () => {
         return null;
     }
   };
+
 
   const obterNomeDependente = () => {
     const dep = dependentes.find((d) => d.id === parseInt(dependenteSelecionado));
@@ -110,11 +124,11 @@ const Resultados = () => {
     console.log("Jogo selecionado:", jogo); // Verifica se o jogo selecionado é o correto
   };
 
+
   return (
     <div
-      className={`${styles.container} ${
-        dependenteSelecionado && resultadosFiltrados.length > 0 ? "" : styles.centralizado
-      }`}
+      className={`${styles.container} ${dependenteSelecionado && resultadosFiltrados.length > 0 ? "" : styles.centralizado
+        }`}
     >
       <div className={styles.content}>
         <h2>Resultados dos Jogos</h2>
@@ -161,6 +175,10 @@ const Resultados = () => {
       {dependenteSelecionado && (
         <div className={styles.content}>
           <h2>Histórico de partidas:</h2>
+          <div className={styles.buttons}>
+            <button className={styles.relatory}>Gerar PDF</button>
+            <button className={styles.relatory}>Gerar EXCEL</button>
+          </div>
           <div className={styles.history}>
             {historicoJogos.length === 0 ? (
               <p>Carregando histórico...</p>
