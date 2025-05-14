@@ -7,50 +7,132 @@ import BarSizeChart from "../resultado/graficos/GraficoBarSize";
 import GaugeChart from "../resultado/graficos/GraficoMedidor";
 import RadarChart from "../resultado/graficos/GraficoRadar";
 
-const Resultados = () => {
-  const [nameFilter, setNameFilter] = useState(""); // Filtrando por nome da criança
-  const [tipoGrafico, setTipoGrafico] = useState("bar"); // "bar", "gauge" ou "radar"
-  const [resultadosFiltrados, setResultadosFiltrados] = useState([]);
+// Serviços
+import { fetchDependentes } from "../../../services/dependenteService";
+import { getJogosPorDependente } from "../../../services/jogosService";
 
-  // Obter todos os nomes únicos dos jogadores
-  const nomesUnicos = [...new Set(resultados.map((r) => r.nome))];
+const Resultados = () => {
+  const [dependentes, setDependentes] = useState([]);
+  const [dependenteSelecionado, setDependenteSelecionado] = useState(""); // ID do dependente
+  const [tipoGrafico, setTipoGrafico] = useState("bar");
+  const [resultadosFiltrados, setResultadosFiltrados] = useState([]);
+  const [historicoJogos, setHistoricoJogos] = useState([]);
+  const [jogoSelecionado, setJogoSelecionado] = useState(null); // Estado para armazenar o jogo selecionado
+  const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(false); // Estado para controlar a visualização do último jogo
 
   useEffect(() => {
-    if (nameFilter === "") {
-      setResultadosFiltrados([]); // Se não houver filtro, limpar os resultados
+    const carregarDependentes = async () => {
+      try {
+        const dependentesAPI = await fetchDependentes();
+        setDependentes(dependentesAPI);
+      } catch (error) {
+        console.error("Erro ao buscar dependentes:", error);
+      }
+    };
+
+    carregarDependentes();
+  }, []);
+
+  useEffect(() => {
+    if (dependenteSelecionado === "") {
+      setResultadosFiltrados([]);
+      setHistoricoJogos([]);
+      setJogoSelecionado(null); // Limpar o jogo selecionado ao desmarcar dependente
     } else {
-      const filtrados = resultados.filter((r) => r.nome === nameFilter);
+      // Dados fictícios (filtrados por ID, se presente nos dados)
+      const filtrados = resultados.filter(
+        (r) => r.dependenteId === parseInt(dependenteSelecionado)
+      );
       setResultadosFiltrados(filtrados);
+
+      // Salva o ID no sessionStorage e busca histórico real
+      sessionStorage.setItem("idDependente", dependenteSelecionado);
+      getJogosPorDependente(dependenteSelecionado).then((jogos) => {
+        setHistoricoJogos(jogos);
+
+        // Selecionar automaticamente o último jogo jogado
+        if (jogos.length > 0) {
+          const ultimoJogo = jogos.sort((a, b) => new Date(b.createDate) - new Date(a.createDate))[0];
+          if (!mostrarUltimoJogo) {
+            setJogoSelecionado(ultimoJogo); // Atualiza o estado com o último jogo se não estiver no modo de "último jogo"
+          }
+        }
+      });
     }
-  }, [nameFilter]);
+  }, [dependenteSelecionado, mostrarUltimoJogo]);
 
   const renderGrafico = () => {
-    if (nameFilter === "") return <p>Selecione uma criança para ver o desempenho.</p>;
+    if (dependenteSelecionado === "" || !jogoSelecionado) {
+      return <p>Selecione uma criança e um jogo para ver o desempenho.</p>;
+    }
+
+    console.log("Dados para o gráfico:", jogoSelecionado); // Verifique se os dados estão sendo passados corretamente
+
+    const dadosGrafico = {
+      acertos: jogoSelecionado.acertos,
+      erros: jogoSelecionado.erros,
+      tentativas: jogoSelecionado.tentativas,
+      tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1, // Substitui 0 por 1
+    };
+    
+
+    console.log("Dados para o gráfico formatados:", dadosGrafico);
 
     switch (tipoGrafico) {
       case "bar":
-        return <BarSizeChart dados={resultadosFiltrados} viewMode="individual" />;
+        return <BarSizeChart dados={[dadosGrafico]} viewMode="individual" />;
       case "gauge":
-        return <GaugeChart dados={resultadosFiltrados} viewMode="individual" />;
+        return <GaugeChart dados={[dadosGrafico]} viewMode="individual" />;
       case "radar":
-        return <RadarChart dados={resultadosFiltrados} nome={nameFilter} />;
+        return <RadarChart dados={[dadosGrafico]} nome={obterNomeDependente()} />;
       default:
         return null;
     }
   };
 
+  const obterNomeDependente = () => {
+    const dep = dependentes.find((d) => d.id === parseInt(dependenteSelecionado));
+    return dep?.nome || "";
+  };
+
+  const formatarData = (data) => {
+    const dataFormatada = new Date(data);
+    if (isNaN(dataFormatada.getTime())) {
+      // Se a data for inválida, retorne uma string de "Data inválida"
+      return null;
+    }
+    return dataFormatada;
+  };
+
+  const selecionarJogo = (jogo) => {
+    setJogoSelecionado(jogo); // Atualiza o estado com o jogo selecionado
+    setMostrarUltimoJogo(false); // Desativa a visualização do último jogo ao selecionar um jogo específico
+    console.log("Jogo selecionado:", jogo); // Verifica se o jogo selecionado é o correto
+  };
+
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${
+        dependenteSelecionado && resultadosFiltrados.length > 0 ? "" : styles.centralizado
+      }`}
+    >
       <div className={styles.content}>
         <h2>Resultados dos Jogos</h2>
         <h3>Acompanhe o desempenho das crianças nos jogos educativos.</h3>
 
         <section className={styles.filter}>
           <label>Filtrar por nome:</label>
-          <select value={nameFilter} onChange={(e) => setNameFilter(e.target.value)}>
-            <option value="" disabled>Selecione uma criança</option>
-            {nomesUnicos.map((nome) => (
-              <option key={nome} value={nome}>{nome}</option>
+          <select
+            value={dependenteSelecionado}
+            onChange={(e) => setDependenteSelecionado(e.target.value)}
+          >
+            <option value="" disabled>
+              Selecione uma criança
+            </option>
+            {dependentes.map((dep) => (
+              <option key={dep.id} value={dep.id}>
+                {dep.nome}
+              </option>
             ))}
           </select>
 
@@ -60,14 +142,56 @@ const Resultados = () => {
             <option value="gauge">Tempo</option>
             <option value="radar">Desempenho por capacidades</option>
           </select>
+
+          <label>
+            <input
+              type="checkbox"
+              checked={mostrarUltimoJogo}
+              onChange={() => setMostrarUltimoJogo(!mostrarUltimoJogo)}
+            />
+            Mostrar último resultado de todos os jogos
+          </label>
         </section>
 
-        {resultadosFiltrados.length > 0 && (
-          <section className={styles.textContent}>
-            {renderGrafico()}
-          </section>
+        {dependenteSelecionado && historicoJogos.length > 0 && (
+          <section className={styles.textContent}>{renderGrafico()}</section>
         )}
       </div>
+
+      {dependenteSelecionado && (
+        <div className={styles.content}>
+          <h2>Histórico de partidas:</h2>
+          <div className={styles.history}>
+            {historicoJogos.length === 0 ? (
+              <p>Carregando histórico...</p>
+            ) : (
+              historicoJogos.map((jogo, index) => {
+                // Usamos a função para formatar a data
+                const dataFormatada = formatarData(jogo.createDate); // Pode ser `updateDate` ou `createDate`
+                const dataValida = dataFormatada !== null; // Verifica se a data é válida
+
+                return (
+                  <div
+                    key={index}
+                    className={styles.jogoItem}
+                    onClick={() => selecionarJogo(jogo)} // Adiciona a função de clique
+                  >
+                    <p>
+                      <strong>Jogo:</strong> {jogo.infoJogos_id_fk.nome}
+                    </p>
+                    <p>
+                      <strong>Data:</strong>{" "}
+                      {dataValida
+                        ? `${dataFormatada.toLocaleDateString("pt-BR")} às ${dataFormatada.toLocaleTimeString("pt-BR")}`
+                        : "Data inválida"}
+                    </p>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

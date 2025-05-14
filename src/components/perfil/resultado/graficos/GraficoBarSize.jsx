@@ -5,7 +5,7 @@ import {
 
 const GraficoTentativas = ({ dados, viewMode }) => {
   // Definindo os jogos predefinidos
-  const jogos = ["Jogo da Memória", "Jogo dos Números", "Jogo das Letras", "Jogo das Cores"];
+  const jogos = ["Jogo Memória", "Jogo Números", "Jogo Letras", "Jogo Cores"];
 
   // Mapeando os dados para incluir todos os jogos, preenchendo com zero se não houver dados
   const data = jogos.map((jogo) => {

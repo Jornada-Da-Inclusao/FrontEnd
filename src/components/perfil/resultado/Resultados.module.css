@@ -1,15 +1,33 @@
 .container {
-    align-items: center;
-    justify-items: center;
-}
+    display: flex;
+    justify-content: space-between; /* Para espaçar os dois content */
+    align-items: flex-start; /* Alinha no topo */
+    gap: 10px; /* Espaçamento entre as duas divs */
+    margin-left: 5vw;
+  }
+
+  .centralizado {
+    justify-content: center; /* centraliza quando só tem um bloco */
+  }
+  
 
 .content {
-    width: 40vw;
     border-radius: 18px;
     background-color: white;
     background-image: none;
     padding: 20px;
+    flex: 1; /* Ocupa o espaço disponível */
+    max-width: 40%;
 }
+ 
+  .history {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
 
 .content h3{
     color: black;
@@ -45,3 +63,19 @@
     font-weight: bold;
     border-bottom: 2px solid lightgrey;
 }
+
+.content p{
+    color: black;
+}
+
+.jogoItem {
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+
+  .jogoItem p{
+    border-bottom: none;
+  }
+  

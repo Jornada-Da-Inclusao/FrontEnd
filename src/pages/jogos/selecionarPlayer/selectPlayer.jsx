@@ -7,8 +7,8 @@ import style from './selectPlayer.module.css';
 
 const SelectPlayer = () => {
   const [dependentes, setDependentes] = useState([]);
-  const [showAddPerfilModal, setShowAddPerfilModal] = useState(false); // Controle do modal de adicionar
-  const [perfilSelecionado, setPerfilSelecionado] = useState(null); // Estado para o perfil selecionado
+  const [showAddPerfilModal, setShowAddPerfilModal] = useState(false);
+  const [perfilSelecionado, setPerfilSelecionado] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,10 +17,10 @@ const SelectPlayer = () => {
         const resultado = await fetchDependentes();
         setDependentes(resultado);
 
-        // Verifica se já existe um player no sessionStorage e define o perfilSelecionado
-        const player = sessionStorage.getItem('player');
-        if (player) {
-          setPerfilSelecionado(player);
+        // Recupera ID do player salvo no sessionStorage (como string)
+        const playerId = sessionStorage.getItem('player');
+        if (playerId) {
+          setPerfilSelecionado(playerId);
         }
       } catch (error) {
         console.error('Erro ao carregar dependentes:', error);
@@ -32,13 +32,13 @@ const SelectPlayer = () => {
 
   const selecionarPerfil = (dependente) => {
     escolherDependenteComoPlayer(dependente);
-    sessionStorage.setItem('player', dependente.nome);
-    setPerfilSelecionado(dependente.nome); // Atualiza o perfil selecionado no estado
+    sessionStorage.setItem('player', String(dependente.id)); // garante string
+    setPerfilSelecionado(String(dependente.id));
     navigate(-1);
   };
 
   const adicionarPerfil = () => {
-    setShowAddPerfilModal(true); // Exibe o modal para confirmar adição
+    setShowAddPerfilModal(true);
   };
 
   const confirmarAdicionarPerfil = () => {
@@ -60,14 +60,13 @@ const SelectPlayer = () => {
               nome={dep.nome}
               imagem={dep.foto}
               onClick={() => selecionarPerfil(dep)}
-              ativo={dep.nome === perfilSelecionado}
+              ativo={String(dep.id) === perfilSelecionado} // Comparação como string
             />
           ))}
           <PerfilCard nome="Adicionar" onClick={adicionarPerfil} adicionar />
         </div>
       </div>
 
-      {/* Modal para adicionar novo perfil */}
       <DependenteModals
         showAddPerfilModal={showAddPerfilModal}
         setShowAddPerfilModal={setShowAddPerfilModal}

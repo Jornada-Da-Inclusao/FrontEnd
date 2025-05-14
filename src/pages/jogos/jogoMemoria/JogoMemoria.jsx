@@ -37,10 +37,11 @@ const JogoMemoria = () => {
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
     const idJogoMemoria = 1;
-    const idDependente = 10;
+    const idDependente = parseInt(sessionStorage.getItem("player"));
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     const { usuario } = useContext(AuthContext);
+    const [timeInSeconds, setTimeInSeconds] = useState(180); // tempo padrão: 3 minutos
 
     useEffect(() => {
         if (usuario.token === "") {
@@ -60,19 +61,57 @@ const JogoMemoria = () => {
     };
 
 
-    const handleTimeUpdate = (newTime) => {
-        setTime(newTime);  // Atualiza o estado com o novo tempo
-    };
+    const handleTimeUpdate = (newTimeInSeconds) => {
+        setTimeInSeconds((prev) => {
+          if (prev !== newTimeInSeconds) {
+            return newTimeInSeconds;
+          }
+          return prev;
+        });
+      };      
 
     function registrarInfosJogo() {
         registrarInfos(infoJogoMemoria, token);
+        console.log(infoJogoMemoria, token)
     }
 
-    // Hook 'useEffect' para embaralhar as cartas assim que o componente for montado.
     useEffect(() => {
-        const shuffledCards = [...cardsData].sort(() => Math.random() - 0.5); // Embaralha as cartas aleatoriamente
-        setCards(shuffledCards); // Atualiza o estado com as cartas embaralhadas
-    }, []); // O array vazio [] indica que o efeito ocorre apenas uma vez após a renderização inicial.
+        // Cria uma cópia dos pares
+        const originalCards = [...cardsData];
+
+        // Inicializa um array vazio para o embaralhamento final
+        const shuffled = new Array(originalCards.length);
+
+        // Pega os índices disponíveis no tabuleiro
+        let availableIndices = [...Array(originalCards.length).keys()];
+
+        // Para cada par único (metade do array original)
+        for (let i = 0; i < originalCards.length / 2; i++) {
+            const pair = [originalCards[i], originalCards[i + originalCards.length / 2]];
+
+            // Sorteia dois índices aleatórios diferentes
+            const firstIndex = availableIndices.splice(Math.floor(Math.random() * availableIndices.length), 1)[0];
+            let secondIndex;
+
+            // Garante que a segunda carta não fique imediatamente ao lado (horizontal ou vertical)
+            do {
+                secondIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+            } while (
+                Math.abs(secondIndex - firstIndex) === 1 || // lado a lado
+                Math.abs(secondIndex - firstIndex) === 4    // em cima ou embaixo (assumindo grid de 4 colunas)
+            );
+
+            // Remove o segundo índice do array de disponíveis
+            availableIndices = availableIndices.filter(i => i !== secondIndex);
+
+            // Atribui as cartas embaralhadas
+            shuffled[firstIndex] = pair[0];
+            shuffled[secondIndex] = pair[1];
+        }
+
+        setCards(shuffled); // Atualiza as cartas com os pares espalhados
+    }, []);
+
 
     // Hook 'useEffect' para verificar se duas cartas foram escolhidas e iniciar a verificação de combinação.
     useEffect(() => {
@@ -84,33 +123,32 @@ const JogoMemoria = () => {
     }, [cardsChosenId]); // O efeito será executado toda vez que o estado 'cardsChosenId' mudar.
 
     // Hook 'useEffect' para verificar se todas as cartas foram combinadas corretamente.
-    
-      useEffect(() => {
+
+    useEffect(() => {
         setInfoJogoMemoria({
-          tempoTotal: convertToMinutes(time),
+          tempoTotal: timeInSeconds / 60,
           tentativas: tentativas,
           acertos: acertos,
           erros: erros,
-          infoJogos_id_fk: {
-            id: idJogoMemoria,
-          },
-          dependente: {
-            id: idDependente,
-          },
+          infoJogos_id_fk: { id: idJogoMemoria },
+          dependente: { id: idDependente },
         });
-    
-        if (cardsWon.length === 8) { // Quando 8 cartas forem combinadas (4 pares de cartas)
-          registrarInfosJogo();
+      }, [timeInSeconds, tentativas, acertos, erros]);
+      
+      useEffect(() => {
+        if (cardsWon.length === 8) {
+          registrarInfos(infoJogoMemoria, token);
+          console.log("Enviando para o backend:", infoJogoMemoria);
           setPopupMessage("Missão concluída!");
           setShowPopup(true);
         }
-      }, [cardsWon, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
+      }, [cardsWon]);
 
     // Função que fecha o popup.
     const handlePopupClose = () => {
         setShowPopup(false);
         navigate("/");
-      };
+    };
 
     // Função que verifica se as duas cartas escolhidas são iguais ou não.
     const checkForMatch = () => {
