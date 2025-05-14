@@ -6,6 +6,7 @@ import resultados from "./dadosFicticios";
 import BarSizeChart from "../resultado/graficos/GraficoBarSize";
 import GaugeChart from "../resultado/graficos/GraficoMedidor";
 import RadarChart from "../resultado/graficos/GraficoRadar";
+import { downloadExcelInfoJogos, downloadPdfInfoJogos } from "@/services/dependenteService";
 
 const Resultados = () => {
   const [nameFilter, setNameFilter] = useState(""); // Filtrando por nome da criança
@@ -39,6 +40,25 @@ const Resultados = () => {
     }
   };
 
+  async function downloadPdf (dependenteId){
+    try {
+      await downloadPdfInfoJogos(dependenteId);
+    } catch (error) {
+      console.error('Erro ao gerar o PDF');
+      console.error(error);
+    }
+  };
+
+  async function downloadExcel (dependenteId){
+    try {
+      await downloadExcelInfoJogos(dependenteId);
+    } catch (error) {
+      console.error('Erro ao gerar o PDF');
+      console.error(error);
+    }
+  };
+
+  const dependenteId = 1;
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -68,6 +88,12 @@ const Resultados = () => {
           </section>
         )}
       </div>
+      <button onClick={(e) => {
+        downloadPdf(dependenteId);
+      }}>Exportar para PDF</button>
+      <button onClick={(e) => {
+        downloadExcel(dependenteId);
+      }}>Exportar para Excel</button>
     </div>
   );
 };

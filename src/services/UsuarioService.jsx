@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Cria uma instância do axios para realizar as requisições HTTP.
 const api = axios.create({
-  baseURL: 'https://backend-9qjw.onrender.com/'
+  baseURL: 'http://localhost:8080/'
 });
 
 /**
@@ -73,7 +73,7 @@ export const deletar = async (url, header) => {
 
 export const atualizarUsuario = async (dadosAtualizados, token) => {
   try {
-    const response = await fetch("https://backend-9qjw.onrender.com/usuarios/atualizar-parcial", {
+    const response = await fetch("http://localhost:8080/usuarios/atualizar-parcial", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export const atualizarUsuario = async (dadosAtualizados, token) => {
 
 export const deletarUsuario = async (id, token) => {
   try {
-    const response = await fetch(`https://backend-9qjw.onrender.com/usuarios/${id}`, {
+    const response = await fetch(`http://localhost:8080/usuarios/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
