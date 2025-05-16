@@ -6,6 +6,8 @@ import styles from './cadastro.module.css'
 import React from 'react'
 import { CustomModal } from '../../components/Modal-custom-alert/CustomModal.jsx' // ajuste o caminho conforme a estrutura do seu projeto
 import { RotatingLines } from 'react-loader-spinner'
+import logo from '../../assets/images/LOGO.png'; // ajuste o caminho conforme seu projeto
+
 
 function Cadastro() {
   const navigate = useNavigate()
@@ -60,7 +62,7 @@ function Cadastro() {
       <div className={styles.containerGeral}>
         <div className={styles.imgContainer}></div>
         <div className={styles.formArea}>
-          <h1 className={styles.titulo}>Integra Kids</h1>
+          <img src={logo} alt="Logo Integra Kids" className={styles.logo} />
           <p className={styles.boasVindas}>Bem-vindo!</p>
           <p className={styles.instrucao}>Crie sua conta para continuar.</p>
           <form onSubmit={cadastrarNovoUsuario} className={styles.formCad}>
