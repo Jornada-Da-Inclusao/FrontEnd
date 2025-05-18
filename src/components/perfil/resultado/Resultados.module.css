@@ -19,13 +19,12 @@
   background-color: white;
   padding: 20px;
   flex: 1;
+  height: 85vh;
   max-width: 50%;
-  max-height: 85vh;
   /* altura máxima visível */
   overflow-y: auto;
   /* permite scroll vertical se o conteúdo ultrapassar */
 }
-
 
 .history {
   flex: 1;
@@ -71,6 +70,7 @@
   border-bottom: 2px solid lightgrey;
 }
 
+
 .content p {
   color: black;
 }
@@ -96,8 +96,20 @@
   border-radius: 12px;
 }
 
+.relatory:hover{
+  background-color: var(--white);
+  color: var(--red);
+  transition: 0.5s;
+}
+
 .buttons {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.ativo {
+  background-color: #dff0ff;
+  border: 2px solid #007bff;
+  border-radius: 8px;
 }

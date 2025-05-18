@@ -24,9 +24,9 @@ const GraficoGaugeTempo = ({ dados }) => {
   return (
     <div>
       <h3>Tempo gasto por jogo</h3>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "space-evenly" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "40px", justifyContent: "space-evenly" }}>
         {temposPorJogo.map(({ jogo, tempo }) => (
-          <div key={jogo} style={{ width: 160, height: 220, textAlign: "center", fontSize: "small" }}>
+          <div key={jogo} style={{ width: 250, height: 150, textAlign: "center", fontSize: "small" }}>
             <Gauge
               value={Math.min(tempo, TEMPO_MAXIMO)}
               valueMax={TEMPO_MAXIMO}

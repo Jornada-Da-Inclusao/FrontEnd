@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../resultado/Resultados.module.css";
-import resultados from "./dadosFicticios";
+import { Switch, FormControlLabel } from "@mui/material";
 
 // Componentes dos gráficos
 import BarSizeChart from "../resultado/graficos/GraficoBarSize";
@@ -16,7 +16,6 @@ const Resultados = () => {
   const [dependentes, setDependentes] = useState([]);
   const [dependenteSelecionado, setDependenteSelecionado] = useState(""); // ID do dependente
   const [tipoGrafico, setTipoGrafico] = useState("bar");
-  const [resultadosFiltrados, setResultadosFiltrados] = useState([]);
   const [historicoJogos, setHistoricoJogos] = useState([]);
   const [jogoSelecionado, setJogoSelecionado] = useState(null); // Estado para armazenar o jogo selecionado
   const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(false); // Estado para controlar a visualização do último jogo
@@ -36,26 +35,17 @@ const Resultados = () => {
 
   useEffect(() => {
     if (dependenteSelecionado === "") {
-      setResultadosFiltrados([]);
       setHistoricoJogos([]);
       setJogoSelecionado(null); // Limpar o jogo selecionado ao desmarcar dependente
     } else {
-      // Dados fictícios (filtrados por ID, se presente nos dados)
-      const filtrados = resultados.filter(
-        (r) => r.dependenteId === parseInt(dependenteSelecionado)
-      );
-      setResultadosFiltrados(filtrados);
-
-      // Salva o ID no sessionStorage e busca histórico real
       sessionStorage.setItem("idDependente", dependenteSelecionado);
       getJogosPorDependente(dependenteSelecionado).then((jogos) => {
         setHistoricoJogos(jogos);
 
-        // Selecionar automaticamente o último jogo jogado
         if (jogos.length > 0) {
           const ultimoJogo = jogos.sort((a, b) => new Date(b.createDate) - new Date(a.createDate))[0];
           if (!mostrarUltimoJogo) {
-            setJogoSelecionado(ultimoJogo); // Atualiza o estado com o último jogo se não estiver no modo de "último jogo"
+            setJogoSelecionado(ultimoJogo);
           }
         }
       });
@@ -88,9 +78,6 @@ const Resultados = () => {
       tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
       jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome), // adiciona o nome padronizado
     };
-
-
-    console.log("Dados para o gráfico formatados:", dadosGrafico);
 
     switch (tipoGrafico) {
       case "bar":
@@ -126,28 +113,38 @@ const Resultados = () => {
   };
 
 
-  async function downloadPdf(dependenteId) {
+  async function downloadPdf() {
+    const idDependente = sessionStorage.getItem("idDependente");
+    if (!idDependente) {
+      console.error("ID do dependente não encontrado");
+      return;
+    }
     try {
-      await downloadPdfInfoJogos(dependenteId);
+      await downloadPdfInfoJogos(idDependente);
     } catch (error) {
-      console.error('Erro ao gerar o PDF');
+      console.error("Erro ao gerar o PDF");
       console.error(error);
     }
-  };
+  }
 
-  async function downloadExcel(dependenteId) {
+  async function downloadExcel() {
+    const idDependente = sessionStorage.getItem("idDependente");
+    if (!idDependente) {
+      console.error("ID do dependente não encontrado");
+      return;
+    }
     try {
-      await downloadExcelInfoJogos(dependenteId);
+      await downloadExcelInfoJogos(idDependente);
     } catch (error) {
-      console.error('Erro ao gerar o PDF');
+      console.error("Erro ao gerar o EXCEL");
       console.error(error);
     }
-  };
+  }
+
 
   return (
     <div
-      className={`${styles.container} ${dependenteSelecionado && resultadosFiltrados.length > 0 ? "" : styles.centralizado
-        }`}
+      className={`${styles.container} ${dependenteSelecionado ? "" : styles.centralizado}`}
     >
       <div className={styles.content}>
         <h2>Resultados dos Jogos</h2>
@@ -177,12 +174,16 @@ const Resultados = () => {
           </select>
 
           <label>
-            <input
-              type="checkbox"
-              checked={mostrarUltimoJogo}
-              onChange={() => setMostrarUltimoJogo(!mostrarUltimoJogo)}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={mostrarUltimoJogo}
+                  onChange={() => setMostrarUltimoJogo(!mostrarUltimoJogo)}
+                  color="primary"
+                />
+              }
+              label="Mostrar último resultado de todos os jogos"
             />
-            Mostrar último resultado de todos os jogos
           </label>
         </section>
 
@@ -191,47 +192,45 @@ const Resultados = () => {
         )}
       </div>
 
-      {
-        dependenteSelecionado && (
-          <div className={styles.content}>
-            <h2>Histórico de partidas:</h2>
-            <div className={styles.buttons}>
-              <button className={styles.relatory} onClick={() => downloadPdf(dependenteSelecionado)}>Gerar PDF</button>
-              <button className={styles.relatory} onClick={() => downloadExcel(dependenteSelecionado)}>Gerar EXCEL</button>
-            </div>
-            <div className={styles.history}>
-              {historicoJogos.length === 0 ? (
-                <p>Carregando histórico...</p>
-              ) : (
-                historicoJogos.map((jogo, index) => {
-                  // Usamos a função para formatar a data
-                  const dataFormatada = formatarData(jogo.createDate); // Pode ser `updateDate` ou `createDate`
-                  const dataValida = dataFormatada !== null; // Verifica se a data é válida
-
-                  return (
-                    <div
-                      key={index}
-                      className={styles.jogoItem}
-                      onClick={() => selecionarJogo(jogo)} // Adiciona a função de clique
-                    >
-                      <p>
-                        <strong>Jogo:</strong> {jogo.infoJogos_id_fk.nome}
-                      </p>
-                      <p>
-                        <strong>Data:</strong>{" "}
-                        {dataValida
-                          ? `${dataFormatada.toLocaleDateString("pt-BR")} às ${dataFormatada.toLocaleTimeString("pt-BR")}`
-                          : "Data inválida"}
-                      </p>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+      {dependenteSelecionado && (
+        <div className={styles.content}>
+          <h2>Histórico de partidas:</h2>
+          <div className={styles.buttons}>
+            <button className={styles.relatory} onClick={downloadPdf}>Gerar PDF</button>
+            <button className={styles.relatory} onClick={downloadExcel}>Gerar EXCEL</button>
           </div>
-        )
-      }
-    </div >
+          <div className={styles.history}>
+            {historicoJogos.length === 0 ? (
+              <p>Carregando histórico...</p>
+            ) : (
+              historicoJogos.map((jogo, index) => {
+                // Usamos a função para formatar a data
+                const dataFormatada = formatarData(jogo.createDate); // Pode ser `updateDate` ou `createDate`
+                const dataValida = dataFormatada !== null; // Verifica se a data é válida
+
+                return (
+                  <div
+                    key={index}
+                    className={`${styles.jogoItem} ${jogoSelecionado?.id === jogo.id && !mostrarUltimoJogo ? styles.ativo : ""}`}
+                    onClick={() => selecionarJogo(jogo)} // Adiciona a função de clique
+                  >
+                    <p>
+                      <strong>Jogo:</strong> {jogo.infoJogos_id_fk.nome}
+                    </p>
+                    <p>
+                      <strong>Data:</strong>{" "}
+                      {dataValida
+                        ? `${dataFormatada.toLocaleDateString("pt-BR")} às ${dataFormatada.toLocaleTimeString("pt-BR")}`
+                        : "Data inválida"}
+                    </p>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

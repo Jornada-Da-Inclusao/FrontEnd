@@ -9,13 +9,10 @@ const GraficoTentativas = ({ dados, viewMode }) => {
 
   // Mapeando os dados para incluir todos os jogos, preenchendo com zero se não houver dados
   const data = jogos.map((jogo) => {
-    console.log(dados);
     
     // Procurar se há dados para o jogo atual
     const jogoData = dados.find((item) => item.jogo === jogo);
-    console.log(dados.find((item) => item.jogo === jogo));
     
-
     // Se houver dados para o jogo, usa eles, senão coloca zero
     return {
       nome: jogo,
