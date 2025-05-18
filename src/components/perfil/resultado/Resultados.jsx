@@ -6,6 +6,7 @@ import resultados from "./dadosFicticios";
 import BarSizeChart from "../resultado/graficos/GraficoBarSize";
 import GaugeChart from "../resultado/graficos/GraficoMedidor";
 import RadarChart from "../resultado/graficos/GraficoRadar";
+import { downloadExcelInfoJogos, downloadPdfInfoJogos } from "@/services/dependenteService";
 
 // Serviços
 import { fetchDependentes } from "../../../services/dependenteService";
@@ -125,6 +126,24 @@ const Resultados = () => {
   };
 
 
+  async function downloadPdf(dependenteId) {
+    try {
+      await downloadPdfInfoJogos(dependenteId);
+    } catch (error) {
+      console.error('Erro ao gerar o PDF');
+      console.error(error);
+    }
+  };
+
+  async function downloadExcel(dependenteId) {
+    try {
+      await downloadExcelInfoJogos(dependenteId);
+    } catch (error) {
+      console.error('Erro ao gerar o PDF');
+      console.error(error);
+    }
+  };
+
   return (
     <div
       className={`${styles.container} ${dependenteSelecionado && resultadosFiltrados.length > 0 ? "" : styles.centralizado
@@ -172,45 +191,47 @@ const Resultados = () => {
         )}
       </div>
 
-      {dependenteSelecionado && (
-        <div className={styles.content}>
-          <h2>Histórico de partidas:</h2>
-          <div className={styles.buttons}>
-            <button className={styles.relatory}>Gerar PDF</button>
-            <button className={styles.relatory}>Gerar EXCEL</button>
-          </div>
-          <div className={styles.history}>
-            {historicoJogos.length === 0 ? (
-              <p>Carregando histórico...</p>
-            ) : (
-              historicoJogos.map((jogo, index) => {
-                // Usamos a função para formatar a data
-                const dataFormatada = formatarData(jogo.createDate); // Pode ser `updateDate` ou `createDate`
-                const dataValida = dataFormatada !== null; // Verifica se a data é válida
+      {
+        dependenteSelecionado && (
+          <div className={styles.content}>
+            <h2>Histórico de partidas:</h2>
+            <div className={styles.buttons}>
+              <button className={styles.relatory} onClick={() => downloadPdf(dependenteSelecionado)}>Gerar PDF</button>
+              <button className={styles.relatory} onClick={() => downloadExcel(dependenteSelecionado)}>Gerar EXCEL</button>
+            </div>
+            <div className={styles.history}>
+              {historicoJogos.length === 0 ? (
+                <p>Carregando histórico...</p>
+              ) : (
+                historicoJogos.map((jogo, index) => {
+                  // Usamos a função para formatar a data
+                  const dataFormatada = formatarData(jogo.createDate); // Pode ser `updateDate` ou `createDate`
+                  const dataValida = dataFormatada !== null; // Verifica se a data é válida
 
-                return (
-                  <div
-                    key={index}
-                    className={styles.jogoItem}
-                    onClick={() => selecionarJogo(jogo)} // Adiciona a função de clique
-                  >
-                    <p>
-                      <strong>Jogo:</strong> {jogo.infoJogos_id_fk.nome}
-                    </p>
-                    <p>
-                      <strong>Data:</strong>{" "}
-                      {dataValida
-                        ? `${dataFormatada.toLocaleDateString("pt-BR")} às ${dataFormatada.toLocaleTimeString("pt-BR")}`
-                        : "Data inválida"}
-                    </p>
-                  </div>
-                );
-              })
-            )}
+                  return (
+                    <div
+                      key={index}
+                      className={styles.jogoItem}
+                      onClick={() => selecionarJogo(jogo)} // Adiciona a função de clique
+                    >
+                      <p>
+                        <strong>Jogo:</strong> {jogo.infoJogos_id_fk.nome}
+                      </p>
+                      <p>
+                        <strong>Data:</strong>{" "}
+                        {dataValida
+                          ? `${dataFormatada.toLocaleDateString("pt-BR")} às ${dataFormatada.toLocaleTimeString("pt-BR")}`
+                          : "Data inválida"}
+                      </p>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 
