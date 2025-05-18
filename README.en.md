@@ -42,6 +42,7 @@ This project aims to contribute directly to the following SDG:
 - [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo) 
 - [Manuela Tenorio da Silva](https://github.com/ManuelaTenorio)
 - [Marcos Vinícius de Oliveira](https://github.com/ViniMarkos283)
+- [Maria Clara Cavalcante](https://github.com/ClaraCavalcant-One)
 - [Pedro Henrique Santos Bernardo](https://github.com/Pedro-HSB)
 - [Renato W. de Lima Jacob](https://github.com/renatowljacob)
 

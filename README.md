@@ -35,10 +35,10 @@ Este projeto visa contribuir diretamente para os seguintes ODS:
 - **Objetivo 4**: Assegurar a educação inclusiva e equitativa e de qualidade, e promover oportunidades de aprendizagem ao longo da vida para todas e todos.
 
 ## Integrantes
-
 - [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo) 
 - [Manuela Tenorio da Silva](https://github.com/ManuelaTenorio)
 - [Marcos Vinícius de Oliveira](https://github.com/ViniMarkos283)
+- [Maria Clara Cavalcante](https://github.com/ClaraCavalcant-One)
 - [Pedro Henrique Santos Bernardo](https://github.com/Pedro-HSB)
 - [Renato W. de Lima Jacob](https://github.com/renatowljacob)
 
