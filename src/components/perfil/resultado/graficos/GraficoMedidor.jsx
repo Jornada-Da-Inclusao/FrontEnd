@@ -1,7 +1,7 @@
 import React from "react";
 import { Gauge } from "@mui/x-charts";
 
-const jogosEsperados = ["Memória", "Números", "Letras", "Cores"]
+const jogosEsperados = ["Memória", "Números", "Vogais", "Cores"];
 
 // Função auxiliar para formatar segundos em minutos e segundos
 const formatarTempo = (segundos) => {
@@ -13,11 +13,15 @@ const formatarTempo = (segundos) => {
 const GraficoGaugeTempo = ({ dados }) => {
   const TEMPO_MAXIMO = 180;
 
+  // Aqui assumo que "jogo" está presente no objeto "dados" para casar com jogosEsperados.
+  // Caso não tenha, você precisará mapear de outra forma.
   const temposPorJogo = jogosEsperados.map((jogo) => {
+    // Procura o objeto do jogo correspondente, adaptando para seu dado real
     const entrada = dados.find((d) => d.jogo === jogo);
+
     return {
       jogo,
-      tempo: entrada ? entrada.tempo : 0
+      tempo: entrada ? entrada.tempoTotal : 0 // Usando tempoTotal em segundos
     };
   });
 

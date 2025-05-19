@@ -13,24 +13,21 @@ import {
 const GraficoRadar = ({ dados, nome }) => {
   if (!nome || !dados) return null;
 
-  // Mapeamento de jogos para áreas
   const mapaJogos = {
     "Memória": "Memorização",
-    "Letras": "Alfabetização inicial",
-    "Números": "Raciocinio logico-matematico",
+    "Vogais": "Alfabetização inicial",
+    "Números": "Raciocínio lógico-matemático",
     "Cores": "Percepção visual",
   };
 
+  // Não filtra mais, assume que "dados" já são só do dependente "nome"
   // Inicializa os dados com 0%
   const radarData = Object.values(mapaJogos).map((area) => ({
     area,
     Porcentagem: 0,
   }));
 
-  // Agrupa os dados da criança por jogo
-  const jogosDaCrianca = dados.filter((d) => d.nome === nome);
-
-  jogosDaCrianca.forEach((jogo) => {
+  dados.forEach((jogo) => {
     const area = mapaJogos[jogo.jogo];
     if (area) {
       const index = radarData.findIndex((item) => item.area === area);
@@ -48,7 +45,11 @@ const GraficoRadar = ({ dados, nome }) => {
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
           <PolarGrid />
           <PolarAngleAxis dataKey="area" />
-          <PolarRadiusAxis angle={30} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+          <PolarRadiusAxis
+            angle={30}
+            domain={[0, 100]}
+            tickFormatter={(v) => `${v}%`}
+          />
           <Tooltip formatter={(value) => `${value}%`} />
           <Legend />
           <Radar

@@ -21,22 +21,66 @@
   flex: 1;
   height: 85vh;
   max-width: 50%;
-  /* altura máxima visível */
-  overflow-y: auto;
-  /* permite scroll vertical se o conteúdo ultrapassar */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* impede rolagem geral */
+}
+
+.headerTop {
+  flex-shrink: 0; /* impede encolhimento */
+  margin-bottom: 10px;
 }
 
 .history {
   flex: 1;
-  /* Ocupa o espaço restante no .content */
   overflow-y: auto;
-  /* Rola se ultrapassar a altura */
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 10px;
   background: #f9f9f9;
   border-radius: 8px;
+}
+
+.btnHistory {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: white;
+  border: 1.5px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  font-weight: 600;
+  color: #333;
+}
+
+.btnHistory:hover {
+  background-color: #e6f0ff;
+  border-color: #007bff;
+}
+
+.selected {
+  background-color: #d0e7ff;
+  border-color: #0056b3;
+  color: #003366;
+  font-weight: 700;
+}
+
+.btnExcluir {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #cc0000;
+  margin-left: 10px;
+  padding: 0;
+  transition: color 0.3s;
+}
+
+.btnExcluir:hover {
+  color: #ff3333;
 }
 
 .content h3 {
@@ -70,7 +114,6 @@
   border-bottom: 2px solid lightgrey;
 }
 
-
 .content p {
   color: black;
 }
@@ -96,7 +139,7 @@
   border-radius: 12px;
 }
 
-.relatory:hover{
+.relatory:hover {
   background-color: var(--white);
   color: var(--red);
   transition: 0.5s;
@@ -106,6 +149,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  gap: 10px;
 }
 
 .ativo {

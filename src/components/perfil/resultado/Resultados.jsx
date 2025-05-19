@@ -2,23 +2,29 @@ import React, { useState, useEffect } from "react";
 import styles from "../resultado/Resultados.module.css";
 import { Switch, FormControlLabel } from "@mui/material";
 
-// Componentes dos gráficos
 import BarSizeChart from "../resultado/graficos/GraficoBarSize";
 import GaugeChart from "../resultado/graficos/GraficoMedidor";
 import RadarChart from "../resultado/graficos/GraficoRadar";
-import { downloadExcelInfoJogos, downloadPdfInfoJogos } from "@/services/dependenteService";
 
-// Serviços
-import { fetchDependentes } from "../../../services/dependenteService";
+import { fetchDependentes, downloadExcelInfoJogos, downloadPdfInfoJogos } from "../../../services/dependenteService";
 import { getJogosPorDependente } from "../../../services/jogosService";
+
+import { JogosModal } from "../../Modal-custom-alert/JogosModal";
 
 const Resultados = () => {
   const [dependentes, setDependentes] = useState([]);
-  const [dependenteSelecionado, setDependenteSelecionado] = useState(""); // ID do dependente
+  const [dependenteSelecionado, setDependenteSelecionado] = useState("");
   const [tipoGrafico, setTipoGrafico] = useState("bar");
   const [historicoJogos, setHistoricoJogos] = useState([]);
-  const [jogoSelecionado, setJogoSelecionado] = useState(null); // Estado para armazenar o jogo selecionado
-  const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(false); // Estado para controlar a visualização do último jogo
+  const [jogoSelecionado, setJogoSelecionado] = useState(null);
+  const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(false);
+  const [jogosPorTipo, setJogosPorTipo] = useState([]);
+  const [jogadaSelecionada, setJogadaSelecionada] = useState(null);
+
+  // Modais
+  const [modalConfirmDelete, setModalConfirmDelete] = useState(false);
+  const [modalSuccess, setModalSuccess] = useState(false);
+  const [modalError, setModalError] = useState(false);
 
   useEffect(() => {
     const carregarDependentes = async () => {
@@ -29,68 +35,101 @@ const Resultados = () => {
         console.error("Erro ao buscar dependentes:", error);
       }
     };
-
     carregarDependentes();
   }, []);
 
   useEffect(() => {
-    if (dependenteSelecionado === "") {
+    if (!dependenteSelecionado) {
       setHistoricoJogos([]);
-      setJogoSelecionado(null); // Limpar o jogo selecionado ao desmarcar dependente
-    } else {
-      sessionStorage.setItem("idDependente", dependenteSelecionado);
-      getJogosPorDependente(dependenteSelecionado).then((jogos) => {
-        setHistoricoJogos(jogos);
-
-        if (jogos.length > 0) {
-          const ultimoJogo = jogos.sort((a, b) => new Date(b.createDate) - new Date(a.createDate))[0];
-          if (!mostrarUltimoJogo) {
-            setJogoSelecionado(ultimoJogo);
-          }
-        }
-      });
+      setJogoSelecionado(null);
+      setJogosPorTipo([]);
+      return;
     }
+
+    sessionStorage.setItem("idDependente", dependenteSelecionado);
+
+    getJogosPorDependente(dependenteSelecionado).then((jogos) => {
+      setHistoricoJogos(jogos);
+
+      if (jogos.length > 0) {
+        const ordenados = [...jogos].sort(
+          (a, b) => new Date(b.createDate) - new Date(a.createDate)
+        );
+
+        if (mostrarUltimoJogo) {
+          const tiposUnicos = {};
+          const ultimosPorTipo = [];
+
+          for (const jogo of ordenados) {
+            const nome = jogo.infoJogos_id_fk?.nome?.toLowerCase() || "";
+            let tipo;
+
+            if (nome.includes("mem")) tipo = "Memória";
+            else if (nome.includes("num")) tipo = "Números";
+            else if (nome.includes("vog")) tipo = "Vogais";
+            else if (nome.includes("cor")) tipo = "Cores";
+            else continue;
+
+            if (!tiposUnicos[tipo]) {
+              tiposUnicos[tipo] = true;
+              ultimosPorTipo.push(jogo);
+            }
+          }
+          setJogosPorTipo(ultimosPorTipo);
+          setJogoSelecionado(null);
+        } else {
+          setJogoSelecionado(ordenados[0]);
+          setJogosPorTipo([]);
+        }
+      }
+    });
   }, [dependenteSelecionado, mostrarUltimoJogo]);
 
+  const padronizarNomeJogo = (nomeOriginal) => {
+    if (!nomeOriginal) return "Desconhecido";
+    const nome = nomeOriginal.toLowerCase();
+    if (nome.includes("mem")) return "Memória";
+    if (nome.includes("num")) return "Números";
+    if (nome.includes("let")) return "Letras";
+    if (nome.includes("vog")) return "Vogais";
+    if (nome.includes("cor")) return "Cores";
+    return nomeOriginal;
+  };
+
   const renderGrafico = () => {
-    if (dependenteSelecionado === "" || !jogoSelecionado) {
+    if (dependenteSelecionado === "" || (!jogoSelecionado && !mostrarUltimoJogo)) {
       return <p>Selecione uma criança e um jogo para ver o desempenho.</p>;
     }
 
-    console.log("Dados para o gráfico:", jogoSelecionado); // Verifique se os dados estão sendo passados corretamente
-
-    // Função auxiliar para padronizar o nome
-    const padronizarNomeJogo = (nomeOriginal) => {
-      if (!nomeOriginal) return "Desconhecido";
-      const nome = nomeOriginal.toLowerCase();
-
-      if (nome.includes("mem")) return "Memória";
-      if (nome.includes("num")) return "Números";
-      if (nome.includes("let") || nome.includes("vogal")) return "Letras";
-      if (nome.includes("cor")) return "Cores";
-      return nomeOriginal; // fallback
-    };
-
-    const dadosGrafico = {
-      acertos: jogoSelecionado.acertos,
-      erros: jogoSelecionado.erros,
-      tentativas: jogoSelecionado.tentativas,
-      tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
-      jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome), // adiciona o nome padronizado
-    };
+    const jogosParaMostrar = mostrarUltimoJogo
+      ? jogosPorTipo.map((jogo) => ({
+        acertos: jogo.acertos,
+        erros: jogo.erros,
+        tentativas: jogo.tentativas,
+        tempoTotal: jogo.tempoTotal > 0 ? jogo.tempoTotal : 1,
+        jogo: padronizarNomeJogo(jogo.infoJogos_id_fk?.nome),
+      }))
+      : [
+        {
+          acertos: jogoSelecionado.acertos,
+          erros: jogoSelecionado.erros,
+          tentativas: jogoSelecionado.tentativas,
+          tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
+          jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome),
+        },
+      ];
 
     switch (tipoGrafico) {
       case "bar":
-        return <BarSizeChart dados={[dadosGrafico]} viewMode="individual" />;
+        return <BarSizeChart dados={jogosParaMostrar} viewMode="individual" />;
       case "gauge":
-        return <GaugeChart dados={[dadosGrafico]} viewMode="individual" />;
+        return <GaugeChart dados={jogosParaMostrar} viewMode="individual" />;
       case "radar":
-        return <RadarChart dados={[dadosGrafico]} nome={obterNomeDependente()} />;
+        return <RadarChart dados={jogosParaMostrar} nome={obterNomeDependente()} />;
       default:
         return null;
     }
   };
-
 
   const obterNomeDependente = () => {
     const dep = dependentes.find((d) => d.id === parseInt(dependenteSelecionado));
@@ -99,53 +138,83 @@ const Resultados = () => {
 
   const formatarData = (data) => {
     const dataFormatada = new Date(data);
-    if (isNaN(dataFormatada.getTime())) {
-      // Se a data for inválida, retorne uma string de "Data inválida"
-      return null;
-    }
+    if (isNaN(dataFormatada.getTime())) return null;
+    dataFormatada.setHours(dataFormatada.getHours() - 3);
     return dataFormatada;
   };
 
   const selecionarJogo = (jogo) => {
-    setJogoSelecionado(jogo); // Atualiza o estado com o jogo selecionado
-    setMostrarUltimoJogo(false); // Desativa a visualização do último jogo ao selecionar um jogo específico
-    console.log("Jogo selecionado:", jogo); // Verifica se o jogo selecionado é o correto
+    setJogoSelecionado(jogo);
+    setMostrarUltimoJogo(false);
   };
 
-
-  async function downloadPdf() {
+  const downloadPdf = async () => {
     const idDependente = sessionStorage.getItem("idDependente");
-    if (!idDependente) {
-      console.error("ID do dependente não encontrado");
-      return;
-    }
+    if (!idDependente) return;
+
     try {
       await downloadPdfInfoJogos(idDependente);
     } catch (error) {
-      console.error("Erro ao gerar o PDF");
-      console.error(error);
+      console.error("Erro ao gerar o PDF", error);
     }
-  }
+  };
 
-  async function downloadExcel() {
+  const downloadExcel = async () => {
     const idDependente = sessionStorage.getItem("idDependente");
-    if (!idDependente) {
-      console.error("ID do dependente não encontrado");
-      return;
-    }
+    if (!idDependente) return;
+
     try {
       await downloadExcelInfoJogos(idDependente);
     } catch (error) {
-      console.error("Erro ao gerar o EXCEL");
-      console.error(error);
+      console.error("Erro ao gerar o EXCEL", error);
     }
-  }
+  };
 
+  const buscarHistoricoJogos = async () => {
+    if (!dependenteSelecionado) return;
+    try {
+      const jogos = await getJogosPorDependente(dependenteSelecionado);
+      setHistoricoJogos(jogos);
+      setJogoSelecionado(null);
+      setMostrarUltimoJogo(false);
+      setJogosPorTipo([]);
+    } catch (error) {
+      console.error("Erro ao buscar histórico após exclusão", error);
+    }
+  };
+
+  const handleOpenDeleteModal = (id) => {
+    setJogadaSelecionada(id);
+    setModalConfirmDelete(true);
+  };
+
+  const deleteJogo = async () => {
+    const token = localStorage.getItem("token");
+    if (!token || !jogadaSelecionada) return;
+
+    try {
+      const response = await fetch(
+        `https://backend-9qjw.onrender.com/infoJogos/${jogadaSelecionada}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: token },
+        }
+      );
+
+      if (!response.ok) throw new Error("Erro ao excluir o jogo.");
+
+      setModalConfirmDelete(false);
+      setModalSuccess(true);
+      await buscarHistoricoJogos();
+    } catch (error) {
+      console.error("Erro ao excluir o jogo:", error);
+      setModalConfirmDelete(false);
+      setModalError(true);
+    }
+  };
 
   return (
-    <div
-      className={`${styles.container} ${dependenteSelecionado ? "" : styles.centralizado}`}
-    >
+    <div className={`${styles.container} ${dependenteSelecionado ? "" : styles.centralizado}`}>
       <div className={styles.content}>
         <h2>Resultados dos Jogos</h2>
         <h3>Acompanhe o desempenho das crianças nos jogos educativos.</h3>
@@ -173,18 +242,16 @@ const Resultados = () => {
             <option value="radar">Desempenho por capacidades</option>
           </select>
 
-          <label>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={mostrarUltimoJogo}
-                  onChange={() => setMostrarUltimoJogo(!mostrarUltimoJogo)}
-                  color="primary"
-                />
-              }
-              label="Mostrar último resultado de todos os jogos"
-            />
-          </label>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={mostrarUltimoJogo}
+                onChange={() => setMostrarUltimoJogo(!mostrarUltimoJogo)}
+                color="primary"
+              />
+            }
+            label="Mostrar último resultado de todos os jogos"
+          />
         </section>
 
         {dependenteSelecionado && historicoJogos.length > 0 && (
@@ -194,42 +261,63 @@ const Resultados = () => {
 
       {dependenteSelecionado && (
         <div className={styles.content}>
-          <h2>Histórico de partidas:</h2>
-          <div className={styles.buttons}>
-            <button className={styles.relatory} onClick={downloadPdf}>Gerar PDF</button>
-            <button className={styles.relatory} onClick={downloadExcel}>Gerar EXCEL</button>
+          <div className={styles.headerTop}>
+            <h2>Histórico de partidas:</h2>
+            <div className={styles.buttons}>
+              <button className={styles.relatory} onClick={downloadPdf}>
+                Gerar PDF
+              </button>
+              <button className={styles.relatory} onClick={downloadExcel}>
+                Gerar EXCEL
+              </button>
+            </div>
           </div>
           <div className={styles.history}>
             {historicoJogos.length === 0 ? (
               <p>Carregando histórico...</p>
             ) : (
-              historicoJogos.map((jogo, index) => {
-                // Usamos a função para formatar a data
-                const dataFormatada = formatarData(jogo.createDate); // Pode ser `updateDate` ou `createDate`
-                const dataValida = dataFormatada !== null; // Verifica se a data é válida
-
-                return (
-                  <div
-                    key={index}
-                    className={`${styles.jogoItem} ${jogoSelecionado?.id === jogo.id && !mostrarUltimoJogo ? styles.ativo : ""}`}
-                    onClick={() => selecionarJogo(jogo)} // Adiciona a função de clique
-                  >
-                    <p>
-                      <strong>Jogo:</strong> {jogo.infoJogos_id_fk.nome}
-                    </p>
-                    <p>
-                      <strong>Data:</strong>{" "}
-                      {dataValida
-                        ? `${dataFormatada.toLocaleDateString("pt-BR")} às ${dataFormatada.toLocaleTimeString("pt-BR")}`
-                        : "Data inválida"}
-                    </p>
-                  </div>
-                );
-              })
+              historicoJogos
+                .sort((a, b) => new Date(b.createDate) - new Date(a.createDate))
+                .map((jogo) => {
+                  const nomeJogo = jogo.infoJogos_id_fk?.nome || "";
+                  const data = formatarData(jogo.createDate);
+                  return (
+                    <button
+                      key={jogo.id}
+                      className={`${styles.btnHistory} ${jogoSelecionado?.id === jogo.id ? styles.selected : ""
+                        }`}
+                      onClick={() => selecionarJogo(jogo)}
+                    >
+                      {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"
+                        } ${data ? data.toLocaleTimeString() : ""}`}
+                      <button
+                        className={styles.btnExcluir}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenDeleteModal(jogo.id);
+                        }}
+                        title="Excluir jogo"
+                      >
+                        ❌
+                      </button>
+                    </button>
+                  );
+                })
             )}
           </div>
+
         </div>
       )}
+
+      <JogosModal
+        modalConfirmDelete={modalConfirmDelete}
+        setModalConfirmDelete={setModalConfirmDelete}
+        deleteJogo={deleteJogo}
+        modalSuccess={modalSuccess}
+        setModalSuccess={setModalSuccess}
+        modalError={modalError}
+        setModalError={setModalError}
+      />
     </div>
   );
 };
