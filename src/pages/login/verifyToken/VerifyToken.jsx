@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Gettoken } from '../../../services/Service'; // Função GET que você já tem
 import { useNavigate } from 'react-router-dom';
-import styles from './verifyToken.module.css'; // Estilos personalizados
+import styles from './VerifyToken.module.css'; // Estilos personalizados
 import * as React from 'react';
 
 function VerifyToken() {
@@ -15,7 +15,7 @@ function VerifyToken() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       const response = await Gettoken(`https://backend-9qjw.onrender.com/emailApi/token/${token}`);
       if (response.status === 200) {

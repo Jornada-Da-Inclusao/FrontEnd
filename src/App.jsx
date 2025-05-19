@@ -14,7 +14,7 @@ import NovaSenha from './pages/login/novaSenha/NovaSenha';
 import SelectPlayer from './pages/jogos/selecionarPlayer/selectPlayer.jsx';
 import Perfil from './pages/perfil/perfil.jsx';
 import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
-import FaceJogoNumeros from './pages/jogos/JogoNumeros/JogoNumeros.jsx';
+import FaceJogoNumeros from './pages/jogos/jogoNumeros/JogoNumeros.jsx';
 import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais } from './components/explicacoes/Explicacoes.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 import { JogoProvider } from './contexts/JogoContext';
@@ -40,7 +40,7 @@ const App = () => (
           <Route path="/verifyToken" element={<VerifyToken />} />
           <Route path="/novaSenha" element={<NovaSenha />} />
           <Route path="/perfil/*" element={<Perfil />} />
-        <Route path="/selecionar-jogador" element={<SelectPlayer />} />
+          <Route path="/selecionar-jogador" element={<SelectPlayer />} />
         </Routes>
       </Router>
     </JogoProvider>

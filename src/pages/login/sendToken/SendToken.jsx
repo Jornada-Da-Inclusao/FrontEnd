@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Posttoken } from '../../../services/Service'; // Supondo que você tenha essa função no seu serviço de API
 import { useNavigate } from 'react-router-dom';
-import styles from './sendToken.module.css'; // Estilos personalizados
+import styles from './SendToken.module.css'; // Estilos personalizados
 import * as React from 'react';
 
 function SendToken() {
@@ -15,9 +15,9 @@ function SendToken() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
-      
+
       const response = await Posttoken(`https://backend-9qjw.onrender.com/emailApi/token/${email}`);
       if (response.status === 200) {
         setIsLoading(false);

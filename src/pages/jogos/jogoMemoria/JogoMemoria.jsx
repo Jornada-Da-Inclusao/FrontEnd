@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect, useContext } from 'react'; // Importa os hooks 'useState' e 'useEffect' do React para gerenciar o estado e os efeitos colaterais no componente.
 import { useNavigate } from 'react-router-dom'; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
-import Timer from "../../../components/timer/timer";
+import Timer from "../../../components/timer/Timer";
 import img1 from "@assets/images/memoria/pequena.png";
 import img2 from "@assets/images/memoria/pequena3.png";
 import img3 from "@assets/images/memoria/pequena4.png";
@@ -84,33 +84,33 @@ const JogoMemoria = () => {
     }, [cardsChosenId]); // O efeito será executado toda vez que o estado 'cardsChosenId' mudar.
 
     // Hook 'useEffect' para verificar se todas as cartas foram combinadas corretamente.
-    
-      useEffect(() => {
+
+    useEffect(() => {
         setInfoJogoMemoria({
-          tempoTotal: convertToMinutes(time),
-          tentativas: tentativas,
-          acertos: acertos,
-          erros: erros,
-          infoJogos_id_fk: {
-            id: idJogoMemoria,
-          },
-          dependente: {
-            id: idDependente,
-          },
+            tempoTotal: convertToMinutes(time),
+            tentativas: tentativas,
+            acertos: acertos,
+            erros: erros,
+            infoJogos_id_fk: {
+                id: idJogoMemoria,
+            },
+            dependente: {
+                id: idDependente,
+            },
         });
-    
+
         if (cardsWon.length === 8) { // Quando 8 cartas forem combinadas (4 pares de cartas)
-          registrarInfosJogo();
-          setPopupMessage("Missão concluída!");
-          setShowPopup(true);
+            registrarInfosJogo();
+            setPopupMessage("Missão concluída!");
+            setShowPopup(true);
         }
-      }, [cardsWon, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
+    }, [cardsWon, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
 
     // Função que fecha o popup.
     const handlePopupClose = () => {
         setShowPopup(false);
         navigate("/");
-      };
+    };
 
     // Função que verifica se as duas cartas escolhidas são iguais ou não.
     const checkForMatch = () => {
