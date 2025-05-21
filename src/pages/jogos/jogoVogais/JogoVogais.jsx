@@ -1,4 +1,5 @@
-import React, { useState } from 'react'; // Importa React e o hook useState que será usado para gerenciar o estado do componente.
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Style from './jogoVogais.module.css'; // Importa o arquivo CSS que contém os estilos específicos do componente.
 import {
     DndContext, // Importa o contexto de drag-and-drop da biblioteca `@dnd-kit/core` que permite a implementação da funcionalidade de arrastar e soltar.
@@ -8,11 +9,19 @@ import {
     PointerSensor, // Importa o sensor que permite detectar interações de arraste com o mouse ou toque.
     closestCorners, // Importa a estratégia de detecção de colisão que identifica quando um item está próximo dos cantos de outra área.
 } from "@dnd-kit/core"; // Importa os componentes essenciais para drag-and-drop da biblioteca `@dnd-kit/core`.
-
+import { JogoContext } from "@/contexts/JogoContext";
+import { AuthContext } from "@/contexts/AuthContext";
 import CompJogoVogais from '../../../../components/compJogoVogais/CompJogoVogais'; // Importa o componente que renderiza as letras arrastáveis do jogo.
-
+import { randomizeArr } from '@/utils/utils';
+import Timer from '@/components/timer/Timer';
 
 function JogoVogais() {
+    const dialog = useRef(Object.prototype.constructor(HTMLDialogElement));
+    const navigate = useNavigate();
+    // Configura os sensores de arraste com o `PointerSensor`, que detecta interações de mouse ou toque.
+    const sensors = useSensors(useSensor(PointerSensor));
+    const [popupMessage, setPopupMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
     // Estado que armazena as letras disponíveis para o arraste (A-Z).
     // Cria 26 letras com um valor numérico associado (1 = A, 2 = B, 3 = C, ..., 26 = Z).
     const [letras, setLetras] = useState(
@@ -24,9 +33,82 @@ function JogoVogais() {
 
     // Estado que armazena as letras que foram arrastadas e soltas na área de destino.
     const [droppedLetras, setDroppedLetras] = useState([]);
-    
-    // Configura os sensores de arraste com o `PointerSensor`, que detecta interações de mouse ou toque.
-    const sensors = useSensors(useSensor(PointerSensor));
+    const [acertos, setAcertos] = useState(0);
+    const [erros, setErros] = useState(0);
+    const [tentativas, setTentativas] = useState(0);
+    const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
+    const idJogoVogais = 3;
+    const idDependente = 10;
+    const { registrarInfos } = useContext(JogoContext);
+    const [infoJogoVogais, setInfoJogoVogais] = useState({});
+    const { usuario } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (usuario.token === "") {
+            alert("Você precisa estar logado");
+            navigate("/");
+        }
+    }, [usuario.token]);
+    const token = usuario.token;
+
+    useEffect(() => {
+        const shuffledLetras = randomizeArr([...letras]);
+        setLetras(shuffledLetras);
+    }, []);
+
+    const convertToMinutes = (time) => {
+        // Divide o tempo em minutos e segundos
+        const [minutes, seconds] = time.split(":").map(Number);
+
+        // Converte tudo para minutos, incluindo os segundos
+        return minutes + seconds / 60;
+    };
+
+    const handleTimeUpdate = (newTime) => {
+        setTime(newTime); // Atualiza o estado com o novo tempo
+    };
+
+    function registrarInfosJogo() {
+        registrarInfos(infoJogoVogais, token);
+    }
+
+    useEffect(() => {
+        setInfoJogoVogais({
+            tempoTotal: convertToMinutes(time),
+            tentativas: tentativas,
+            acertos: acertos,
+            erros: erros,
+            infoJogos_id_fk: {
+                id: idJogoVogais,
+            },
+            dependente: {
+                id: idDependente,
+            },
+        });
+
+        if (droppedLetras.length === 5) {
+            registrarInfosJogo();
+            setPopupMessage("Missão concluída!");
+            setShowPopup(true);
+        }
+    }, [droppedLetras, navigate]);
+
+    useEffect(() => {
+        if (dialog.current?.open && !showPopup) {
+            dialog.current?.close();
+        } else if (!dialog.current?.open && showPopup) {
+            dialog.current?.showModal();
+        }
+    }, [showPopup]);
+
+    const handlePopupClose = () => {
+        setShowPopup(false);
+        navigate("/");
+    };
+
+    const { setNodeRef } = useDroppable({
+        id: "droppable-area",
+    });
 
     // Componente que representa a área onde as letras podem ser soltadas.
     const DroppableArea = () => {
@@ -56,8 +138,13 @@ function JogoVogais() {
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
-        // Se o item não foi solto sobre uma área válida, não faz nada.
-        if (!over) return;
+        setTentativas((prev) => prev + 1);
+
+        // Se o item não for solto sobre uma área válida, incremente erros.
+        if (!over) {
+            setErros((prev) => prev + 1);
+            return;
+        }
 
         // Verifica se o item foi solto na área de destino (identificada como 'droppable-area').
         if (over.id === 'droppable-area') {
@@ -65,19 +152,27 @@ function JogoVogais() {
             const letraToDrop = letras.find(letra => letra.id === active.id);
 
             // Verifica se a letra ainda não foi solta e se é uma vogal.
-            if (letraToDrop && !droppedLetras.some(letra => letra.id === letraToDrop.id) && 
+            if (letraToDrop && !droppedLetras.some(letra => letra.id === letraToDrop.id) &&
                 (letraToDrop.id === 1 || letraToDrop.id === 5 || letraToDrop.id === 9 || letraToDrop.id === 15 || letraToDrop.id === 21)) {
-                
+
                 // Adiciona a letra à lista de letras que foram soltas.
                 setDroppedLetras(prev => [...prev, letraToDrop]);
                 // Remove a letra da lista de letras arrastáveis.
                 setLetras(prevLetras => prevLetras.filter(letra => letra.id !== letraToDrop.id));
+                setAcertos((prev) => prev + 1);
+            } else {
+                setErros((prev) => prev + 1);
             }
         }
     };
 
     return (
         <>
+            <Timer
+                isActive={true}
+                resetTrigger={false}
+                onTimeUpdate={handleTimeUpdate}
+            />
             <div className={Style.pagVogais}>
                 <div></div>
                 <div>
@@ -98,6 +193,14 @@ function JogoVogais() {
                             </div>
                         </div>
                     </div>
+
+                    <dialog ref={dialog} className={styles.popup}>
+                        <p>{popupMessage}</p>
+                        <button id="popup-close" onClick={handlePopupClose}>
+                            Voltar
+                        </button>
+                    </dialog>
+
                 </div>
                 <div></div>
             </div>

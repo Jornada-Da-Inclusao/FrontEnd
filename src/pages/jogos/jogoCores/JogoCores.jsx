@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { animalsData, colorsData, stringsData } from '../../../components/jogoCores/Data.jsx'
 import {
     DndContext,
@@ -6,28 +7,103 @@ import {
     useSensor,
     useSensors,
     PointerSensor,
-    closestCorners,
     useDraggable
 } from '@dnd-kit/core'
 import { CSS } from "@dnd-kit/utilities";
-import { randomizeNum  } from "@/utils/utils.js"
+import { JogoContext } from "@/contexts/JogoContext";
+import { AuthContext } from "@/contexts/AuthContext";
+import { randomizeArr } from "@/utils/utils.js";
+import NumerosGrid from "@/components/jogoNumeros/numerosGrid/NumerosGrid.jsx";
+import Timer from "@/components/timer/Timer.jsx";
 import styles from './jogoCores.module.css'
 
 export default function JogoNumeros() {
-    const [colors, setColors] = useState(
-        Array.from({ length: colorsData.length }, (_, index) => ({
-            id: index + 1,
-            value: colorsData[index].code,
-        }))
-    );
-
+    const animals = [...animalsData];
+    const [colors, setColors] = useState(Array.from({ length: colorsData.length }, (_, index) => ({
+        id: index,
+        value: colorsData[index].code
+    })));
+    const descriptions = [...stringsData];
     const [droppedColors, setDroppedColors] = useState([]);
-
+    const dialog = useRef(Object.prototype.constructor(HTMLDialogElement));
+    const navigate = useNavigate();
     const sensors = useSensors(useSensor(PointerSensor));
+    const [popupMessage, setPopupMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
+    const [acertos, setAcertos] = useState(0);
+    const [erros, setErros] = useState(0);
+    const [tentativas, setTentativas] = useState(0);
+    const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
+    const idJogoCores = 4;
+    const idDependente = 10;
+    const { registrarInfos } = useContext(JogoContext);
+    const [infoJogoCores, setInfoJogoCores] = useState({});
+    const { usuario } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (usuario.token === "") {
+            alert("Você precisa estar logado");
+            navigate("/");
+        }
+    }, [usuario.token]);
+    const token = usuario.token;
+
+    const convertToMinutes = (time) => {
+        // Divide o tempo em minutos e segundos
+        const [minutes, seconds] = time.split(":").map(Number);
+
+        // Converte tudo para minutos, incluindo os segundos
+        return minutes + seconds / 60;
+    };
+
+    const handleTimeUpdate = (newTime) => {
+        setTime(newTime); // Atualiza o estado com o novo tempo
+    };
+
+    function registrarInfosJogo() {
+        registrarInfos(infoJogoCores, token);
+    }
+
+    useEffect(() => {
+        setInfoJogoCores({
+            tempoTotal: convertToMinutes(time),
+            tentativas: tentativas,
+            acertos: acertos,
+            erros: erros,
+            infoJogos_id_fk: {
+                id: idJogoCores,
+            },
+            dependente: {
+                id: idDependente,
+            },
+        });
+
+        if (droppedColors.length === 6) {
+            registrarInfosJogo();
+            setPopupMessage("Missão concluída!");
+            setShowPopup(true);
+        }
+    }, [droppedColors, tentativas, acertos, erros, navigate]);
+
+    useEffect(() => {
+        if (dialog.current?.open && !showPopup) {
+            dialog.current?.close();
+        } else if (!dialog.current?.open && showPopup) {
+            dialog.current?.showModal();
+        }
+    }, [showPopup]);
+
+    const handlePopupClose = () => {
+        setShowPopup(false);
+        navigate("/");
+    };
 
     const DroppableArea = (props) => {
         const { setNodeRef } = useDroppable({
             id: props.id,
+            data: {
+                accepts: [props.id]
+            }
         });
 
         return (
@@ -40,14 +116,18 @@ export default function JogoNumeros() {
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
-        if (!over) return;
+        setTentativas((prev) => prev + 1);
 
-        if (over.id === active.id) {
-            const colorToDrop = colors.find(color => color.id === active.id);
+        if (over && over.data.current.accepts.includes(active.data.current.type)) {
+            const colorToDrop = colorsData.find(color => color.id === active.id);
 
             setDroppedColors(prev => [...prev, colorToDrop]);
             setColors(prevColors => prevColors.filter(color => color.id !== colorToDrop.id));
+            setAcertos((prev) => prev + 1);
+            return;
         }
+
+        setErros((prev) => prev + 1);
     }
 
     const Image = ({ animal }) => {
@@ -64,9 +144,9 @@ export default function JogoNumeros() {
         return (
             <div className={styles.card}>
                 <Image animal={animal} />
-                <DroppableArea key={animal.id + 1} id={animal.id + 1}>
+                <DroppableArea key={animal.id} id={animal.id}>
                     {droppedColors.find(color => color.id === animal.id) ? (
-                        <ColorBox key={colorsData.id} id={colorsData.id} color={colorsData.code} />
+                        <ColorBox key={colorsData[animal.id].id} id={colorsData[animal.id].id} color={colorsData[animal.id].code} />
                     ) : (null)}
                 </DroppableArea>
             </div>
@@ -74,7 +154,7 @@ export default function JogoNumeros() {
     }
 
     const Cards = () => {
-        const cards = animalsData.map(element =>
+        const cards = animals.map(element =>
             <Card key={element.id} animal={element} />
         );
 
@@ -82,7 +162,12 @@ export default function JogoNumeros() {
     }
 
     const ColorBox = ({ id, color }) => {
-        const { attributes, listeners, setNodeRef, transform, transition } = useDraggable({ id });
+        const { attributes, listeners, setNodeRef, transform, transition } = useDraggable({
+            id: id,
+            data: {
+                type: id
+            }
+        });
 
         const staticStyles = {
             willChange: 'transform',
@@ -123,30 +208,33 @@ export default function JogoNumeros() {
     }
 
     const Descriptions = () => {
-        const descriptions = animalsData.map(element => {
-            const color = colorsData.at(element.id);
-            const string = stringsData.at(element.id) || stringsData.at(random(stringsData.length));
-
+        const descs = animals.map((element) => {
+            const color = colorsData[element.id];
+            const desc = stringsData[element.id];
             return (
                 <Description
                     key={element.id}
                     animal={element}
                     color={color}
-                    string={string}
+                    string={desc}
                 />
             )
         })
 
-        return descriptions
+        return descs;
     }
 
     return (
         <>
+            <Timer
+                isActive={true}
+                resetTrigger={false}
+                onTimeUpdate={handleTimeUpdate}
+            />
             <div className={styles.gameBody}>
                 <div className={styles.game}>
                     <DndContext
                         sensors={sensors}
-                        collisionDetection={closestCorners}
                         onDragEnd={handleDragEnd}
                     >
                         <div className={styles.infoArea}>
@@ -164,6 +252,12 @@ export default function JogoNumeros() {
                             <Cards />
                         </div>
                     </DndContext>
+                    <dialog ref={dialog} className={styles.popup}>
+                        <p>{popupMessage}</p>
+                        <button id="popup-close" onClick={handlePopupClose}>
+                            Voltar
+                        </button>
+                    </dialog>
                 </div>
             </div>
         </>

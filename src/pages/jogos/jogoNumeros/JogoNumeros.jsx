@@ -86,7 +86,7 @@ export default function JogoNumeros() {
       setPopupMessage("Missão concluída!");
       setShowPopup(true);
     }
-  }, [droppedNumbers, navigate]);
+  }, [droppedNumbers, tentativas, acertos, erros, navigate]);
 
   useEffect(() => {
     if (dialog.current?.open && !showPopup) {
@@ -126,6 +126,8 @@ export default function JogoNumeros() {
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
+
+    console.log(active, over)
 
     setTentativas((prev) => prev + 1);
 

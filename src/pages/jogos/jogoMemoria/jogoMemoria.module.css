@@ -68,13 +68,30 @@ body {
 }
 
 /* Estilo das imagens das cartas */
-.board img {
-  width: 80px;
-  height: 120px;
-  margin: 10px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-top: 20px; /* Ajusta o alinhamento das imagens para cima */
+.board {
+  --width: 80px;
+  --height: 120px;
+
+  .cardImage {
+    width: var(--width);
+    height: var(--height);
+    margin: 10px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 20px; /* Ajusta o alinhamento das imagens para cima */
+  }
+
+  .cardHidden {
+    transition: all 0.3s;
+    &:focus-within,
+    &:hover {
+      width: calc(var(--width) * 1.25);
+      height: calc(var(--height) * 1.25);
+      margin: 0px;
+      z-index: 5;
+      transition: all 0.3s;
+    }
+  }
 }
 
 /* Estilo para o pop-up */

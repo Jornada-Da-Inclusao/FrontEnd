@@ -11,16 +11,13 @@ body {
 .gameBody {
   padding-block: 2em;
   font-family: "Comic Neue";
-  color: var(--clr-neutral-500);
-
-  background-color: var(--clr-neutral-100);
+  color: var(--clr-game-foreground);
 
   width: 100%;
   height: 100%;
 }
 
 .game {
-  background-color: var(--clr-info);
   container-type: inline-size;
   margin: auto;
   width: min(800px, 100%);
@@ -45,15 +42,15 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: var(--padding);
 
-  background-color: var(--clr-info-500);
-  border: 1px solid var(--clr-neutral-500);
+  background-color: var(--clr-game-primary);
   border-radius: 1em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
   margin-bottom: 2em;
   padding: var(--padding);
 
   .info {
-    background-color: var(--clr-neutral-200);
-    border: 1px solid var(--clr-neutral-500);
+    background-color: var(--clr-game-terciary);
+    border: 1px solid var(--clr-game-foreground);
     border-radius: 1em;
     padding: 2em;
   }
@@ -65,17 +62,9 @@ body {
   gap: var(--padding);
   justify-content: space-around;
 
-  background-color: var(--clr-neutral-200);
-  border: 1px solid var(--clr-neutral-500);
+  background-color: var(--clr-game-terciary);
+  border: 1px solid var(--clr-game-foreground);
   border-radius: 1em;
-
-  transition: background-color 500ms 100ms ease;
-
-  &:hover,
-  &:focus {
-    background-color: var(--clr-neutral-300);
-    transition-duration: 0.5s;
-  }
 }
 
 .square {
@@ -105,8 +94,8 @@ body {
   flex-direction: column;
   /* grid-template-columns: subgrid; */
 
-  background-color: var(--clr-neutral-200);
-  border: 1px solid var(--clr-neutral-500);
+  background-color: var(--clr-game-secondary);
+  border: 1px solid var(--clr-game-foreground);
   border-radius: 1em;
   padding: 0.5em;
 
@@ -123,11 +112,51 @@ body {
 }
 
 .dropArea {
+  display: grid;
+  place-content: center;
   align-self: flex-end;
-  background-color: var(--clr-neutral-300);
-  border: 1px solid var(--clr-neutral-500);
+  background-color: var(--clr-game-terciary);
+  border: 1px solid var(--clr-game-foreground);
   border-radius: 1em;
   height: 100px;
   width: 100px;
   margin: auto;
+}
+
+.popup {
+  place-self: center;
+
+  background-color: var(--clr-neutral-200);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  border-radius: 1em;
+  padding: 2rem;
+
+  color: var(--clr-neutral-500);
+  font-size: var(--fs-600);
+  text-align: center;
+
+  transition: all 0.7s allow-discrete;
+
+  &:open {
+    opacity: 1;
+  }
+
+  &::backdrop {
+    transition: all 0.7s allow-discrete;
+  }
+
+  &:open::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+@starting-style {
+  .popup:open {
+    opacity: 0;
+  }
+
+  .popup:open::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+  }
 }

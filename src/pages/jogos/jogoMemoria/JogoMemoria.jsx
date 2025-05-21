@@ -7,6 +7,7 @@ import img2 from "@assets/images/memoria/pequena3.png";
 import img3 from "@assets/images/memoria/pequena4.png";
 import img4 from "@assets/images/memoria/pequena5.png";
 import imgPlaceholder from "@assets/images/memoria/rosa.png"; // Imagem que será exibida nas cartas viradas para baixo.
+import { randomizeArr } from '@/utils/utils';
 import styles from "./jogoMemoria.module.css"; // Importa os estilos CSS para estilizar o componente.
 import { JogoContext } from "../../../contexts/JogoContext";
 import { AuthContext } from "../../../contexts/AuthContext";
@@ -70,7 +71,7 @@ const JogoMemoria = () => {
 
     // Hook 'useEffect' para embaralhar as cartas assim que o componente for montado.
     useEffect(() => {
-        const shuffledCards = [...cardsData].sort(() => Math.random() - 0.5); // Embaralha as cartas aleatoriamente
+        const shuffledCards = randomizeArr(cardsData); // Embaralha as cartas aleatoriamente
         setCards(shuffledCards); // Atualiza o estado com as cartas embaralhadas
     }, []); // O array vazio [] indica que o efeito ocorre apenas uma vez após a renderização inicial.
 
@@ -104,7 +105,7 @@ const JogoMemoria = () => {
             setPopupMessage("Missão concluída!");
             setShowPopup(true);
         }
-    }, [cardsWon, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
+    }, [cardsWon, tentativas, acertos, erros, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
 
     // Função que fecha o popup.
     const handlePopupClose = () => {
@@ -132,6 +133,8 @@ const JogoMemoria = () => {
             } else {
                 setErros(prev => prev + 1); // Incrementa o contador de erros.
             }
+            console.log(cardsChosenId, cardsChosen)
+
             clearChosenCards(); // Limpa as cartas escolhidas para nova rodada.
         } else {
             console.error('IDs escolhidos estão fora do intervalo válido:', optionOneId, optionTwoId);
@@ -166,7 +169,7 @@ const JogoMemoria = () => {
                             src={cardsWon.includes(index) || cardsChosenId.includes(index) ? card.img : imgPlaceholder} // Exibe a imagem da carta se ela foi virada ou combinada, caso contrário, exibe a imagem de placeholder.
                             alt={`card-${index}`} // Define o texto alternativo para a imagem da carta.
                             onClick={() => flipCard(index)} // Chama a função 'flipCard' ao clicar na carta.
-                            className={`card-image ${cardsWon.includes(index) ? 'disabled' : ''}`} // Adiciona a classe 'disabled' às cartas combinadas.
+                            className={`${styles.cardImage} ${cardsWon.includes(index) ? 'disabled' : styles.cardHidden}`} // Adiciona a classe 'disabled' às cartas combinadas.
                         />
                     ))}
                 </div>
