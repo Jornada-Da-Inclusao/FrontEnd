@@ -12,7 +12,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 
 import { randomizeArr } from "@/utils/utils.js";
 import NumerosGrid from "@/components/jogoNumeros/NumerosGrid/NumerosGrid.jsx";
-import Timer from "@/components/timer/Timer.jsx";
+import Timer from "@/components/timer/timer.jsx";
 import styles from "./JogoNumeros.module.css";
 
 export default function JogoNumeros() {
