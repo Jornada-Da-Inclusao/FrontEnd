@@ -13,7 +13,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { randomizeNum } from "@/utils/utils.js";
 import styles from './jogoCores.module.css';
 import { CustomModal } from "../../../components/Modal-custom-alert/CustomModal";
-import Timer from '@/components/timer/timer.jsx'; // <-- novo import
+import Timer from '@/components/timer/Timer.jsx'; // <-- novo import
 
 export default function JogoNumeros() {
     const [colors, setColors] = useState(

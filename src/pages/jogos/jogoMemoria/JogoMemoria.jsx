@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Timer from "../../../components/timer/timer";
-import { CustomModal } from "../../../components/Modal-custom-alert/CustomModal";
+import Timer from "../../../components/timer/Timer.jsx";
+import { CustomModal } from "../../../components/Modal-custom-alert/CustomModal.jsx";
 import img1 from "@assets/images/memoria/pequena.png";
 import img2 from "@assets/images/memoria/pequena3.png";
 import img3 from "@assets/images/memoria/pequena4.png";

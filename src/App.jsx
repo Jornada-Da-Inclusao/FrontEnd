@@ -8,7 +8,7 @@ import Cadastro from './pages/cadastro/Cadastro.jsx';
 import JogoCores from './pages/jogos/jogoCores/JogoCores.jsx';
 import JogoMemoria from './pages/jogos/jogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.jsx';
-import SendToken from './components/login/sendToken/SendToken';
+import SendToken from './components/login/SendToken/SendToken';
 import VerifyToken from './components/login/verifyToken/VerifyToken';
 import NovaSenha from './components/login/novaSenha/NovaSenha';
 import SelectPlayer from './pages/jogos/selecionarPlayer/selectPlayer.jsx';
