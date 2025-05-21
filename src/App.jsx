@@ -8,9 +8,9 @@ import Cadastro from './pages/cadastro/Cadastro.jsx';
 import JogoCores from './pages/jogos/jogoCores/JogoCores.jsx';
 import JogoMemoria from './pages/jogos/jogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.jsx';
-import SendToken from './pages/login/sendToken/SendToken';
-import VerifyToken from './pages/login/verifyToken/VerifyToken';
-import NovaSenha from './pages/login/novaSenha/NovaSenha';
+import SendToken from './components/login/sendToken/SendToken';
+import VerifyToken from './components/login/verifyToken/VerifyToken';
+import NovaSenha from './components/login/novaSenha/NovaSenha';
 import SelectPlayer from './pages/jogos/selecionarPlayer/selectPlayer.jsx';
 import Perfil from './pages/perfil/perfil.jsx';
 import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
@@ -20,9 +20,9 @@ import { AuthProvider } from './contexts/AuthContext';
 import { JogoProvider } from './contexts/JogoContext';
 
 const App = () => (
-  <AuthProvider>
-    <JogoProvider>
-      <Router>
+  <Router>
+    <AuthProvider>
+      <JogoProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cadastro" element={<Cadastro />} />
@@ -40,11 +40,11 @@ const App = () => (
           <Route path="/verifyToken" element={<VerifyToken />} />
           <Route path="/novaSenha" element={<NovaSenha />} />
           <Route path="/perfil/*" element={<Perfil />} />
-        <Route path="/selecionar-jogador" element={<SelectPlayer />} />
+          <Route path="/selecionar-jogador" element={<SelectPlayer />} />
         </Routes>
-      </Router>
-    </JogoProvider>
-  </AuthProvider>
+      </JogoProvider>
+    </AuthProvider>
+  </Router>
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

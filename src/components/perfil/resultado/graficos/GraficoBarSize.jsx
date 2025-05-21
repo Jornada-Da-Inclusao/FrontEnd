@@ -5,13 +5,14 @@ import {
 
 const GraficoTentativas = ({ dados, viewMode }) => {
   // Definindo os jogos predefinidos
-  const jogos = ["Jogo da Memória", "Jogo dos Números", "Jogo das Letras", "Jogo das Cores"];
+  const jogos = ["Memória", "Números", "Vogais", "Cores"];
 
   // Mapeando os dados para incluir todos os jogos, preenchendo com zero se não houver dados
   const data = jogos.map((jogo) => {
+    
     // Procurar se há dados para o jogo atual
     const jogoData = dados.find((item) => item.jogo === jogo);
-
+    
     // Se houver dados para o jogo, usa eles, senão coloca zero
     return {
       nome: jogo,
@@ -25,7 +26,7 @@ const GraficoTentativas = ({ dados, viewMode }) => {
   return (
     <div style={{ width: "100%", height: 300 }}>
       <h3>
-        Tentativas, Acertos e Erros por {viewMode === "geral" ? "Jogo" : "Criança"}
+        Tentativas, Acertos e Erros por {viewMode === "geral" ? "Jogo" : "Jogo"}
       </h3>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
