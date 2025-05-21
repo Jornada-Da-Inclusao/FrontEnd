@@ -11,7 +11,7 @@ import { JogoContext } from "@/contexts/JogoContext";
 import { AuthContext } from "@/contexts/AuthContext";
 
 import { randomizeArr } from "@/utils/utils.js";
-import NumerosGrid from "@/components/jogoNumeros/NumerosGrid/NumerosGrid.jsx";
+import NumerosGrid from "@/components/jogoNumeros/numerosGrid/NumerosGrid.jsx";
 import Timer from "@/components/timer/Timer.jsx";
 import styles from "./JogoNumeros.module.css";
 
