@@ -1,18 +1,19 @@
 // @ts-nocheck
-import React, { useState, useEffect, useContext } from 'react'; 
-import { useNavigate } from 'react-router-dom'; 
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Timer from "../../../components/timer/timer";
+import { CustomModal } from "../../../components/Modal-custom-alert/CustomModal";
 import img1 from "@assets/images/memoria/pequena.png";
 import img2 from "@assets/images/memoria/pequena3.png";
 import img3 from "@assets/images/memoria/pequena4.png";
 import img4 from "@assets/images/memoria/pequena5.png";
-import imgPlaceholder from "@assets/images/memoria/rosa.png"; 
-import styles from "./jogoMemoria.module.css"; 
+import imgPlaceholder from "@assets/images/memoria/rosa.png";
+import styles from "./jogoMemoria.module.css";
 import { JogoContext } from "../../../contexts/JogoContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 
 const JogoMemoria = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const cardsData = [
         { name: "imagem1", img: img1 },
         { name: "imagem2", img: img2 },
@@ -23,31 +24,41 @@ const JogoMemoria = () => {
         { name: "imagem3", img: img3 },
         { name: "imagem4", img: img4 },
     ];
-    
-    const [cards, setCards] = useState([]); 
-    const [cardsChosen, setCardsChosen] = useState([]); 
-    const [cardsChosenId, setCardsChosenId] = useState([]); 
-    const [cardsWon, setCardsWon] = useState([]); 
-    const [popupMessage, setPopupMessage] = useState(''); 
-    const [showPopup, setShowPopup] = useState(false); 
-    const [acertos, setAcertos] = useState(0); 
-    const [erros, setErros] = useState(0); 
+
+    const [cards, setCards] = useState([]);
+    const [cardsChosen, setCardsChosen] = useState([]);
+    const [cardsChosenId, setCardsChosenId] = useState([]);
+    const [cardsWon, setCardsWon] = useState([]);
+    const [acertos, setAcertos] = useState(0);
+    const [erros, setErros] = useState(0);
     const [tentativas, setTentativas] = useState(0);
-    const [time, setTime] = useState("03:00");  
+    const [time, setTime] = useState("03:00");
+    const [timeInSeconds, setTimeInSeconds] = useState(180);
+
+    const [modalConfig, setModalConfig] = useState({ show: false });
+
     const idJogoMemoria = 1;
     const idDependente = parseInt(sessionStorage.getItem("player"));
     const { registrarInfos } = useContext(JogoContext);
-    const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     const { usuario } = useContext(AuthContext);
-    const [timeInSeconds, setTimeInSeconds] = useState(180); 
+    const token = usuario.token;
 
     useEffect(() => {
         if (usuario.token === "") {
-            alert("Você precisa estar logado")
-            navigate("/")
+            setModalConfig({
+                show: true,
+                title: "Atenção",
+                message: "Você precisa estar logado.",
+                icon: "⚠️",
+                color: "#ff9800",
+                doneButton: {
+                    label: "OK",
+                    onClick: () => navigate("/"),
+                },
+                onClose: () => navigate("/"),
+            });
         }
-    }, [usuario.token])
-    const token = usuario.token;
+    }, [usuario.token]);
 
     const convertToMinutes = (time) => {
         const [minutes, seconds] = time.split(":").map(Number);
@@ -57,19 +68,14 @@ const JogoMemoria = () => {
     const handleTimeUpdate = (newTimeInSeconds) => {
         const segundosInteiros = Number.isFinite(newTimeInSeconds) ? Math.floor(newTimeInSeconds) : 0;
         if (segundosInteiros > 0) {
-          setTimeInSeconds((prev) => {
-            if (prev !== segundosInteiros) {
-              return segundosInteiros;
-            }
-            return prev;
-          });
+            setTimeInSeconds((prev) => {
+                if (prev !== segundosInteiros) {
+                    return segundosInteiros;
+                }
+                return prev;
+            });
         }
-      };
-
-    function registrarInfosJogo() {
-        registrarInfos(infoJogoMemoria, token);
-        console.log(infoJogoMemoria, token)
-    }
+    };
 
     useEffect(() => {
         const originalCards = [...cardsData];
@@ -82,8 +88,8 @@ const JogoMemoria = () => {
             do {
                 secondIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
             } while (
-                Math.abs(secondIndex - firstIndex) === 1 || 
-                Math.abs(secondIndex - firstIndex) === 4    
+                Math.abs(secondIndex - firstIndex) === 1 ||
+                Math.abs(secondIndex - firstIndex) === 4
             );
             availableIndices = availableIndices.filter(i => i !== secondIndex);
             shuffled[firstIndex] = pair[0];
@@ -99,57 +105,68 @@ const JogoMemoria = () => {
         }
     }, [cardsChosenId]);
 
+    const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     useEffect(() => {
         setInfoJogoMemoria({
-          tempoTotal: timeInSeconds > 0 ? timeInSeconds / 60 : 0.001, 
-          tentativas,
-          acertos,
-          erros,
-          infoJogos_id_fk: { id: idJogoMemoria },
-          dependente: { id: idDependente },
+            tempoTotal: timeInSeconds > 0 ? timeInSeconds / 60 : 0.001,
+            tentativas,
+            acertos,
+            erros,
+            infoJogos_id_fk: { id: idJogoMemoria },
+            dependente: { id: idDependente },
         });
     }, [timeInSeconds, tentativas, acertos, erros]);
-      
+
     useEffect(() => {
         if (cardsWon.length === 8) {
-          registrarInfos(infoJogoMemoria, token);
-          console.log("Enviando para o backend:", infoJogoMemoria);
-          setPopupMessage("Missão concluída!");
-          setShowPopup(true);
+            registrarInfos(infoJogoMemoria, token);
+            setModalConfig({
+                show: true,
+                title: "Missão concluída!",
+                message: "Parabéns! Você completou o jogo.",
+                icon: "🏆",
+                color: "#4caf50",
+                doneButton: {
+                    label: "Voltar",
+                    onClick: () => navigate("/"),
+                },
+                onClose: () => navigate("/"),
+            });
         }
     }, [cardsWon]);
 
-    // *** Aqui o useEffect para atualizar o acertos conforme cardsWon ***
     useEffect(() => {
         setAcertos(cardsWon.length / 2);
     }, [cardsWon]);
 
-    const handlePopupClose = () => {
-        setShowPopup(false);
-        navigate("/");
-    };    
-
     const checkForMatch = () => {
         const [optionOneId, optionTwoId] = cardsChosenId;
-    
+
         if (optionOneId === optionTwoId) {
-            setPopupMessage('Você clicou na mesma carta duas vezes!');
-            setShowPopup(true);
+            setModalConfig({
+                show: true,
+                title: "Oops!",
+                message: "Você clicou na mesma carta duas vezes.",
+                icon: "❗",
+                color: "#f44336",
+                doneButton: {
+                    label: "OK",
+                },
+                onClose: () => setModalConfig({ show: false }),
+            });
             clearChosenCards();
             return;
         }
-    
+
         if (cards[optionOneId]?.name === cards[optionTwoId]?.name) {
             setCardsWon(prev => [...prev, optionOneId, optionTwoId]);
-            // Removida a linha que incrementava acertos diretamente:
-            // setAcertos(prev => prev + 1);
         } else {
             setErros(prev => prev + 1);
         }
         setTentativas(prev => prev + 1);
         clearChosenCards();
     };
-    
+
     const clearChosenCards = () => {
         setCardsChosen([]);
         setCardsChosenId([]);
@@ -167,7 +184,9 @@ const JogoMemoria = () => {
             <Timer isActive={true} resetTrigger={false} onTimeUpdate={handleTimeUpdate} />
             <div className={styles.gameContainer}>
                 <div className={styles.resultContainer}>
-                    <span className={styles.result}>Cartas combinadas: {cardsWon.length / 2}/{cards.length / 2}</span>
+                    <span className={styles.result}>
+                        Cartas combinadas: {cardsWon.length / 2}/{cards.length / 2}
+                    </span>
                 </div>
                 <div className={styles.board}>
                     {cards.map((card, index) => (
@@ -176,20 +195,21 @@ const JogoMemoria = () => {
                             src={cardsWon.includes(index) || cardsChosenId.includes(index) ? card.img : imgPlaceholder}
                             alt={`card-${index}`}
                             onClick={() => flipCard(index)}
-                            className={`card-image ${cardsWon.includes(index) ? 'disabled' : ''}`}
+                            className={styles.cardImage}
                         />
                     ))}
                 </div>
-
-                {showPopup && (
-                    <div className={styles.popup}>
-                        <div className={styles.popupContent}>
-                            <p>{popupMessage}</p>
-                            <button id="popup-close" onClick={handlePopupClose}>Fechar</button>
-                        </div>
-                    </div>
-                )}
             </div>
+
+            <CustomModal
+                show={modalConfig.show}
+                onClose={modalConfig.onClose}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                icon={modalConfig.icon}
+                color={modalConfig.color}
+                doneButton={modalConfig.doneButton}
+            />
         </>
     );
 };

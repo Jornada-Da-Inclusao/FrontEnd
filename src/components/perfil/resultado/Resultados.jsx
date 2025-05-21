@@ -17,7 +17,7 @@ const Resultados = () => {
   const [tipoGrafico, setTipoGrafico] = useState("bar");
   const [historicoJogos, setHistoricoJogos] = useState([]);
   const [jogoSelecionado, setJogoSelecionado] = useState(null);
-  const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(false);
+  const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(true);
   const [jogosPorTipo, setJogosPorTipo] = useState([]);
   const [jogadaSelecionada, setJogadaSelecionada] = useState(null);
 
@@ -281,15 +281,26 @@ const Resultados = () => {
                 .map((jogo) => {
                   const nomeJogo = jogo.infoJogos_id_fk?.nome || "";
                   const data = formatarData(jogo.createDate);
+                
+                  // Verifica se o jogo está entre os exibidos no modo "mostrarUltimoJogo"
+                  const estaSelecionadoNoGrafico =
+                    mostrarUltimoJogo &&
+                    jogosPorTipo.some((j) => j.id === jogo.id);
+                
+                  const estaSelecionadoIndividualmente =
+                    !mostrarUltimoJogo && jogoSelecionado?.id === jogo.id;
+                
                   return (
                     <button
                       key={jogo.id}
-                      className={`${styles.btnHistory} ${jogoSelecionado?.id === jogo.id ? styles.selected : ""
-                        }`}
+                      className={`${styles.btnHistory} ${
+                        estaSelecionadoIndividualmente || estaSelecionadoNoGrafico
+                          ? styles.selected
+                          : ""
+                      }`}
                       onClick={() => selecionarJogo(jogo)}
                     >
-                      {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"
-                        } ${data ? data.toLocaleTimeString() : ""}`}
+                      {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"} ${data ? data.toLocaleTimeString() : ""}`}
                       <button
                         className={styles.btnExcluir}
                         onClick={(e) => {
@@ -302,7 +313,7 @@ const Resultados = () => {
                       </button>
                     </button>
                   );
-                })
+                })                
             )}
           </div>
 

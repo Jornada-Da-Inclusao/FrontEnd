@@ -11,7 +11,6 @@ import {
 
 import CompJogoVogais from '../../../../components/compJogoVogais/CompJogoVogais'; // Importa o componente que renderiza as letras arrastáveis do jogo.
 
-
 function JogoVogais() {
     // Estado que armazena as letras disponíveis para o arraste (A-Z).
     // Cria 26 letras com um valor numérico associado (1 = A, 2 = B, 3 = C, ..., 26 = Z).
@@ -79,7 +78,6 @@ function JogoVogais() {
     return (
         <>
             <div className={Style.pagVogais}>
-                <div></div>
                 <div>
                     <div className={Style.bodyGame}>
                         <div className={Style.jogo}>
