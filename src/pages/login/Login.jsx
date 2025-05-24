@@ -97,6 +97,9 @@ function Login() {
             <p className={styles.loglinks}>
               <a href="/cadastro">Faça seu cadastro</a>
             </p>
+            <p className={styles.loglinks}>
+              <a href="/home">Voltar para Home</a>
+            </p>
           </form>
         </div>
       </div>

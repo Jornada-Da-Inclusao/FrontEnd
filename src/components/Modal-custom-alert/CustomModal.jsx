@@ -10,21 +10,39 @@ export function CustomModal({
     firstButton,
     secondButton,
     doneButton,
+    clear, // Função opcional clear
+    autoClear = false, // Novo parâmetro que controla se o clear é feito automaticamente
 }) {
     const [visible, setVisible] = useState(false);
     const modalRef = useRef(null);
 
+    // Função para limpar o modal
+    const handleClear = () => {
+        if (clear) {
+            // Resetando o conteúdo do modal
+            // Isso pode ser feito de diferentes formas, dependendo do que você deseja limpar.
+            onClose();  // Chama o onClose para resetar qualquer estado associado ao modal
+        }
+    };
+
     useEffect(() => {
         if (show) {
-            setTimeout(() => setVisible(true), 10); // pequeno delay para iniciar animação
+            setTimeout(() => setVisible(true), 10); // Pequeno delay para iniciar animação
         } else {
             setVisible(false);
+            // Se o modal for fechado e autoClear for true, chamamos handleClear
+            if (autoClear && clear) {
+                handleClear(); // Limpa o conteúdo do modal
+            }
         }
-    }, [show]);
+    }, [show, autoClear, clear]);
 
     const handleOutsideClick = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
             onClose();
+            if (autoClear && clear) {
+                handleClear(); // Limpa o conteúdo do modal se autoClear for true
+            }
         }
     };
 
@@ -79,7 +97,10 @@ export function CustomModal({
 
                 {firstButton && (
                     <button
-                        onClick={firstButton.onClick}
+                        onClick={() => {
+                            firstButton.onClick();
+                            handleClear(); // Limpa o modal quando o botão é pressionado
+                        }}
                         style={{
                             backgroundColor: color,
                             color: "#fff",
@@ -98,7 +119,10 @@ export function CustomModal({
 
                 {secondButton && (
                     <button
-                        onClick={secondButton.onClick}
+                        onClick={() => {
+                            secondButton.onClick();
+                            handleClear(); // Limpa o modal quando o botão é pressionado
+                        }}
                         style={{
                             backgroundColor: color,
                             color: "#fff",
@@ -120,6 +144,7 @@ export function CustomModal({
                         onClick={() => {
                             doneButton.onClick?.();
                             onClose();
+                            handleClear(); // Limpa o modal quando o botão é pressionado
                         }}
                         style={{
                             backgroundColor: color,

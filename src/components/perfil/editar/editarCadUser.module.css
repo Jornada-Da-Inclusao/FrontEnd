@@ -6,6 +6,7 @@ h2,h3, input, label, select{
 }
 
 .container{
+display: flex;
 align-items: center;
 justify-items: center;
 }

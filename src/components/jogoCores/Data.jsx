@@ -29,4 +29,5 @@ export const stringsData = [
   { id: 2, body: "é fã do" },
   { id: 3, body: "gosta do" },
   { id: 4, body: "prefere o" },
+  { id: 5, body: "aprecia o" },
 ]
