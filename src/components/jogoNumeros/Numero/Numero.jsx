@@ -9,9 +9,12 @@ function Numeros({ id, value }) {
   // Usa o hook useDraggable para tornar o componente arrastável.
   const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: id });
 
+  const scale = 1.25
+  const transformScale = transform ? { ...transform, x: transform.x / scale, y: transform.y / scale } : undefined;
+
   // Define estilos dinâmicos que mudam com a transformação.
   const dynamicStyles = {
-    transform: CSS.Translate.toString(transform), // Aplica a transformação de posição
+    transform: CSS.Translate.toString(transformScale), // Aplica a transformação de posição
     CSSTransition, // Aplica a transição
   };
 

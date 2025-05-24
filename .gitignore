@@ -32,3 +32,6 @@ coverage/
 
 # Configurações do Docker
 docker-compose.override.yml
+
+#cache dos arquvivos do firebase (não precisa commitar eles)
+*.cache

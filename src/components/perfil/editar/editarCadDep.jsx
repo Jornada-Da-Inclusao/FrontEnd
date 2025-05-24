@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import styles from "./editarCadDep.module.css";
+import styles from "../editar/editarCadDep.module.css";
+import { icons } from "../icons";
+import { calcularIdade } from '../calcularIdade';
+import { getUserData, fetchDependentes, updateDependente, deleteDependente } from "../../../services/dependenteService";
+import DependenteModals from "../../../components/Modal-custom-alert/DependenteModal";
 
 const EditarDep = () => {
   const [formData, setFormData] = useState({
@@ -11,41 +15,21 @@ const EditarDep = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [avatarSelecionado, setAvatarSelecionado] = useState("");
 
-  // Função para buscar usuário e token
-  const getUserData = () => {
-    const usuarioData = localStorage.getItem("usuario");
-    const token = localStorage.getItem("token");
-    if (!usuarioData || !token) {
-      console.error("Usuário ou token não encontrado no localStorage.");
-      return null;
-    }
-    return { usuario: JSON.parse(usuarioData), token };
-  };
+  // Modais
+  const [showEditConfirm, setShowEditConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
-    const { usuario, token } = getUserData() || {};
-    if (!usuario || !token) return;
-
-    const fetchDependentes = async () => {
+    const fetchDependentesData = async () => {
       try {
-        const res = await fetch(
-          `https://backend-9qjw.onrender.com/dependente/getDependenteByIdUsuario/${usuario.id}`,
-          {
-            headers: {
-              "Authorization": token,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
-        const data = await res.json();
+        const data = await fetchDependentes();
         setIds(data);
       } catch (err) {
-        console.error("Erro ao buscar IDs:", err);
+        console.error("Erro ao buscar dependentes:", err);
       }
     };
 
-    fetchDependentes();
+    fetchDependentesData();
   }, []);
 
   const handleSelectId = (e) => {
@@ -54,14 +38,12 @@ const EditarDep = () => {
 
     const dependente = ids.find((dep) => dep.id === id);
     if (dependente) {
-      console.log(dependente.sexo);
-      
       setFormData({
         nome: dependente.nome,
         dataNascimento: dependente.dataNascimento,
         sexo: dependente.sexo,
       });
-      setAvatarSelecionado(dependente.avatar || ""); // Aqui ajusta o avatar com base no dependente
+      setAvatarSelecionado(dependente.foto || "");
     }
   };
 
@@ -70,76 +52,35 @@ const EditarDep = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Função para calcular idade a partir da data de nascimento
-  const calcularIdade = (dataNascimento) => {
-    if (!dataNascimento) return 0; // Se não houver data, retorna 0
-
-    const dataNascimentoDate = new Date(dataNascimento);
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNascimentoDate.getFullYear();
-    const mes = hoje.getMonth() - dataNascimentoDate.getMonth();
-
-    if (mes < 0 || (mes === 0 && hoje.getDate() < dataNascimentoDate.getDate())) {
-      idade--;
-    }
-
-    return idade;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const { usuario, token } = getUserData() || {};
-    if (!usuario || !token) return;
-
-    // Calcular a idade com base na dataNascimento
-    const idade = calcularIdade(formData.dataNascimento);
-
     try {
-      const res = await fetch(
-        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Authorization": token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nome: formData.nome,
-            idade: idade,  // Enviar a idade em vez da data de nascimento
-            sexo: formData.sexo,
-            foto: avatarSelecionado,
-            usuarioId: usuario.id,
-          }),
-        }
-      );
-      if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
-      alert("Dados alterados com sucesso!");
+      const idade = calcularIdade(formData.dataNascimento);
+      const dadosAtualizados = {
+        nome: formData.nome,
+        idade, // aqui você passa a idade corretamente
+        sexo: formData.sexo,
+      };
+  
+      await updateDependente(selectedId, dadosAtualizados, avatarSelecionado);
+      setShowEditConfirm(true);
     } catch (err) {
       console.error("Erro ao alterar dependente:", err);
     }
   };
+  
 
-  const handleRemove = async () => {
-    const confirmDelete = window.confirm("Tem certeza que deseja remover este dependente?");
-    if (!confirmDelete || !selectedId) return;
+  const handleRemove = () => {
+    if (!selectedId) return;
+    setShowDeleteConfirm(true);
+  };
 
-    const { usuario, token } = getUserData() || {};
-    if (!usuario || !token) return;
+  const confirmDelete = async () => {
+    const { token } = getUserData() || {};
+    if (!token) return;
 
     try {
-      const res = await fetch(
-        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Authorization": token,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) throw new Error(`Erro ${res.status}: ${res.statusText}`);
-      alert("Dependente removido com sucesso!");
+      await deleteDependente(selectedId, token);
       setFormData({ nome: "", dataNascimento: "", sexo: "" });
       setSelectedId(null);
     } catch (err) {
@@ -153,25 +94,11 @@ const EditarDep = () => {
   const dataMaxima = new Date(anoAtual - 3, hoje.getMonth(), hoje.getDate());
   const formatarData = (data) => data.toISOString().split("T")[0];
 
-  const icons = [
-    "https://www.svgrepo.com/show/420338/avatar-person-pilot.svg",
-    "https://www.svgrepo.com/show/420345/fighter-luchador-man.svg",
-    "https://www.svgrepo.com/show/420315/avatar-cloud-crying.svg",
-    "https://www.svgrepo.com/show/420322/avatar-female-portrait-2.svg",
-    "https://www.svgrepo.com/show/420327/avatar-child-girl.svg",
-    "https://www.svgrepo.com/show/420329/anime-away-face.svg",
-    "https://www.svgrepo.com/show/420319/actor-chaplin-comedy.svg",
-    "https://www.svgrepo.com/show/420333/afro-avatar-male.svg",
-    "https://www.svgrepo.com/show/420360/avatar-batman-comics.svg",
-    "https://www.svgrepo.com/show/420334/avatar-bad-breaking.svg",
-    "https://www.svgrepo.com/show/420343/avatar-joker-squad.svg",
-    "https://www.svgrepo.com/show/420347/avatar-einstein-professor.svg",
-  ];
-
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <h2>Alterar dados das crianças</h2>
+
         <h3>Alterar dados de qual criança:</h3>
         <select id="idSelect" value={selectedId ?? ""} onChange={handleSelectId}>
           <option value="" disabled>-- Escolha uma criança --</option>
@@ -237,6 +164,14 @@ const EditarDep = () => {
 
         <button onClick={handleRemove}>Remover dependente</button>
       </div>
+
+      <DependenteModals
+        showEditConfirm={showEditConfirm}
+        setShowEditConfirm={setShowEditConfirm}
+        showDeleteConfirm={showDeleteConfirm}
+        setShowDeleteConfirm={setShowDeleteConfirm}
+        onConfirmDelete={confirmDelete}
+      />
     </div>
   );
 };

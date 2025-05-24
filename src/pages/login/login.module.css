@@ -93,6 +93,12 @@
   padding: 40px;
 }
 
+.loglinks {
+  text-align: center;
+  padding: 10px;
+  color: black;
+}
+
 .logo {
   width: 60%;
   margin-bottom: 20px;
@@ -177,4 +183,9 @@ input[type="password"]:focus {
   transform: scale(1.05);
   box-shadow: 0 6px 18px rgba(230, 0, 0, 0.4);
   filter: brightness(1.1);
+}
+
+.btnLogin > svg{
+  height: 50%;
+  width: 100%;
 }

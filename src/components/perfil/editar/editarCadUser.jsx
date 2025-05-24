@@ -1,140 +1,120 @@
-import { useState } from 'react';
-import styles from "./editarCadUser.module.css";
-import { Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import styles from "../editar/editarCadUser.module.css";
+import { atualizarUsuario, deletarUsuario } from '../../../services/UsuarioService';
+import UsuarioModals from '../../../components/Modal-custom-alert/UsuarioModal';
 
 const EditarUsuario = () => {
-    const [formData, setFormData] = useState({
-        nome: '',
-        usuario: '',
+  const usuarioData = JSON.parse(localStorage.getItem("usuario") || "{}");
+  const token = localStorage.getItem('token');
+
+  // Inicializar o formData com os dados atuais do usuário
+  const [formData, setFormData] = useState({
+    nome: usuarioData.nome || '',
+    email: usuarioData.email || '',
+    senha: '',
+    confirmarSenha: ''
+  });
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.senha && formData.senha !== formData.confirmarSenha) {
+      alert("As senhas não coincidem!");
+      return;
+    }
+
+    if (!token) return;
+
+    // Monta os dados que serão enviados, iniciando pelo id do usuário
+    const dataToSend = { id: usuarioData?.id };
+    if (formData.nome && formData.nome !== usuarioData.nome) dataToSend.nome = formData.nome;
+    if (formData.email && formData.email !== usuarioData.email) dataToSend.email = formData.email;
+    if (formData.senha) dataToSend.senha = formData.senha;
+
+    try {
+      await atualizarUsuario(dataToSend, token);
+
+      // Atualiza o localStorage com os novos dados (nome e email) caso tenham sido alterados
+      const updatedUser = { ...usuarioData };
+      if (dataToSend.nome) updatedUser.nome = dataToSend.nome;
+      if (dataToSend.email) updatedUser.email = dataToSend.email;
+      localStorage.setItem("usuario", JSON.stringify(updatedUser));
+
+      // Atualiza também o state para refletir no formulário
+      setFormData(prev => ({
+        ...prev,
+        nome: updatedUser.nome,
+        email: updatedUser.email,
         senha: '',
         confirmarSenha: ''
-    });
+      }));
 
-    const token = localStorage.getItem('token');
-    const usuarioData = JSON.parse(localStorage.getItem("usuario")); // Parse para obter o objeto
+      setShowConfirmModal(true);
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao atualizar usuário");
+    }
+  };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
+  const confirmDelete = async () => {
+    try {
+      await deletarUsuario(usuarioData.id, token);
+      alert("Conta excluída com sucesso!");
+  
+      // Limpa dados do localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+  
+      // Redireciona para a página de login
+      window.location.href = '/login'; // Ajuste a URL se for diferente
+  
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao deletar usuário");
+    }
+  };
+  
+  return (
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <form onSubmit={handleSubmit}>
+          <h2>Editar dados do responsável</h2>
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+          <label htmlFor="nome">Alterar nome:</label>
+          <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
 
-        const dataToSend = {};
+          <label htmlFor="email">Alterar E-mail:</label>
+          <input type="text" name="email" value={formData.email} onChange={handleChange} />
 
-        // Verificar se os campos têm valor antes de enviar
-        if (formData.nome) dataToSend.nome = formData.nome;
-        if (formData.usuario) dataToSend.usuario = formData.usuario;
-        if (formData.senha) dataToSend.senha = formData.senha;
+          <label htmlFor="senha">Alterar senha:</label>
+          <input type="password" name="senha" value={formData.senha} onChange={handleChange} />
 
-        // Verificar se o token está presente antes de enviar a requisição
-        if (!token) {
-            console.error('Token de autenticação não encontrado');
-            return;
-        }
+          <label htmlFor="confirmarSenha">Digite a nova senha novamente:</label>
+          <input type="password" name="confirmarSenha" value={formData.confirmarSenha} onChange={handleChange} />
 
-        try {
-            const response = await fetch('https://backend-9qjw.onrender.com/usuarios/atualizar-parcial', {
-                method: "PATCH",
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': token, // Enviando o token no cabeçalho
-                },
-                body: JSON.stringify({
-                  id: usuarioData.id,  // Adicionando o ID do usuário
-                  ...dataToSend            // Espalhando os outros dados
-                }),
-              })
-              
+          <button type="submit">Alterar dados</button>
+        </form>
 
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Usuário atualizado com sucesso:', result);
-                window.location.reload();
-            } else {
-                const error = await response.json();
-                console.error('Erro ao atualizar usuário:', error);
-            }
-        } catch (error) {
-            console.error('Erro na requisição:', error);
-        }
-    };
+        <button onClick={() => setShowDeleteModal(true)}>Deletar Conta</button>
+      </div>
 
-    const handleDelete = async () => {
-        if (!usuarioData || !usuarioData.id) {
-            console.error('ID do usuário não encontrado');
-            return;
-        }
-
-        if (!token) {
-            console.error('Token de autenticação não encontrado');
-            return;
-        }
-
-        try {
-            const response = await fetch(`https://backend-9qjw.onrender.com/usuarios/${usuarioData.id}`, {
-                method: 'DELETE',
-                headers: {
-                    "Authorization": token,
-                },
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Usuário deletado com sucesso:', result);
-                Navigate("/");
-            } else {
-                const error = await response.json();
-                console.error('Erro ao deletar usuário:', error);
-            }
-        } catch (error) {
-            console.error('Erro na requisição de deleção:', error);
-        }
-    };
-
-    return(
-        <div className={styles.container}>
-            <div className={styles.content}>
-                <form onSubmit={handleSubmit}>
-                    <h2>Editar dados do responsável</h2>
-                    <label htmlFor="nome">Alterar nome:</label>
-                    <input
-                        type="text"
-                        name="nome"
-                        value={formData.nome}
-                        onChange={handleChange}
-                    />
-                    <label htmlFor="usuario">Alterar E-mail:</label>
-                    <input
-                        type="text"
-                        name="usuario"
-                        value={formData.usuario}
-                        onChange={handleChange}
-                    />
-                    <label htmlFor="senha">Alterar senha:</label>
-                    <input
-                        type="password"
-                        name="senha"
-                        value={formData.senha}
-                        onChange={handleChange}
-                    />
-                    <label htmlFor="confirmarSenha">Digite a nova senha novamente:</label>
-                    <input
-                        type="password"
-                        name="confirmarSenha"
-                        value={formData.confirmarSenha}
-                        onChange={handleChange}
-                    />
-                    <button type="submit">Alterar dados</button>
-                </form>
-                <button onClick={handleDelete}>Deletar Conta</button>
-            </div>
-        </div>
-    );
+      <UsuarioModals
+        showConfirm={showConfirmModal}
+        setShowConfirm={setShowConfirmModal}
+        showDelete={showDeleteModal}
+        setShowDelete={setShowDeleteModal}
+        onConfirmDelete={confirmDelete}
+      />
+    </div>
+  );
 };
 
 export default EditarUsuario;

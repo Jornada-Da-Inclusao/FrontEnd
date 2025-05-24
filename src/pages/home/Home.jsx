@@ -6,7 +6,6 @@ import About from "../../components/home/sobre/About.jsx";
 import Footer from "../../components/home/footer/Footer.jsx";
 import styles from "./home.module.css";
 
-
 const Home = () => (
   <div className={styles.home}>
     <Header />
