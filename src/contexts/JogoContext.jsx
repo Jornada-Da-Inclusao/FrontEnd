@@ -7,6 +7,7 @@ export const JogoContext = createContext({});
 // Provedor de contexto para gerenciar o estado e a função de registro
 export function JogoProvider({ children }) {
 
+
     const [infoJogos, setInfoJogos] = useState({
         "tempoTotal": 0,
         "tentativas": 0,
@@ -21,22 +22,30 @@ export function JogoProvider({ children }) {
     });
     // Função para registrar as informações do jogo
     async function registrarInfos(infoJogos, token) {
-        console.log(token);
-        try {
-            // Supondo que registrarJogo seja uma função que envia os dados para uma API
-            await registrarJogo(`/infoJogos`, infoJogos, setInfoJogos, {
-                headers: {
-                    Authorization: token,
-                },
-            }
-            ); // Ajuste o URL e os parâmetros conforme necessário
-            alert("As informações foram registradas com sucesso!");
-        } catch (error) {
-            console.log(error);
+    console.log(token);
+    try {
+        // Supondo que registrarJogo seja uma função que envia os dados para uma API
+        await registrarJogo(`/infoJogos`, infoJogos, setInfoJogos, {
+            headers: {
+                Authorization: token,
+            },
+        });
 
-            alert("As informações estão inconsistentes!");
-        }
+        return {
+            code: 200,
+            message: "As informações foram registradas com sucesso!",
+        };
+    } catch (error) {
+        console.log(error);
+
+        // Caso ocorra um erro
+        return {
+            code: 500,
+            message: "As informações estão inconsistentes ou ocorreu um erro no servidor!",
+        };
     }
+}
+
 
     // Retorna o provedor com as variáveis de contexto
     return (

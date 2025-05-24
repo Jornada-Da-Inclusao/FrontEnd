@@ -73,6 +73,13 @@
   --clr-danger-600: #754242;
   --clr-danger-700: #a85e5e;
   --clr-danger-800: #db7b7b;
+
+  /* game theme */
+  --clr-game-foreground: #16363b;
+  --clr-game-primary: #73bdbd;
+  --clr-game-secondary: #a7d6dc;
+  --clr-game-terciary: #e8f3f5;
+  --clr-game-hover: #ffffff;
 }
 
 /* DEFAULTS */

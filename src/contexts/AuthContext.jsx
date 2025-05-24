@@ -51,6 +51,9 @@ export function AuthProvider({ children }) {
       await login("/usuarios/logar", usuarioLogin, (resposta) => {
         setUsuario(resposta);
 
+        localStorage.clear();
+        sessionStorage.clear();
+
         localStorage.setItem("token", resposta.token);
         localStorage.setItem(
           "usuario",
