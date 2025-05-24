@@ -14,6 +14,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import GameVogais from '../gameVogais/GameVogais.jsx';
 import { randomizeArr } from '@/utils/utils';
 import Timer from '@/components/timer/Timer';
+import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 
 function FaceJogoVogais() {
     const dialog = useRef(Object.prototype.constructor(HTMLDialogElement));
@@ -38,17 +39,29 @@ function FaceJogoVogais() {
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
     const idJogoVogais = 3;
-    const idDependente = 10;
+    const idDependente = parseInt(sessionStorage.getItem("player"));
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoVogais, setInfoJogoVogais] = useState({});
     const { usuario } = useContext(AuthContext);
+    const [modalConfig, setModalConfig] = useState({ show: false });
 
     useEffect(() => {
         if (usuario.token === "") {
-            alert("Você precisa estar logado");
-            navigate("/");
+            setModalConfig({
+                show: true,
+                title: "Atenção",
+                message: "Você precisa estar logado.",
+                icon: "⚠️",
+                color: "#ff9800",
+                doneButton: {
+                    label: "OK",
+                    onClick: () => navigate("/"),
+                },
+                onClose: () => navigate("/"),
+            });
         }
     }, [usuario.token]);
+
     const token = usuario.token;
 
     useEffect(() => {
@@ -68,30 +81,69 @@ function FaceJogoVogais() {
         setTime(newTime); // Atualiza o estado com o novo tempo
     };
 
-    function registrarInfosJogo() {
-        registrarInfos(infoJogoVogais, token);
+    async function registrarInfosJogo() {
+        const resultado = await registrarInfos(infoJogoVogais, token);
+        return resultado;
     }
 
     useEffect(() => {
-        setInfoJogoVogais({
-            tempoTotal: convertToMinutes(time),
-            tentativas: tentativas,
-            acertos: acertos,
-            erros: erros,
-            infoJogos_id_fk: {
-                id: idJogoVogais,
-            },
-            dependente: {
-                id: idDependente,
-            },
-        });
+        // Função assíncrona dentro do useEffect
+        const executarAsync = async () => {
+            // Atualiza o estado de infoJogoVogais
+            setInfoJogoVogais({
+                tempoTotal: convertToMinutes(time),
+                tentativas: tentativas,
+                acertos: acertos,
+                erros: erros,
+                infoJogos_id_fk: { id: idJogoVogais },
+                dependente: { id: idDependente },
+            });
 
-        if (droppedLetters.length === 5) {
-            registrarInfosJogo();
-            setPopupMessage("Missão concluída!");
-            setShowPopup(true);
-        }
-    }, [droppedLetters, tentativas, acertos, erros, navigate]);
+            // Se o número de letras caídas for 5
+            if (droppedLetters.length === 5) {
+                // Espera o resultado da função assíncrona registrarInfosJogo
+                const resultado = await registrarInfosJogo();  // Aguardando a resposta de registrarInfosJogo
+
+                console.log(resultado);
+
+                // Lógica para mostrar o modal de acordo com a resposta
+                if (resultado.code === 200) {  // Ajuste o código conforme necessário
+                    setModalConfig({
+                        show: true,
+                        title: "Missão concluída!",
+                        message: "Parabéns! Você completou o jogo.",
+                        icon: "🏆",
+                        color: "#4caf50",
+                        doneButton: {
+                            label: "Voltar",
+                            onClick: () => navigate("/"),
+                        },
+                        onClose: () => navigate("/"),
+                    });
+                } else {
+                    setModalConfig({
+                        show: true,
+                        title: "Atenção",
+                        message: "Parece que algo deu errado, entre em contato com o suporte.",
+                        icon: "⚠️",
+                        color: "#ff9800",
+                        doneButton: {
+                            label: "OK",
+                            onClick: () => navigate("/"),
+                        },
+                        onClose: () => navigate("/"),
+                    });
+                }
+            }
+        };
+
+        // Chama a função assíncrona dentro do useEffect
+        executarAsync();
+
+    }, [droppedLetters, navigate, time, tentativas, acertos, erros, idJogoVogais, idDependente]);
+
+
+
 
     useEffect(() => {
         if (dialog.current?.open && !showPopup) {
@@ -154,31 +206,13 @@ function FaceJogoVogais() {
 
         const ids = [1, 5, 9, 15, 21];
 
-        console.log(letterToDrop.id)
-
         if (!droppedLetters.some(letter => letter.id === letterToDrop.id) && ids.some(id => id === letterToDrop.id)) {
             setDroppedLetters(prev => [...prev, letterToDrop]); // Adiciona a letra à lista de letras soltas.
             setLetters(prevLetters => prevLetters.filter(letter => letter.id !== letterToDrop.id)); // Remove a letra da lista de letras arrastáveis.
             setAcertos((prev) => prev + 1);
             return;
         }
-
         setErros((prev) => prev + 1);
-
-        // Se o item for solto na área de soltura ('droppable-area').
-        // if (over.id === 'droppable-area') {
-        //     // Busca a letra arrastada com base em seu `id`.
-        //     const letterToDrop = letters.find(letter => letter.id === active.id);
-        //
-        //     // Verifica se a letra ainda não foi solta anteriormente.
-        //     if (letterToDrop && !droppedLetters.some(letter => letter.id === letterToDrop.id) && letterToDrop.id === 1 || letterToDrop.id === 5 || letterToDrop.id === 9 || letterToDrop.id === 15 || letterToDrop.id === 21) {
-        //         setDroppedLetters(prev => [...prev, letterToDrop]); // Adiciona a letra à lista de letras soltas.
-        //         setLetters(prevLetters => prevLetters.filter(letter => letter.id !== letterToDrop.id)); // Remove a letra da lista de letras arrastáveis.
-        //         setAcertos((prev) => prev + 1);
-        //     } else {
-        //         setErros((prev) => prev + 1);
-        //     }
-        // }
     };
 
     return (
@@ -226,6 +260,15 @@ function FaceJogoVogais() {
                 new window.VLibras.Widget('https://vlibras.gov.br/app');
             </script>
             <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
+            <CustomModal
+                show={modalConfig.show}
+                onClose={modalConfig.onClose}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                icon={modalConfig.icon}
+                color={modalConfig.color}
+                doneButton={modalConfig.doneButton}
+            />
         </>
     );
 }

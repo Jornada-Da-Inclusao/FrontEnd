@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./explicacao.module.css";
 import { CustomModal } from "../Modal-custom-alert/CustomModal"; // ajuste se necessário
@@ -18,9 +18,10 @@ function TemplateExplicacao({ title, description, route }) {
     const usuario = localStorage.getItem("usuario");
     const player = sessionStorage.getItem("player");
 
-    if (!usuario) {
-      setShowLoginModal(true);
-    } else if (!player) {
+    // if (!usuario) {
+    //   setShowLoginModal(true);
+    // } else 
+    if (!player) {
       setShowPlayerModal(true);
     } else {
       navigate(targetRoute);
@@ -82,34 +83,118 @@ function TemplateExplicacao({ title, description, route }) {
 }
 
 // Exportações
-export const ExplicacaoCores = () => (
-  <TemplateExplicacao
-    title="Jogo das Cores"
-    description="O objetivo é arrastar cada uma das cores para o container do animal correspondente."
-    route="/jogo-cores"
-  />
-);
+export const ExplicacaoCores = () => {
+  const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
 
-export const ExplicacaoMemoria = () => (
-  <TemplateExplicacao
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+
+    if (!usuario) {
+      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
+      sessionStorage.setItem('player','2')
+    }
+  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
+
+  // Aqui a lógica de renderização condicional
+  return stateUserDeslogado ? (
+    <TemplateExplicacao
+      title="Jogo das Cores"
+      description="O objetivo é arrastar cada uma das cores para o container do animal correspondente."
+      route="/jogo-cores-deslogado"
+    />
+  ) : (
+    <TemplateExplicacao
+      title="Jogo das Cores"
+      description="O objetivo é arrastar cada uma das cores para o container do animal correspondente."
+      route="/jogo-cores"
+    />
+  );
+};
+
+
+export const ExplicacaoMemoria = () => {
+
+    const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
+
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+
+    if (!usuario) {
+      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
+      sessionStorage.setItem('player','2')
+    }
+  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
+
+  // Aqui a lógica de renderização condicional
+  return stateUserDeslogado ? (
+      <TemplateExplicacao
+    title="Jogo da Memória"
+    description="Revele todas as cartas encontrando os pares iguais consecutivos."
+    route="/jogo-memoria-deslogado"
+  />
+  ) : (
+      <TemplateExplicacao
     title="Jogo da Memória"
     description="Revele todas as cartas encontrando os pares iguais consecutivos."
     route="/jogo-memoria"
   />
-);
+  );
+};
 
-export const ExplicacaoNumeros = () => (
+export const ExplicacaoNumeros = () => {
+
+    const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
+
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+
+    if (!usuario) {
+      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
+      sessionStorage.setItem('player','2')
+    }
+  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
+
+  // Aqui a lógica de renderização condicional
+  return stateUserDeslogado ? (
   <TemplateExplicacao
+    title="Jogo dos Números"
+    description="Ordene todos os números em sequência numérica ao arrastá-los para o container."
+    route="/jogo-numeros-deslogado"
+  />
+  ) : (
+      <TemplateExplicacao
     title="Jogo dos Números"
     description="Ordene todos os números em sequência numérica ao arrastá-los para o container."
     route="/jogo-numeros"
   />
-);
+  );
+};
 
-export const ExplicacaoVogais = () => (
-  <TemplateExplicacao
+export const ExplicacaoVogais = () => {
+
+    const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
+
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+
+    if (!usuario) {
+      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
+      sessionStorage.setItem('player','2')
+    }
+  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
+
+  // Aqui a lógica de renderização condicional
+  return stateUserDeslogado ? (
+    <TemplateExplicacao
+    title="Jogo das Vogais"
+    description="Arraste, dentre o alfabeto inteiro, apenas as letras vogais para o container."
+    route="/jogo-vogais-deslogado"
+  />
+  ) : (
+        <TemplateExplicacao
     title="Jogo das Vogais"
     description="Arraste, dentre o alfabeto inteiro, apenas as letras vogais para o container."
     route="/jogo-vogais"
   />
-);
+  );
+};

@@ -15,9 +15,10 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { randomizeArr } from "@/utils/utils.js";
 import NumerosGrid from "@/components/jogoNumeros/numerosGrid/NumerosGrid.jsx";
 import Timer from "@/components/timer/Timer.jsx";
-import styles from './jogoCores.module.css'
+import styles from './jogoCoresDeslogado.module.css'
+import { CustomModal } from "@/components/Modal-custom-alert/CustomModal.jsx";
 
-export default function JogoNumeros() {
+export default function JogoNumerosDeslogado() {
     const animals = [...animalsData];
     const [colors, setColors] = useState(Array.from({ length: colorsData.length }, (_, index) => ({
         id: index,
@@ -34,54 +35,30 @@ export default function JogoNumeros() {
     const [erros, setErros] = useState(0);
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
-    const idJogoCores = 4;
-    const idDependente = 10;
-    const { registrarInfos } = useContext(JogoContext);
-    const [infoJogoCores, setInfoJogoCores] = useState({});
-    const { usuario } = useContext(AuthContext);
+    const [modalConfig, setModalConfig] = useState({ show: false });
+    const [isTimerActive, setIsTimerActive] = useState(true);  // Novo estado para controlar o timer
 
-    useEffect(() => {
-        if (usuario.token === "") {
-            alert("Você precisa estar logado");
-            navigate("/");
-        }
-    }, [usuario.token]);
-    const token = usuario.token;
-
-    const convertToMinutes = (time) => {
-        // Divide o tempo em minutos e segundos
-        const [minutes, seconds] = time.split(":").map(Number);
-
-        // Converte tudo para minutos, incluindo os segundos
-        return minutes + seconds / 60;
-    };
 
     const handleTimeUpdate = (newTime) => {
         setTime(newTime); // Atualiza o estado com o novo tempo
     };
 
-    function registrarInfosJogo() {
-        registrarInfos(infoJogoCores, token);
-    }
 
     useEffect(() => {
-        setInfoJogoCores({
-            tempoTotal: convertToMinutes(time),
-            tentativas: tentativas,
-            acertos: acertos,
-            erros: erros,
-            infoJogos_id_fk: {
-                id: idJogoCores,
-            },
-            dependente: {
-                id: idDependente,
-            },
-        });
-
         if (droppedColors.length === 6) {
-            registrarInfosJogo();
-            setPopupMessage("Missão concluída!");
-            setShowPopup(true);
+            const tempoFinal = time;
+            // Quando o jogo terminar, exibe uma mensagem com o resultado
+            const resultadoMessage = `
+                Acertos: ${acertos}
+                Erros: ${erros}
+                Tentativas: ${tentativas}
+                Tempo: ${tempoFinal}
+                
+                Para mais informações, por favor, faça login.
+            `;
+            setPopupMessage(resultadoMessage);
+            setShowPopup(true);  // Exibe o popup com os resultados
+            setIsTimerActive(false);  // Para o timer quando o jogo terminar
         }
     }, [droppedColors, tentativas, acertos, erros, navigate]);
 
@@ -95,7 +72,7 @@ export default function JogoNumeros() {
 
     const handlePopupClose = () => {
         setShowPopup(false);
-        navigate("/");
+        navigate("/login");
     };
 
     const DroppableArea = (props) => {
@@ -227,7 +204,7 @@ export default function JogoNumeros() {
     return (
         <>
             <Timer
-                isActive={true}
+                isActive={isTimerActive}
                 resetTrigger={false}
                 onTimeUpdate={handleTimeUpdate}
             />
@@ -255,11 +232,21 @@ export default function JogoNumeros() {
                     <dialog ref={dialog} className={styles.popup}>
                         <p>{popupMessage}</p>
                         <button id="popup-close" onClick={handlePopupClose}>
-                            Voltar
+                            Login
                         </button>
                     </dialog>
                 </div>
             </div>
+
+            <CustomModal
+                show={modalConfig.show}
+                onClose={modalConfig.onClose}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                icon={modalConfig.icon}
+                color={modalConfig.color}
+                doneButton={modalConfig.doneButton}
+            />
         </>
     );
 }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useContext } from 'react'; // Importa os hooks 'useState' e 'useEffect' do React para gerenciar o estado e os efeitos colaterais no componente.
 import { useNavigate } from 'react-router-dom'; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
 import Timer from "../../../components/timer/Timer";
@@ -8,11 +7,10 @@ import img3 from "@assets/images/memoria/pequena4.png";
 import img4 from "@assets/images/memoria/pequena5.png";
 import imgPlaceholder from "@assets/images/memoria/rosa.png"; // Imagem que será exibida nas cartas viradas para baixo.
 import { randomizeArr } from '@/utils/utils';
-import styles from "./jogoMemoria.module.css"; // Importa os estilos CSS para estilizar o componente.
-import { JogoContext } from "../../../contexts/JogoContext";
-import { AuthContext } from "../../../contexts/AuthContext";
+import styles from "./jogoMemoriaDeslogado.module.css"; // Importa os estilos CSS para estilizar o componente.
+import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 
-const JogoMemoria = () => {
+const JogoMemoriaDeslogado = () => {
     const navigate = useNavigate(); // Usado para navegar para outras páginas quando necessário.
     // Define os dados das cartas (nome e imagem) que serão usadas no jogo.
     const cardsData = [
@@ -37,37 +35,13 @@ const JogoMemoria = () => {
     const [erros, setErros] = useState(0); // Armazena a quantidade de erros no jogo
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
-    const idJogoMemoria = 1;
-    const idDependente = 10;
-    const { registrarInfos } = useContext(JogoContext);
-    const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
-    const { usuario } = useContext(AuthContext);
-
-    useEffect(() => {
-        if (usuario.token === "") {
-            alert("Você precisa estar logado")
-            navigate("/")
-        }
-    }, [usuario.token])
-    const token = usuario.token;
-
-
-    const convertToMinutes = (time) => {
-        // Divide o tempo em minutos e segundos
-        const [minutes, seconds] = time.split(":").map(Number);
-
-        // Converte tudo para minutos, incluindo os segundos
-        return minutes + seconds / 60;
-    };
-
+    const [modalConfig, setModalConfig] = useState({ show: false });
+    const [isTimerActive, setIsTimerActive] = useState(true);  // Novo estado para controlar o timer
 
     const handleTimeUpdate = (newTime) => {
         setTime(newTime);  // Atualiza o estado com o novo tempo
     };
 
-    function registrarInfosJogo() {
-        registrarInfos(infoJogoMemoria, token);
-    }
 
     // Hook 'useEffect' para embaralhar as cartas assim que o componente for montado.
     useEffect(() => {
@@ -84,38 +58,49 @@ const JogoMemoria = () => {
         }
     }, [cardsChosenId]); // O efeito será executado toda vez que o estado 'cardsChosenId' mudar.
 
-    // Hook 'useEffect' para verificar se todas as cartas foram combinadas corretamente.
-
     useEffect(() => {
-        setInfoJogoMemoria({
-            tempoTotal: convertToMinutes(time),
-            tentativas: tentativas,
-            acertos: acertos,
-            erros: erros,
-            infoJogos_id_fk: {
-                id: idJogoMemoria,
-            },
-            dependente: {
-                id: idDependente,
-            },
-        });
-
-        if (cardsWon.length === 8) { // Quando 8 cartas forem combinadas (4 pares de cartas)
-            registrarInfosJogo();
-            setPopupMessage("Missão concluída!");
-            setShowPopup(true);
-        }
-    }, [cardsWon, tentativas, acertos, erros, navigate]);// O efeito é executado toda vez que o estado 'cardsWon' ou a função 'navigate' mudar.
+            if (cardsWon.length === 8) {
+                const tempoFinal = time;
+                // Quando o jogo terminar, exibe uma mensagem com o resultado
+                const resultadoMessage = `
+                    Acertos: ${acertos}
+                    Erros: ${erros}
+                    Tentativas: ${tentativas}
+                    Tempo: ${tempoFinal}
+                    
+                    Para mais informações, por favor, faça login.
+                `;
+                setPopupMessage(resultadoMessage);
+                setShowPopup(true);  // Exibe o popup com os resultados
+                setIsTimerActive(false);  // Para o timer quando o jogo terminar
+            }
+        }, [cardsWon, acertos, erros, tentativas, time]);
 
     // Função que fecha o popup.
     const handlePopupClose = () => {
         setShowPopup(false);
-        navigate("/");
+        navigate("/login");
     };
 
     // Função que verifica se as duas cartas escolhidas são iguais ou não.
     const checkForMatch = () => {
         const [optionOneId, optionTwoId] = cardsChosenId; // Obtém os índices das cartas escolhidas.
+
+        if (optionOneId === optionTwoId) {
+            setModalConfig({
+                show: true,
+                title: "Oops!",
+                message: "Você clicou na mesma carta duas vezes.",
+                icon: "❗",
+                color: "#f44336",
+                doneButton: {
+                    label: "OK",
+                },
+                onClose: () => setModalConfig({ show: false }),
+            });
+            clearChosenCards();
+            return;
+        }
 
         // Verifica se os índices das cartas estão dentro do intervalo válido.
         if (optionOneId >= 0 && optionTwoId >= 0 && optionOneId < cards.length && optionTwoId < cards.length) {
@@ -157,7 +142,7 @@ const JogoMemoria = () => {
 
     return (
         <>
-            <Timer isActive={true} resetTrigger={false} onTimeUpdate={handleTimeUpdate} />
+            <Timer isActive={isTimerActive} resetTrigger={false} onTimeUpdate={handleTimeUpdate} />
             <div className={styles.gameContainer}> {/* Contêiner principal do jogo */}
                 <div className={styles.resultContainer}> {/* Exibe o resultado de cartas combinadas */}
                     <span className={styles.result}>Cartas combinadas: {cardsWon.length / 2}/{cards.length / 2}</span> {/* Exibe a quantidade de pares de cartas combinadas */}
@@ -179,13 +164,23 @@ const JogoMemoria = () => {
                     <div className={styles.popup}>
                         <div className={styles.popupContent}>
                             <p>{popupMessage}</p> {/* Exibe a mensagem do popup */}
-                            <button id="popup-close" onClick={handlePopupClose}>Fechar</button> {/* Botão para fechar o popup */}
+                            <button id="popup-close" onClick={handlePopupClose}>Login</button> {/* Botão para fechar o popup */}
                         </div>
                     </div>
                 )}
             </div>
+
+            <CustomModal
+                show={modalConfig.show}
+                onClose={modalConfig.onClose}
+                title={modalConfig.title}
+                message={modalConfig.message}
+                icon={modalConfig.icon}
+                color={modalConfig.color}
+                doneButton={modalConfig.doneButton}
+            />
         </>
     );
 };
 
-export default JogoMemoria; // Exporta o componente para ser utilizado em outras partes do aplicativo.
+export default JogoMemoriaDeslogado; // Exporta o componente para ser utilizado em outras partes do aplicativo.

@@ -216,8 +216,10 @@ const Resultados = () => {
   return (
     <div className={`${styles.container} ${dependenteSelecionado ? "" : styles.centralizado}`}>
       <div className={styles.content}>
-        <h2>Resultados dos Jogos</h2>
-        <h3>Acompanhe o desempenho das crianças nos jogos educativos.</h3>
+        <div className={styles.tituPag}>
+          <h2>Resultados dos Jogos</h2>
+          <h3>Acompanhe o desempenho das crianças nos jogos educativos.</h3>
+        </div>
 
         <section className={styles.filter}>
           <label>Filtrar por nome:</label>

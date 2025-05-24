@@ -14,6 +14,7 @@ import { randomizeArr } from "@/utils/utils.js";
 import NumerosGrid from "@/components/jogoNumeros/numerosGrid/NumerosGrid.jsx";
 import Timer from "@/components/timer/Timer.jsx";
 import styles from "./JogoNumeros.module.css";
+import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 
 export default function JogoNumeros() {
   const dialog = useRef(Object.prototype.constructor(HTMLDialogElement));
@@ -32,18 +33,30 @@ export default function JogoNumeros() {
   const [erros, setErros] = useState(0);
   const [tentativas, setTentativas] = useState(0);
   const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
-  const idJogoNumeros = 2;
-  const idDependente = 10;
   const { registrarInfos } = useContext(JogoContext);
   const [infoJogoNumeros, setInfoJogoNumeros] = useState({});
   const { usuario } = useContext(AuthContext);
+  const [modalConfig, setModalConfig] = useState({ show: false });
+  const idJogoNumeros = 2;
+  const idDependente = parseInt(sessionStorage.getItem("player"));
 
   useEffect(() => {
     if (usuario.token === "") {
-      alert("Você precisa estar logado");
-      navigate("/");
+      setModalConfig({
+        show: true,
+        title: "Atenção",
+        message: "Você precisa estar logado.",
+        icon: "⚠️",
+        color: "#ff9800",
+        doneButton: {
+          label: "OK",
+          onClick: () => navigate("/"),
+        },
+        onClose: () => navigate("/"),
+      });
     }
   }, [usuario.token]);
+
   const token = usuario.token;
 
   useEffect(() => {
@@ -63,30 +76,61 @@ export default function JogoNumeros() {
     setTime(newTime); // Atualiza o estado com o novo tempo
   };
 
-  function registrarInfosJogo() {
-    registrarInfos(infoJogoNumeros, token);
+
+  async function registrarInfosJogo() {
+    const resultado = await registrarInfos(infoJogoNumeros, token);
+    return resultado;
   }
 
   useEffect(() => {
-    setInfoJogoNumeros({
-      tempoTotal: convertToMinutes(time),
-      tentativas: tentativas,
-      acertos: acertos,
-      erros: erros,
-      infoJogos_id_fk: {
-        id: idJogoNumeros,
-      },
-      dependente: {
-        id: idDependente,
-      },
-    });
+    const executarAsync = async () => {
+      setInfoJogoNumeros({
+        tempoTotal: convertToMinutes(time),
+        tentativas: tentativas,
+        acertos: acertos,
+        erros: erros,
+        infoJogos_id_fk: { id: idJogoNumeros },
+        dependente: { id: idDependente },
+      });
 
-    if (droppedNumbers.length === 10) {
-      registrarInfosJogo();
-      setPopupMessage("Missão concluída!");
-      setShowPopup(true);
-    }
-  }, [droppedNumbers, tentativas, acertos, erros, navigate]);
+      if (droppedNumbers.length === 10) {
+        const resultado = await registrarInfosJogo();
+
+        console.log(resultado);
+
+        if (resultado.code === 200) {
+          setModalConfig({
+            show: true,
+            title: "Missão concluída!",
+            message: "Parabéns! Você completou o jogo.",
+            icon: "🏆",
+            color: "#4caf50",
+            doneButton: {
+              label: "Voltar",
+              onClick: () => navigate("/"),
+            },
+            onClose: () => navigate("/"),
+          });
+        } else {
+          setModalConfig({
+            show: true,
+            title: "Atenção",
+            message: "Parece que algo deu errado, entre em contato com o suporte.",
+            icon: "⚠️",
+            color: "#ff9800",
+            doneButton: {
+              label: "OK",
+              onClick: () => navigate("/"),
+            },
+            onClose: () => navigate("/"),
+          });
+        }
+      }
+    };
+
+    executarAsync();
+
+  }, [droppedNumbers, navigate, time, tentativas, acertos, erros, idJogoNumeros, idDependente]);
 
   useEffect(() => {
     if (dialog.current?.open && !showPopup) {
@@ -194,6 +238,16 @@ export default function JogoNumeros() {
         src="https://website-widgets.pages.dev/dist/sienna.min.js"
         defer
       ></script>
+
+      <CustomModal
+        show={modalConfig.show}
+        onClose={modalConfig.onClose}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        icon={modalConfig.icon}
+        color={modalConfig.color}
+        doneButton={modalConfig.doneButton}
+      />
     </>
   );
 }

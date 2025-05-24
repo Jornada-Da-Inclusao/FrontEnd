@@ -1,5 +1,6 @@
 import React from "react";
 import { Gauge } from "@mui/x-charts";
+import styles from "./GraficoGaugeTempo.module.css"; // Importando o CSS Module
 
 const jogosEsperados = ["Memória", "Números", "Vogais", "Cores"];
 
@@ -13,10 +14,7 @@ const formatarTempo = (segundos) => {
 const GraficoGaugeTempo = ({ dados }) => {
   const TEMPO_MAXIMO = 180;
 
-  // Aqui assumo que "jogo" está presente no objeto "dados" para casar com jogosEsperados.
-  // Caso não tenha, você precisará mapear de outra forma.
   const temposPorJogo = jogosEsperados.map((jogo) => {
-    // Procura o objeto do jogo correspondente, adaptando para seu dado real
     const entrada = dados.find((d) => d.jogo === jogo);
 
     return {
@@ -28,9 +26,9 @@ const GraficoGaugeTempo = ({ dados }) => {
   return (
     <div>
       <h3>Tempo gasto por jogo</h3>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "40px", justifyContent: "space-evenly" }}>
+      <div className={styles.container}>
         {temposPorJogo.map(({ jogo, tempo }) => (
-          <div key={jogo} style={{ width: 250, height: 150, textAlign: "center", fontSize: "small" }}>
+          <div key={jogo} className={styles.graficoItem}>
             <Gauge
               value={Math.min(tempo, TEMPO_MAXIMO)}
               valueMax={TEMPO_MAXIMO}
@@ -45,7 +43,7 @@ const GraficoGaugeTempo = ({ dados }) => {
                 `${formatarTempo(tempo)} / ${formatarTempo(TEMPO_MAXIMO)}`
               }
             />
-            <p style={{ fontWeight: "bold", marginTop: -25, color: "black" }}>{jogo}</p>
+            <p>{jogo}</p>
           </div>
         ))}
       </div>

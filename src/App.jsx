@@ -5,17 +5,27 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/home/Home.jsx';
 import Cadastro from './pages/cadastro/Cadastro.jsx';
-import JogoCores from './pages/jogos/jogoCores/JogoCores.jsx';
-import JogoMemoria from './pages/jogos/jogoMemoria/JogoMemoria.jsx';
 import Login from './pages/login/Login.jsx';
 import SendToken from './components/login/sendToken/SendToken';
 import VerifyToken from './components/login/verifyToken/VerifyToken';
 import NovaSenha from './components/login/novaSenha/NovaSenha';
-import SelectPlayer from './pages/jogos/selecionarPlayer/selectPlayer.jsx';
 import Perfil from './pages/perfil/perfil.jsx';
-import FaceJogoVogais from './pages/jogos/faceJogoVogais/FaceJogoVogais.jsx';
-import FaceJogoNumeros from './pages/jogos/jogoNumeros/JogoNumeros.jsx';
+
+// jogos logado
+import SelectPlayer from './pages/jogosLogado/selecionarPlayer/selectPlayer.jsx';
+import JogoCores from './pages/jogosLogado/jogoCores/JogoCores.jsx';
+import JogoMemoria from './pages/jogosLogado/jogoMemoria/JogoMemoria.jsx';
+import FaceJogoVogais from './pages/jogosLogado/faceJogoVogais/FaceJogoVogais.jsx';
+import FaceJogoNumeros from './pages/jogosLogado/jogoNumeros/JogoNumeros.jsx';
 import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais } from './components/explicacoes/Explicacoes.jsx';
+
+// jogos deslogado
+import JogoCoresDeslogado from './pages/jogosDeslogado/jogoCoresDeslogado/JogoCoresDeslogado';
+import JogoMemoriaDeslogado from './pages/jogosDeslogado/JogoMemoriaDeslogado/JogoMemoriaDeslogado';
+import FaceJogoVogaisDeslogado from './pages/jogosDeslogado/FaceJogoVogaisDeslogado/FaceJogoVogaisDeslogado';
+import JogoNumerosDeslogado from './pages/jogosDeslogado/JogoNumerosDeslogado/JogoNumerosDeslogado';
+
+
 import { AuthProvider } from './contexts/AuthContext';
 import { JogoProvider } from './contexts/JogoContext';
 
@@ -27,14 +37,22 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/home" element={<Home />} />
+
           <Route path="/jogo-cores-exp" element={<ExplicacaoCores />} />
           <Route path="/jogo-memoria-exp" element={<ExplicacaoMemoria />} />
           <Route path="/jogo-numeros-exp" element={<ExplicacaoNumeros />} />
           <Route path="/jogo-vogais-exp" element={<ExplicacaoVogais />} />
+
           <Route path="/jogo-memoria" element={<JogoMemoria />} />
           <Route path="/jogo-numeros" element={<FaceJogoNumeros />} />
           <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
           <Route path="/jogo-cores" element={<JogoCores />} />
+
+          <Route path="/jogo-memoria-deslogado" element={<JogoMemoriaDeslogado />} />
+          <Route path="/jogo-numeros-deslogado" element={<JogoNumerosDeslogado  />} />
+          <Route path="/jogo-vogais-deslogado" element={<FaceJogoVogaisDeslogado  />} />
+          <Route path="/jogo-cores-deslogado" element={<JogoCoresDeslogado  />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/sendToken" element={<SendToken />} />
           <Route path="/verifyToken" element={<VerifyToken />} />
