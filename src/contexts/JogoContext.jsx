@@ -33,7 +33,6 @@ export function JogoProvider({ children }) {
 
         return {
             code: 200,
-            message: "As informações foram registradas com sucesso!",
         };
     } catch (error) {
         console.log(error);
@@ -41,9 +40,9 @@ export function JogoProvider({ children }) {
         // Caso ocorra um erro
         return {
             code: 500,
-            message: "As informações estão inconsistentes ou ocorreu um erro no servidor!",
         };
     }
+    
 }
 
 

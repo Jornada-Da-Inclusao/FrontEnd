@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../resultado/Resultados.module.css";
 import { Switch, FormControlLabel } from "@mui/material";
+import { RotatingLines } from "react-loader-spinner";
 
 import BarSizeChart from "../resultado/graficos/GraficoBarSize";
 import GaugeChart from "../resultado/graficos/GraficoMedidor";
@@ -20,6 +21,8 @@ const Resultados = () => {
   const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(true);
   const [jogosPorTipo, setJogosPorTipo] = useState([]);
   const [jogadaSelecionada, setJogadaSelecionada] = useState(null);
+  const [isLoadingPdf, setIsLoadingPdf] = useState(false);
+  const [isLoadingExcel, setIsLoadingExecel] = useState(false);
 
   // Modais
   const [modalConfirmDelete, setModalConfirmDelete] = useState(false);
@@ -152,10 +155,14 @@ const Resultados = () => {
     const idDependente = sessionStorage.getItem("idDependente");
     if (!idDependente) return;
 
+    setIsLoadingPdf(true);
+
     try {
       await downloadPdfInfoJogos(idDependente);
     } catch (error) {
       console.error("Erro ao gerar o PDF", error);
+    } finally {
+      setIsLoadingPdf(false); // Desativa o loading após a conclusão da operação
     }
   };
 
@@ -163,10 +170,14 @@ const Resultados = () => {
     const idDependente = sessionStorage.getItem("idDependente");
     if (!idDependente) return;
 
+    setIsLoadingExecel(true);
+
     try {
       await downloadExcelInfoJogos(idDependente);
     } catch (error) {
       console.error("Erro ao gerar o EXCEL", error);
+    } finally {
+      setIsLoadingExecel(false); // Desativa o loading após a conclusão da operação
     }
   };
 
@@ -267,10 +278,33 @@ const Resultados = () => {
             <h2>Histórico de partidas:</h2>
             <div className={styles.buttons}>
               <button className={styles.relatory} onClick={downloadPdf}>
-                Gerar PDF
+                {isLoadingPdf ? (
+                  <RotatingLines
+                    strokeColor="red"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="24"
+                    visible={true}
+                  />
+                ) : (
+                  <span>Gerar PDF</span>
+                )}
+
               </button>
+
               <button className={styles.relatory} onClick={downloadExcel}>
-                Gerar EXCEL
+                {isLoadingExcel ? (
+                  <RotatingLines
+                    strokeColor="white"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="24"
+                    visible={true}
+                  />
+                ) : (
+                  <span>Gerar EXCEL</span>
+                )}
+
               </button>
             </div>
           </div>
@@ -283,23 +317,22 @@ const Resultados = () => {
                 .map((jogo) => {
                   const nomeJogo = jogo.infoJogos_id_fk?.nome || "";
                   const data = formatarData(jogo.createDate);
-                
+
                   // Verifica se o jogo está entre os exibidos no modo "mostrarUltimoJogo"
                   const estaSelecionadoNoGrafico =
                     mostrarUltimoJogo &&
                     jogosPorTipo.some((j) => j.id === jogo.id);
-                
+
                   const estaSelecionadoIndividualmente =
                     !mostrarUltimoJogo && jogoSelecionado?.id === jogo.id;
-                
+
                   return (
                     <button
                       key={jogo.id}
-                      className={`${styles.btnHistory} ${
-                        estaSelecionadoIndividualmente || estaSelecionadoNoGrafico
+                      className={`${styles.btnHistory} ${estaSelecionadoIndividualmente || estaSelecionadoNoGrafico
                           ? styles.selected
                           : ""
-                      }`}
+                        }`}
                       onClick={() => selecionarJogo(jogo)}
                     >
                       {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"} ${data ? data.toLocaleTimeString() : ""}`}
@@ -315,7 +348,7 @@ const Resultados = () => {
                       </button>
                     </button>
                   );
-                })                
+                })
             )}
           </div>
 
