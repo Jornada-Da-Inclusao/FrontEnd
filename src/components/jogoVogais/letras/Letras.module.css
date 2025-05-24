@@ -1,0 +1,48 @@
+.letter {
+  z-index: 2;
+  background-color: var(--clr-game-secondary);
+  color: var(--clr-game-foreground);
+  width: 50px;
+  height: 50px;
+  border-radius: 7px;
+  text-align: center;
+  align-content: center;
+  box-sizing: border-box;
+
+  /* &:hover {
+    cursor: pointer;
+    background-color: var(--clr-game-hover);
+    border-radius: 7px;
+  } */
+   &:active,
+  &:hover,
+  &:focus-within {
+    scale: 1.25;
+    cursor: pointer;
+    background-color: var(--clr-game-hover);
+    transition:
+      scale 0.3s,
+      background-color 0.3s;
+    z-index: 3;
+  }
+
+  &:focus-within {
+    cursor: move;
+  }
+}
+
+.letter:hover,
+.letter:active,
+.letter:focus {
+  /* Ensure no size-related properties are being changed here */
+  transform: none;
+  /* Or remove scaling transform if it's being applied */
+}
+
+#num1,
+#num5,
+#num9,
+#num15,
+#num21 {
+  background-color: var(--clr-game-secondary);
+}
