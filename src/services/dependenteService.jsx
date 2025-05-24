@@ -2,7 +2,7 @@ export const cadastrarDependente = async (dependente) => {
     const token = localStorage.getItem("token");
   
     const response = await fetch(
-      "https://backend-9qjw.onrender.com/dependente",
+      "http://localhost:8080/dependente",
       {
         method: "POST", 
         headers: {
@@ -41,7 +41,7 @@ export const cadastrarDependente = async (dependente) => {
   
     try {
       const res = await fetch(
-        `https://backend-9qjw.onrender.com/dependente/getDependenteByIdUsuario/${usuario.id}`,
+        `http://localhost:8080/dependente/getDependenteByIdUsuario/${usuario.id}`,
         {
           headers: {
             "Authorization": token,
@@ -68,7 +68,7 @@ export const cadastrarDependente = async (dependente) => {
   
     try {
       const res = await fetch(
-        `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
+        `http://localhost:8080/dependente/${selectedId}`,
         {
           method: "PATCH",
           headers: {
@@ -97,7 +97,7 @@ export const cadastrarDependente = async (dependente) => {
     const token = localStorage.getItem('token');
   
     try {
-      const response = await fetch(`https://backend-9qjw.onrender.com/dependente/${id}`, {
+      const response = await fetch(`http://localhost:8080/dependente/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': token,

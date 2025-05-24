@@ -18,7 +18,7 @@ function SendToken() {
 
     try {
 
-      const response = await Posttoken(`https://backend-9qjw.onrender.com/emailApi/token/${email}`);
+      const response = await Posttoken(`http://localhost:8080/emailApi/token/${email}`);
       if (response.status === 200) {
         setIsLoading(false);
         navigate('/verifyToken'); // Página que será criada abaixo

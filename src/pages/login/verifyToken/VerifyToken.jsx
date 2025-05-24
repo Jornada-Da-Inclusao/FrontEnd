@@ -17,7 +17,7 @@ function VerifyToken() {
     setError('');
 
     try {
-      const response = await Gettoken(`https://backend-9qjw.onrender.com/emailApi/token/${token}`);
+      const response = await Gettoken(`http://localhost:8080/emailApi/token/${token}`);
       if (response.status === 200) {
         setIsLoading(false);
         navigate('/novaSenha'); // Página para atualizar a senha, que você pode criar depois
