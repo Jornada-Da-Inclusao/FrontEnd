@@ -11,9 +11,10 @@ import {
 } from "@dnd-kit/core"; // Importa os componentes essenciais para drag-and-drop da biblioteca `@dnd-kit/core`.
 import { JogoContext } from "@/contexts/JogoContext";
 import { AuthContext } from "@/contexts/AuthContext";
-import CompJogoVogais from '../../../../components/compJogoVogais/CompJogoVogais'; // Importa o componente que renderiza as letras arrastáveis do jogo.
+import VogaisGrid from '@/components/jogoVogais/vogaisGrid/VogaisGrid'; // Importa o componente que renderiza as letras arrastáveis do jogo.
 import { randomizeArr } from '@/utils/utils';
 import Timer from '@/components/timer/Timer';
+import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 
 function JogoVogais() {
     const dialog = useRef(Object.prototype.constructor(HTMLDialogElement));
@@ -22,6 +23,7 @@ function JogoVogais() {
     const sensors = useSensors(useSensor(PointerSensor));
     const [popupMessage, setPopupMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const [modalSucesso, setModalSucesso] = useState(false);
     // Estado que armazena as letras disponíveis para o arraste (A-Z).
     // Cria 26 letras com um valor numérico associado (1 = A, 2 = B, 3 = C, ..., 26 = Z).
     const [letras, setLetras] = useState(
@@ -69,6 +71,7 @@ function JogoVogais() {
     };
 
     function registrarInfosJogo() {
+        debugger
         registrarInfos(infoJogoVogais, token);
     }
 
@@ -86,10 +89,11 @@ function JogoVogais() {
             },
         });
 
-        if (droppedLetras.length === 5) {
+        if (droppedLetras.length === 5) {            
             registrarInfosJogo();
-            setPopupMessage("Missão concluída!");
-            setShowPopup(true);
+            // setPopupMessage("Missão concluída!");
+            // setShowPopup(true);
+            setModalSucesso(true);
         }
     }, [droppedLetras, navigate]);
 
@@ -188,7 +192,7 @@ function JogoVogais() {
                                     onDragEnd={handleDragEnd} // Define a função a ser chamada quando o arraste terminar.
                                 >
                                     <DroppableArea /> {/* Exibe a área onde as letras podem ser soltas. */}
-                                    <CompJogoVogais Letras={letras} /> {/* Componente que renderiza as letras disponíveis para arrasto. */}
+                                    <VogaisGrid Letras={letras} /> {/* Componente que renderiza as letras disponíveis para arrasto. */}
                                 </DndContext>
                             </div>
                         </div>
@@ -218,6 +222,24 @@ function JogoVogais() {
             <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
         </>
     );
+    <CustomModal
+            show={modalSucesso}
+            onClose={() => {
+              setModalSucesso(false);
+              navigate('/');
+            }}
+            title="Missão concluída!"
+            message="Você Finalizou Esse Jogo."
+            icon="✔️"
+            color="#4caf50"
+            doneButton={{
+              label: "OK",
+              onClick: () => {
+                setModalSucesso(false);
+                navigate('/');
+              }
+            }}
+          />
 }
 
 export default JogoVogais

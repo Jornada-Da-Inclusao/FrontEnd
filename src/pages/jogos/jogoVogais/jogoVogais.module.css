@@ -58,6 +58,7 @@
     max-width: 100%;  /* Largura máxima de 100% */
     min-width: 80%;  /* Largura mínima de 80% */
     width: 100%;  /* Largura fixa de 100% */
+    max-height: 100%;
 }
 
 /* Container do jogo, centralizando o conteúdo */
@@ -76,6 +77,7 @@
     width: 100%;  /* Largura fixa de 100% */
     box-shadow: 2px 2px #5F8A68;  /* Sombra na borda */
     height: 700px;  /* Altura fixa de 700px */
+    max-height: 100%;
 }
 
 /* Estilo da frase */
@@ -128,6 +130,7 @@
 
     .gameContent {
         height: 100%;  /* Ajusta a altura do conteúdo */
+        max-height: 100%;
     }
 }
 
@@ -151,6 +154,7 @@
     .gameContent {
         width: 100%;  /* Ajusta a largura */
         height: 100%;  /* Ajusta a altura */
+        max-height: 100%;
     }
 
     .letraInDroppable {
@@ -177,6 +181,7 @@
 
     .gameContent {
         width: 100%;  /* Ajusta a largura */
+        max-height: 100%;
     }
 
     .letraInDroppable {
@@ -227,6 +232,7 @@
 
     .gameContent {
         width: 300px;  /* Ajusta a largura */
+        max-height: 100%;
     }
 
     .letraInDroppable {

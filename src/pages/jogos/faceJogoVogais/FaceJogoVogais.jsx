@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './faceJogoVogais.module.css';
-import image from '../../../assets/images/jacare-removebg.png'
+import image from '@/assets/images/jacare-removebg.png'
 import {
     DndContext, // Importa o contexto de drag-and-drop da biblioteca `@dnd-kit/core` que permite a implementação da funcionalidade de arrastar e soltar.
     useDroppable, // Importa o hook que permite criar uma área "droppable" (onde os itens podem ser soltos).

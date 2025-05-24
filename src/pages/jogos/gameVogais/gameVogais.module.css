@@ -6,6 +6,7 @@
   margin: auto;
   margin-top: 4em;
   width: 95%;
+  max-height: 100%;
 }
 
 .result {

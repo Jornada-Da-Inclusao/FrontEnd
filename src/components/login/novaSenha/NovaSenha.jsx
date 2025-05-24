@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './novaSenha.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import * as React from 'react';
 
 function NovaSenha() {
+
+  useEffect(() => {
+    const canAccess = localStorage.getItem('canAccessNovaSenha');
+    if (!canAccess) {
+      navigate('/'); // bloqueia acesso direto
+    }
+  }, []);
+
+
   const [id, setId] = useState('2');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
@@ -25,9 +34,11 @@ function NovaSenha() {
     }
 
     try {
+      debugger
       setIsLoading(true);
+      const token = localStorage.getItem('token');
       const dto = {
-        id,
+        token,
         senha
       };
 
@@ -38,9 +49,12 @@ function NovaSenha() {
         },
         body: JSON.stringify(dto)
       });
-      
+
 
       if (response.status === 200) {
+        localStorage.removeItem('canAccessVerifyToken');
+        localStorage.removeItem('canAccessNovaSenha');
+
         setSuccess('Senha atualizada com sucesso!');
         setTimeout(() => {
           navigate('/'); // ou "/login"

@@ -56,14 +56,19 @@ const EditarDep = () => {
     e.preventDefault();
     try {
       const idade = calcularIdade(formData.dataNascimento);
-      const dadosAtualizados = { ...formData, idade };
-
+      const dadosAtualizados = {
+        nome: formData.nome,
+        idade, // aqui você passa a idade corretamente
+        sexo: formData.sexo,
+      };
+  
       await updateDependente(selectedId, dadosAtualizados, avatarSelecionado);
       setShowEditConfirm(true);
     } catch (err) {
       console.error("Erro ao alterar dependente:", err);
     }
   };
+  
 
   const handleRemove = () => {
     if (!selectedId) return;

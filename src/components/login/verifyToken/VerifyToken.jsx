@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Gettoken } from '../../../services/Service'; // Função GET que você já tem
 import { useNavigate } from 'react-router-dom';
 import styles from './VerifyToken.module.css'; // Estilos personalizados
 import * as React from 'react';
 
 function VerifyToken() {
+
+  useEffect(() => {
+    const canAccess = localStorage.getItem('canAccessVerifyToken');
+    if (!canAccess) {
+      navigate('/'); // ou outra rota segura
+    }
+  }, []);
+  
   const navigate = useNavigate();
 
   const [token, setToken] = useState('');
@@ -15,10 +23,11 @@ function VerifyToken() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-
     try {
       const response = await Gettoken(`http://localhost:8080/emailApi/token/${token}`);
       if (response.status === 200) {
+        localStorage.setItem('canAccessNovaSenha', 'true');
+        localStorage.setItem('token', token);
         setIsLoading(false);
         navigate('/novaSenha'); // Página para atualizar a senha, que você pode criar depois
       }
