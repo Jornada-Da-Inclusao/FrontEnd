@@ -194,7 +194,7 @@ const Resultados = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/infoJogos/${jogadaSelecionada}`,
+        `https://backend-9qjw.onrender.com/infoJogos/${jogadaSelecionada}`,
         {
           method: "DELETE",
           headers: { Authorization: token },

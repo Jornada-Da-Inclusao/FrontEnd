@@ -71,7 +71,6 @@ function JogoVogais() {
     };
 
     function registrarInfosJogo() {
-        debugger
         registrarInfos(infoJogoVogais, token);
     }
 
