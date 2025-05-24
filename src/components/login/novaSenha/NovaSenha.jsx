@@ -42,7 +42,7 @@ function NovaSenha() {
         senha
       };
 
-      const response = await fetch('https://backend-9qjw.onrender.com/usuarios/atualizar-parcial', {
+      const response = await fetch('https://backend-9qjw.onrender.com/senha/atualizar', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

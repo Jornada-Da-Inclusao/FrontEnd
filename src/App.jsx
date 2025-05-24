@@ -21,9 +21,9 @@ import { ExplicacaoCores, ExplicacaoMemoria, ExplicacaoNumeros, ExplicacaoVogais
 
 // jogos deslogado
 import JogoCoresDeslogado from './pages/jogosDeslogado/jogoCoresDeslogado/JogoCoresDeslogado';
-import JogoMemoriaDeslogado from './pages/jogosDeslogado/JogoMemoriaDeslogado/JogoMemoriaDeslogado';
-import FaceJogoVogaisDeslogado from './pages/jogosDeslogado/FaceJogoVogaisDeslogado/FaceJogoVogaisDeslogado';
-import JogoNumerosDeslogado from './pages/jogosDeslogado/JogoNumerosDeslogado/JogoNumerosDeslogado';
+import JogoMemoriaDeslogado from './pages/jogosDeslogado/jogoMemoriaDeslogado/JogoMemoriaDeslogado';
+import FaceJogoVogaisDeslogado from './pages/jogosDeslogado/faceJogoVogaisDeslogado/FaceJogoVogaisDeslogado';
+import JogoNumerosDeslogado from './pages/jogosDeslogado/jogoNumerosDeslogado/JogoNumerosDeslogado';
 
 
 import { AuthProvider } from './contexts/AuthContext';

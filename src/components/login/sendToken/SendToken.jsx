@@ -1,6 +1,6 @@
 import { Posttoken } from '../../../services/Service'; // Supondo que você tenha essa função no seu serviço de API
 import { useNavigate } from 'react-router-dom';
-import styles from './sendToken.module.css'; // Estilos personalizados
+import styles from './SendToken.module.css'; // Estilos personalizados
 import * as React from 'react';
 import { useState } from 'react';
 
