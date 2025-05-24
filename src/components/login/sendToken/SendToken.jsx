@@ -18,7 +18,7 @@ function SendToken() {
 
     try {
 
-      const response = await Posttoken(`http://localhost:8080/emailApi/token/${email}`);
+      const response = await Posttoken(`https://backend-9qjw.onrender.com/emailApi/token/${email}`);
       if (response.status === 200) {
         localStorage.setItem('canAccessVerifyToken', 'true');
         setIsLoading(false);

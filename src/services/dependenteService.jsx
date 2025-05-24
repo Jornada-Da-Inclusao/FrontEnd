@@ -2,7 +2,7 @@ export const cadastrarDependente = async (dependente) => {
   const token = localStorage.getItem("token");
 
   const response = await fetch(
-    "http://localhost:8080/dependente",
+    "https://backend-9qjw.onrender.com/dependente",
     {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ export const cadastrarDependente = async (dependente) => {
 export const downloadPdfInfoJogos = async (dependenteId) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await fetch(`http://localhost:8080/dependente/exportPdf/${dependenteId}`, {
+    const response = await fetch(`https://backend-9qjw.onrender.com/dependente/exportPdf/${dependenteId}`, {
       headers: {
         "Authorization": token,
         "Content-Type": "application/json"
@@ -47,7 +47,7 @@ export const downloadPdfInfoJogos = async (dependenteId) => {
 export const downloadExcelInfoJogos = async (dependenteId) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await fetch(`http://localhost:8080/dependente/exportExcel/${dependenteId}`, {
+    const response = await fetch(`https://backend-9qjw.onrender.com/dependente/exportExcel/${dependenteId}`, {
       headers: {
         "Authorization": token,
         "Content-Type": "application/json"
@@ -89,7 +89,7 @@ export const fetchDependentes = async () => {
 
   try {
     const res = await fetch(
-      `http://localhost:8080/dependente/getDependenteByIdUsuario/${usuario.id}`,
+      `https://backend-9qjw.onrender.com/dependente/getDependenteByIdUsuario/${usuario.id}`,
       {
         headers: {
           "Authorization": token,
@@ -116,7 +116,7 @@ export const updateDependente = async (selectedId, formData, avatarSelecionado) 
 
   try {
     const res = await fetch(
-      `http://localhost:8080/dependente/${selectedId}`,
+      `https://backend-9qjw.onrender.com/dependente/${selectedId}`,
       {
         method: "PATCH",
         headers: {
@@ -145,7 +145,7 @@ export const deleteDependente = async (id) => {
   const token = localStorage.getItem('token');
 
   try {
-    const response = await fetch(`http://localhost:8080/dependente/${id}`, {
+    const response = await fetch(`https://backend-9qjw.onrender.com/dependente/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': token,

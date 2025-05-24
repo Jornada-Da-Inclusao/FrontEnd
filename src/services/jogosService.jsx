@@ -1,7 +1,7 @@
 // src/services/jogosService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/infoJogos";
+const API_URL = "https://backend-9qjw.onrender.com/infoJogos";
 
 export const getJogosPorDependente = async (dependenteId) => {
   try {
