@@ -44,6 +44,8 @@ const JogoMemoria = () => {
     const [modalConfig, setModalConfig] = useState({ show: false });
     const idJogoMemoria = 1;
     const idDependente = parseInt(sessionStorage.getItem("player"));
+    const [jogoRegistrado, setJogoRegistrado] = useState(false);
+    const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 
     useEffect(() => {
         if (usuario.token === "") {
@@ -79,14 +81,17 @@ const JogoMemoria = () => {
     };
 
     async function registrarInfosJogo() {
-        const resultado = await registrarInfos(infoJogoMemoria, token);
-        return resultado;
+        return await registrarInfos(infoJogoMemoria, token);
     }
 
     useEffect(() => {
+        
+        
         const executarAsync = async () => {
+            const minutosConvertidos = convertToMinutes(time);
+            const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
             setInfoJogoMemoria({
-                tempoTotal: convertToMinutes(time),
+                tempoTotal: minutosArredondado,
                 tentativas: tentativas,
                 acertos: acertos,
                 erros: erros,
@@ -94,12 +99,12 @@ const JogoMemoria = () => {
                 dependente: { id: idDependente },
             });
 
-            if (cardsWon.length === 8) {
-                const resultado = await registrarInfosJogo();
-
-                console.log(resultado);
-
-                if (resultado.code === 200) {
+            if (cardsWon.length === 8 && !jogoRegistrado) {
+                setJogoRegistrado(true);
+                registrarInfosJogo().then((resultado) => {
+                    console.log(resultado);
+                    setStateTimerAtivo(false);
+    
                     setModalConfig({
                         show: true,
                         title: "Missão concluída!",
@@ -112,20 +117,22 @@ const JogoMemoria = () => {
                         },
                         onClose: () => navigate("/"),
                     });
-                } else {
+                }).catch((error) => {
+                    console.error("Erro ao registrar informações do jogo:", error);
+    
                     setModalConfig({
                         show: true,
-                        title: "Atenção",
-                        message: "Parece que algo deu errado, entre em contato com o suporte.",
-                        icon: "⚠️",
-                        color: "#ff9800",
+                        title: "Erro",
+                        message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                        icon: "❌",
+                        color: "#f44336",
                         doneButton: {
-                            label: "OK",
+                            label: "Voltar",
                             onClick: () => navigate("/"),
                         },
                         onClose: () => navigate("/"),
                     });
-                }
+                });
             }
         };
 
@@ -216,7 +223,7 @@ const JogoMemoria = () => {
 
     return (
         <>
-            <Timer isActive={true} resetTrigger={false} onTimeUpdate={handleTimeUpdate} />
+            <Timer isActive={stateTimerAtivo} resetTrigger={false} onTimeUpdate={handleTimeUpdate} />
             <div className={styles.gameContainer}> {/* Contêiner principal do jogo */}
                 <div className={styles.resultContainer}> {/* Exibe o resultado de cartas combinadas */}
                     <span className={styles.result}>Cartas combinadas: {cardsWon.length / 2}/{cards.length / 2}</span> {/* Exibe a quantidade de pares de cartas combinadas */}

@@ -38,8 +38,8 @@ function NovaSenha() {
       setIsLoading(true);
       const token = localStorage.getItem('token');
       const dto = {
-        token,
-        senha
+        token : token,
+        novaSenha: senha
       };
 
       const response = await fetch('https://backend-9qjw.onrender.com/senha/atualizar', {
@@ -54,6 +54,8 @@ function NovaSenha() {
       if (response.status === 200) {
         localStorage.removeItem('canAccessVerifyToken');
         localStorage.removeItem('canAccessNovaSenha');
+        localStorage.clear();
+        sessionStorage.clear();
 
         setSuccess('Senha atualizada com sucesso!');
         setTimeout(() => {

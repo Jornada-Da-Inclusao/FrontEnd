@@ -44,6 +44,8 @@ function FaceJogoVogais() {
     const [infoJogoVogais, setInfoJogoVogais] = useState({});
     const { usuario } = useContext(AuthContext);
     const [modalConfig, setModalConfig] = useState({ show: false });
+    const [jogoRegistrado, setJogoRegistrado] = useState(false);
+    const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 
     useEffect(() => {
         if (usuario.token === "") {
@@ -82,66 +84,62 @@ function FaceJogoVogais() {
     };
 
     async function registrarInfosJogo() {
-        const resultado = await registrarInfos(infoJogoVogais, token);
-        return resultado;
+        return await registrarInfos(infoJogoVogais, token);
     }
 
-    useEffect(() => {
-        // Função assíncrona dentro do useEffect
-        const executarAsync = async () => {
-            // Atualiza o estado de infoJogoVogais
-            setInfoJogoVogais({
-                tempoTotal: convertToMinutes(time),
-                tentativas: tentativas,
-                acertos: acertos,
-                erros: erros,
-                infoJogos_id_fk: { id: idJogoVogais },
-                dependente: { id: idDependente },
-            });
 
-            // Se o número de letras caídas for 5
-            if (droppedLetters.length === 5) {
-                // Espera o resultado da função assíncrona registrarInfosJogo
-                const resultado = await registrarInfosJogo();  // Aguardando a resposta de registrarInfosJogo
+useEffect(() => {
+    const executarAsync = async () => {
+        const minutosConvertidos = convertToMinutes(time);
+        const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
+        setInfoJogoVogais({
+            tempoTotal: minutosArredondado,
+            tentativas: tentativas,
+            acertos: acertos,
+            erros: erros,
+            infoJogos_id_fk: { id: idJogoVogais },
+            dependente: { id: idDependente },
+        });
 
+        if (droppedLetters.length === 5 && !jogoRegistrado) {
+            setJogoRegistrado(true); // evita múltiplas execuções
+
+            registrarInfosJogo().then((resultado) => {
                 console.log(resultado);
+                setStateTimerAtivo(false);
+                setModalConfig({
+                    show: true,
+                    title: "Missão concluída!",
+                    message: "Parabéns! Você completou o jogo.",
+                    icon: "🏆",
+                    color: "#4caf50",
+                    doneButton: {
+                        label: "Voltar",
+                        onClick: () => navigate("/"),
+                    },
+                    onClose: () => navigate("/"),
+                });
+            }).catch((error) => {
+                console.error("Erro ao registrar informações do jogo:", error);
 
-                // Lógica para mostrar o modal de acordo com a resposta
-                if (resultado.code === 200) {  // Ajuste o código conforme necessário
-                    setModalConfig({
-                        show: true,
-                        title: "Missão concluída!",
-                        message: "Parabéns! Você completou o jogo.",
-                        icon: "🏆",
-                        color: "#4caf50",
-                        doneButton: {
-                            label: "Voltar",
-                            onClick: () => navigate("/"),
-                        },
-                        onClose: () => navigate("/"),
-                    });
-                } else {
-                    setModalConfig({
-                        show: true,
-                        title: "Atenção",
-                        message: "Parece que algo deu errado, entre em contato com o suporte.",
-                        icon: "⚠️",
-                        color: "#ff9800",
-                        doneButton: {
-                            label: "OK",
-                            onClick: () => navigate("/"),
-                        },
-                        onClose: () => navigate("/"),
-                    });
-                }
-            }
-        };
+                setModalConfig({
+                    show: true,
+                    title: "Erro",
+                    message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                    icon: "❌",
+                    color: "#f44336",
+                    doneButton: {
+                        label: "Voltar",
+                        onClick: () => navigate("/"),
+                    },
+                    onClose: () => navigate("/"),
+                });
+            });
+        }
+    };
 
-        // Chama a função assíncrona dentro do useEffect
-        executarAsync();
-
-    }, [droppedLetters, navigate, time, tentativas, acertos, erros, idJogoVogais, idDependente]);
-
+    executarAsync();
+}, [droppedLetters, navigate, time, tentativas, acertos, erros, idJogoVogais, idDependente, jogoRegistrado]);
 
 
 
@@ -218,7 +216,7 @@ function FaceJogoVogais() {
     return (
         <>
             <Timer
-                isActive={true}
+                isActive={stateTimerAtivo}
                 resetTrigger={false}
                 onTimeUpdate={handleTimeUpdate}
             />

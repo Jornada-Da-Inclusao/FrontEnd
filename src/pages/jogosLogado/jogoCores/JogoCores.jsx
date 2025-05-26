@@ -41,6 +41,8 @@ export default function JogoNumeros() {
     const [modalConfig, setModalConfig] = useState({ show: false });
     const idJogoCores = 4;
     const idDependente = parseInt(sessionStorage.getItem("player"));
+    const [jogoRegistrado, setJogoRegistrado] = useState(false);
+    const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 
     useEffect(() => {
         if (usuario.token === "") {
@@ -74,14 +76,15 @@ export default function JogoNumeros() {
     };
 
     async function registrarInfosJogo() {
-        const resultado = await registrarInfos(info, token);
-        return resultado;
+        return await registrarInfos(info, token);
     }
 
     useEffect(() => {
         const executarAsync = async () => {
+            const minutosConvertidos = convertToMinutes(time);
+            const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
             setInfoJogoCores({
-                tempoTotal: convertToMinutes(time),
+                tempoTotal: minutosArredondado,
                 tentativas: tentativas,
                 acertos: acertos,
                 erros: erros,
@@ -89,12 +92,11 @@ export default function JogoNumeros() {
                 dependente: { id: idDependente },
             });
 
-            if (droppedColors.length === 6) {
-                const resultado = await registrarInfosJogo();
-
-                console.log(resultado);
-
-                if (resultado.code === 200) {
+            if (droppedColors.length === 6 && !jogoRegistrado) {
+                setJogoRegistrado(true);
+                registrarInfosJogo().then((resultado) => {
+                    console.log(resultado);
+                    setStateTimerAtivo(false);
                     setModalConfig({
                         show: true,
                         title: "Missão concluída!",
@@ -107,20 +109,22 @@ export default function JogoNumeros() {
                         },
                         onClose: () => navigate("/"),
                     });
-                } else {
+                }).catch((error) => {
+                    console.error("Erro ao registrar informações do jogo:", error);
+    
                     setModalConfig({
                         show: true,
-                        title: "Atenção",
-                        message: "Parece que algo deu errado, entre em contato com o suporte.",
-                        icon: "⚠️",
-                        color: "#ff9800",
+                        title: "Erro",
+                        message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                        icon: "❌",
+                        color: "#f44336",
                         doneButton: {
-                            label: "OK",
+                            label: "Voltar",
                             onClick: () => navigate("/"),
                         },
                         onClose: () => navigate("/"),
                     });
-                }
+                });
             }
         };
 
@@ -298,7 +302,7 @@ export default function JogoNumeros() {
     return (
         <>
             <Timer
-                isActive={true}
+                isActive={stateTimerAtivo}
                 resetTrigger={false}
                 onTimeUpdate={handleTimeUpdate}
             />

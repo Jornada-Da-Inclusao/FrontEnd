@@ -39,6 +39,8 @@ export default function JogoNumeros() {
   const [modalConfig, setModalConfig] = useState({ show: false });
   const idJogoNumeros = 2;
   const idDependente = parseInt(sessionStorage.getItem("player"));
+  const [jogoRegistrado, setJogoRegistrado] = useState(false);
+  const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 
   useEffect(() => {
     if (usuario.token === "") {
@@ -78,14 +80,16 @@ export default function JogoNumeros() {
 
 
   async function registrarInfosJogo() {
-    const resultado = await registrarInfos(infoJogoNumeros, token);
-    return resultado;
+    return await registrarInfos(infoJogoNumeros, token);
   }
 
   useEffect(() => {
+    
     const executarAsync = async () => {
+      const minutosConvertidos = convertToMinutes(time);
+      const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
       setInfoJogoNumeros({
-        tempoTotal: convertToMinutes(time),
+        tempoTotal: minutosArredondado,
         tentativas: tentativas,
         acertos: acertos,
         erros: erros,
@@ -93,38 +97,39 @@ export default function JogoNumeros() {
         dependente: { id: idDependente },
       });
 
-      if (droppedNumbers.length === 10) {
-        const resultado = await registrarInfosJogo();
-
-        console.log(resultado);
-
-        if (resultado.code === 200) {
+      if (droppedNumbers.length === 10 && !jogoRegistrado) {
+        setJogoRegistrado(true);
+        registrarInfosJogo().then((resultado) => {
+          console.log(resultado);
+          setStateTimerAtivo(false);
           setModalConfig({
-            show: true,
-            title: "Missão concluída!",
-            message: "Parabéns! Você completou o jogo.",
-            icon: "🏆",
-            color: "#4caf50",
-            doneButton: {
-              label: "Voltar",
-              onClick: () => navigate("/"),
-            },
-            onClose: () => navigate("/"),
+              show: true,
+              title: "Missão concluída!",
+              message: "Parabéns! Você completou o jogo.",
+              icon: "🏆",
+              color: "#4caf50",
+              doneButton: {
+                  label: "Voltar",
+                  onClick: () => navigate("/"),
+              },
+              onClose: () => navigate("/"),
           });
-        } else {
+      }).catch((error) => {
+          console.error("Erro ao registrar informações do jogo:", error);
+
           setModalConfig({
-            show: true,
-            title: "Atenção",
-            message: "Parece que algo deu errado, entre em contato com o suporte.",
-            icon: "⚠️",
-            color: "#ff9800",
-            doneButton: {
-              label: "OK",
-              onClick: () => navigate("/"),
-            },
-            onClose: () => navigate("/"),
+              show: true,
+              title: "Erro",
+              message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+              icon: "❌",
+              color: "#f44336",
+              doneButton: {
+                  label: "Voltar",
+                  onClick: () => navigate("/"),
+              },
+              onClose: () => navigate("/"),
           });
-        }
+      });
       }
     };
 
@@ -202,7 +207,7 @@ export default function JogoNumeros() {
   return (
     <>
       <Timer
-        isActive={true}
+        isActive={stateTimerAtivo}
         resetTrigger={false}
         onTimeUpdate={handleTimeUpdate}
       />
