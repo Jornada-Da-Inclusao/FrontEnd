@@ -4,23 +4,27 @@ import styles from "../sidebar/Sidebar.module.css";
 import { AuthContext } from '../../../contexts/AuthContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPen, faClipboard, faPencilAlt, faChartBar, faHome, faRunning, faPeopleArrows } from '@fortawesome/free-solid-svg-icons';
+import { faUserPen, faClipboard, faPencilAlt, faChartBar, faHome, faRunning, faPeopleArrows, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
     const { usuario, handleLogout } = useContext(AuthContext);
-    const [isOpen, setIsOpen] = useState(true);
-    const location = useLocation(); // Hook para pegar a rota atual
+    const [isOpen, setIsOpen] = useState(false);  // começa fechado no celular
+    const location = useLocation();
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
-    // Função para verificar se o caminho atual corresponde
     const isActive = (path) => location.pathname === path;
 
     return (
         <>
-            <aside className={`${styles.sidebar} ${isOpen ? "" : styles.hidden}`}>
+            {/* Botão para abrir/fechar no celular */}
+            <button className={styles.menuToggle} onClick={toggleSidebar} aria-label="Toggle menu">
+                <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
+            </button>
+
+            <aside className={`${styles.sidebar} ${!isOpen ? styles.hidden : ""}`}>
                 <div className={styles.uploadContainer}>
                     <h2>Bem-vindo, {usuario?.nome || "Usuário"}</h2>
                 </div>
@@ -28,38 +32,38 @@ const Sidebar = () => {
                     <h2 className={styles.options}>Menu</h2>
                     <ul>
                         <li className={isActive("/perfil/editar-usuario") ? styles.ativo : ""}>
-                            <Link to="/perfil/editar-usuario">
-                                <FontAwesomeIcon icon={faUserPen} /> - Editar dados do responsável
+                            <Link to="/perfil/editar-usuario" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faUserPen} /> Editar dados do responsável
                             </Link>
                         </li>
                         <li className={isActive("/perfil/cadastrar-dependente") ? styles.ativo : ""}>
-                            <Link to="/perfil/cadastrar-dependente">
-                                <FontAwesomeIcon icon={faClipboard} /> - Cadastrar criança
+                            <Link to="/perfil/cadastrar-dependente" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faClipboard} /> Cadastrar criança
                             </Link>
                         </li>
                         <li className={isActive("/perfil/editar-dependente") ? styles.ativo : ""}>
-                            <Link to="/perfil/editar-dependente">
-                                <FontAwesomeIcon icon={faPencilAlt} /> - Editar dados da criança
+                            <Link to="/perfil/editar-dependente" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faPencilAlt} /> Editar dados da criança
                             </Link>
                         </li>
                         <li className={isActive("/perfil/resultados") ? styles.ativo : ""}>
-                            <Link to="/perfil/resultados">
-                                <FontAwesomeIcon icon={faChartBar} /> - Ver Resultados
+                            <Link to="/perfil/resultados" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faChartBar} /> Ver Resultados
                             </Link>
                         </li>
                         <li className={isActive("/selecionar-jogador") ? styles.ativo : ""}>
-                            <Link to="/selecionar-jogador">
-                                <FontAwesomeIcon icon={faPeopleArrows} /> - Selecionar / alterar Jogador
+                            <Link to="/selecionar-jogador" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faPeopleArrows} /> Selecionar / alterar Jogador
                             </Link>
                         </li>
                         <li className={isActive("/") ? styles.ativo : ""}>
-                            <Link to="/">
-                                <FontAwesomeIcon icon={faHome} /> - Voltar à Home
+                            <Link to="/" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faHome} /> Voltar à Home
                             </Link>
                         </li>
                         <li>
-                            <Link to="/" onClick={handleLogout}>
-                                <FontAwesomeIcon icon={faRunning} /> - Fazer Logout
+                            <Link to="/" onClick={() => { setIsOpen(false); handleLogout(); }}>
+                                <FontAwesomeIcon icon={faRunning} /> Fazer Logout
                             </Link>
                         </li>
                     </ul>

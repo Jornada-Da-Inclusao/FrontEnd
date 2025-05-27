@@ -189,3 +189,14 @@ input[type="password"]:focus {
   height: 50%;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .rightSide{
+    width: 100%;
+  }
+
+  .leftSide{
+    display: none;
+  }
+
+}

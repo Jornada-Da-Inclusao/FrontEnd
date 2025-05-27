@@ -6,7 +6,6 @@ h2,h3, input, label, select{
 }
 
 .container{
-display: flex;
 align-items: center;
 justify-items: center;
 }
@@ -67,4 +66,21 @@ justify-items: center;
 
 .content button:hover{
     text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .content{
+        width: 80vw;
+        display: flex;
+        flex-direction: column;
+    }  
+
+    .content form h2{
+        font-size: larger;
+    }
+
+    .content form input{
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }

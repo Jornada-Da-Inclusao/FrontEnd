@@ -102,3 +102,24 @@ body {
     border: 3px solid #ddd;
     margin-bottom: 10px;
 }
+
+@media (max-width: 768px) {
+    .content{
+        width: 100%;
+    }
+
+    .content h2{
+        font-size: larger;
+    }
+
+    .figures{
+        grid-template-columns: repeat(4, 1fr);
+        margin-bottom: 2vh;
+        margin-top: -25px;
+    }
+
+    .content input{
+        margin-bottom: 10px;
+    }
+    
+}

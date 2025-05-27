@@ -10,6 +10,15 @@
   /* Define uma altura base para o container */
 }
 
+/* Responsividade para container */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    margin-left: 2vw;
+    height: auto; /* deixa crescer conforme conteúdo */
+  }
+}
+
 .centralizado {
   justify-content: center;
 }
@@ -24,6 +33,16 @@
   display: flex;
   flex-direction: column;
   overflow: hidden; /* impede rolagem geral */
+}
+
+/* Responsividade para content */
+@media (max-width: 1024px) {
+  .content {
+    max-width: 100%;
+    height: auto;
+    padding: 15px;
+    width: 100%;
+  }
 }
 
 .headerTop {
@@ -83,8 +102,8 @@
   color: #ff3333;
 }
 
-.tituPag{
-  max-height: 15% ;
+.tituPag {
+  max-height: 15%;
 }
 
 .tituPag h3 {
@@ -141,6 +160,7 @@
   color: var(--white);
   border: 2px solid var(--red);
   border-radius: 12px;
+  text-align: center;
 }
 
 .relatory:hover {
@@ -154,6 +174,7 @@
   flex-direction: row;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .ativo {
@@ -161,3 +182,27 @@
   border: 2px solid #007bff;
   border-radius: 8px;
 }
+
+.headerTop h2{
+  font-size: x-large;
+  font-weight: bolder;
+  border-bottom: 3px solid red;
+  text-align: center;
+}
+
+/* Responsividade para relatory */
+@media (max-width: 768px) {
+  .relatory {
+    margin: 8px 0;
+  }
+
+  .textContent{
+    margin: 20px 0 50px 0;
+  }
+
+  .tituPag h2, .headerTop h2{
+    font-size: larger;
+  }
+}
+
+

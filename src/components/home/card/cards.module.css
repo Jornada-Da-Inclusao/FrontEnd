@@ -10,6 +10,8 @@
 
 .cardComponent {
   background-color: #f8f9fa;
+  height: 100%;
+  font-weight: bold;
 
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -51,7 +53,7 @@
   }
 
   >.card-text>.description {
-    color: var(--clr-neutral-600);
+    color: var(--wh);
     font-size: var(--fs-400);
     font-weight: var(--fw-light);
 

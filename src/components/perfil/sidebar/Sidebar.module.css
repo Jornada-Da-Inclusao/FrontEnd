@@ -2,116 +2,153 @@
 
 .sidebar {
   font-family: sans-serif;
-    width: 325px;
-    background: var(--red);
-    padding: 30px; 
-    height: 100%;
-    color: #333;
-    position: fixed;
-    text-align: center;
+  width: 325px;
+  background: var(--red);
+  padding: 30px; 
+  height: 100%;
+  color: #333;
+  position: fixed;
+  text-align: center;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar ul{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-weight: bold;
+  gap: 30px;
+  font-size: small;
+}
+
+.sidebar ul a:hover{
+  text-decoration: none;
+}
+
+.sidebar li a, .sidebar h2{
+  font-family: 'Baloo 2', cursive;
+  font-size: larger;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.sidebar .options{
+  margin-top: 20px;
+  font-size: xx-large;
+  font-family: 'Baloo 2', cursive;
+  font-weight: bolder;
+  border-bottom: 3px solid white;
+}
+
+.menuToggle {
+  position: fixed;
+  top: 20px;
+  left: 5px;
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 1100;
+  display: none;
+}
+
+/* Esconde a sidebar e "empurra" para fora da tela */
+.hidden {
+  transform: translateX(-350px);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-350px); /* escondida por padrão */
   }
 
-  .sidebar ul{
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    font-weight: bold;
-    gap: 30px;
-    font-size: small;
-  }
-
-  .sidebar ul a:hover{
-    text-decoration: none;
-  }
-
-  .sidebar li a, .sidebar h2{
-    font-family: 'Baloo 2', cursive;
-    font-size: larger;
-    color: var(--white);
-    text-decoration: none;
-  }
-
-  .sidebar .options{
-    margin-top: 20px;
-    font-size: xx-large;
-    font-family: 'Baloo 2', cursive;
-    font-weight: bolder;
-    border-bottom: 3px solid white;
+  .sidebar:not(.hidden) {
+    transform: translateX(0); /* aparece quando não tem .hidden */
   }
 
   .menuToggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background: #D90404;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-  }
-  
-  .profilePicture {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    display: block;
-    margin: 0 auto 10px auto;
-    object-fit: cover;
-    border: 2px solid var(--white);
-  }
-  
-  .uploadContainer input {
-    display: none;
-  }
-  
-  .formContainer {
-    background: #FFFFFF;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 50%;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .formContainer form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .formContainer input {
-    width: 95%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #D9D9D9;
-    border-radius: 8px;
-    font-size: 16px;
-  }
-  
-  .formContainer button {
-    background: #D90404;
-    color: white;
-    font-weight: bold;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .formContainer button:hover {
-    background: #A30303;
+    display: block; /* botão visível no celular */
   }
 
-  .ativo {
-    margin-left: 30px;
-    transition: 0.5s;  
+  .sidebar .options{
+    font-size: x-large;
+  }
 }
 
+/* Mantém o estilo desktop original para telas maiores */
+@media (min-width: 769px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
   
+  .menuToggle {
+    display: none !important;
+  }
+}
+
+.profilePicture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  display: block;
+  margin: 0 auto 10px auto;
+  object-fit: cover;
+  border: 2px solid var(--white);
+}
+
+.uploadContainer input {
+  display: none;
+}
+
+.formContainer {
+  background: #FFFFFF;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formContainer form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.formContainer input {
+  width: 95%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #D9D9D9;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.formContainer button {
+  background: #D90404;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.formContainer button:hover {
+  background: #A30303;
+}
+
+.ativo {
+  margin-left: 30px;
+  transition: 0.5s;  
+}

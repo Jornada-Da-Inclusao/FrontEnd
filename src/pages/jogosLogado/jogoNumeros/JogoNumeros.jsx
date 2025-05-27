@@ -202,6 +202,7 @@ export default function JogoNumeros() {
       prevNumbers.filter((number) => number.id !== numberToDrop.id),
     );
     setAcertos((prev) => prev + 1);
+    
   };
 
   return (
