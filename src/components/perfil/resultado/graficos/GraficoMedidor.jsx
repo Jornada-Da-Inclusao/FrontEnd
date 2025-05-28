@@ -38,29 +38,29 @@ const GraficoGaugeTempo = ({ dados }) => {
 
   return (
     <div>
-      <h3>Tempo gasto por jogo</h3>
-      <div className={styles.container}>
-        {temposPorJogo.map(({ jogo, tempo }) => (
-          <div key={jogo} className={styles.graficoItem}>
-            <Gauge
-              value={Math.min(tempo, TEMPO_MAXIMO)}
-              valueMax={TEMPO_MAXIMO}
-              startAngle={-110}
-              endAngle={110}
-              sx={{
-                "& .MuiGauge-valueArc": {
-                  fill: "rgb(0, 183, 255)",
-                },
-              }}
-              text={() =>
-                `${formatarTempo(tempo)} / ${formatarTempo(TEMPO_MAXIMO)}`
-              }
-            />
-            <p>{jogo}</p>
-          </div>
-        ))}
+  <h3>Tempo gasto por jogo</h3>
+  <div className={styles.container}>
+    {temposPorJogo.map(({ jogo, tempo }) => (
+      <div key={jogo} className={styles.graficoItem}>
+        <Gauge
+          value={Math.min(tempo, TEMPO_MAXIMO)}
+          valueMax={TEMPO_MAXIMO}
+          startAngle={-110}
+          endAngle={110}
+          sx={{
+            "& .MuiGauge-valueArc": {
+              fill: "rgb(0, 183, 255)",
+            },
+          }}
+          text={() =>
+            `${formatarTempo(tempo)} / ${formatarTempo(TEMPO_MAXIMO)}`
+          }
+        />
+        <p>{jogo}</p>
       </div>
-    </div>
+    ))}
+  </div>
+</div>
   );
 };
 

@@ -2,12 +2,11 @@
 
 .sidebar {
   font-family: sans-serif;
-  width: 325px;
+  width: 25vw;
   background: var(--red);
   padding: 30px; 
   height: 100%;
   color: #333;
-  position: fixed;
   text-align: center;
   transition: transform 0.3s ease;
   z-index: 1000;
@@ -17,25 +16,27 @@
   display: flex;
   flex-direction: column;
   text-align: left;
-  font-weight: bold;
-  gap: 30px;
-  font-size: small;
+  font-size: x-small;
 }
 
 .sidebar ul a:hover{
   text-decoration: none;
 }
 
+.sidebar li{
+  padding: 3% 0 3% 0;
+}
+
 .sidebar li a, .sidebar h2{
   font-family: 'Baloo 2', cursive;
-  font-size: larger;
+  font-size: medium;
   color: var(--white);
   text-decoration: none;
 }
 
 .sidebar .options{
   margin-top: 20px;
-  font-size: xx-large;
+  font-size: x-large;
   font-family: 'Baloo 2', cursive;
   font-weight: bolder;
   border-bottom: 3px solid white;
@@ -58,13 +59,15 @@
 
 /* Esconde a sidebar e "empurra" para fora da tela */
 .hidden {
-  transform: translateX(-350px);
+  transform: translateX(-400px);
 }
 
 /* Mobile */
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-350px); /* escondida por padrão */
+    position: fixed;
+    transform: translateX(-400px); /* escondida por padrão */
+    width: 100%;
   }
 
   .sidebar:not(.hidden) {

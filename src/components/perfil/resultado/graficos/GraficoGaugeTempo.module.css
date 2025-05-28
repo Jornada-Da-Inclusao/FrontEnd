@@ -1,26 +1,29 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Espaçamento entre os gráficos */
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .graficoItem {
-  flex: 1 1 calc(50% - 5px); /* Cada gráfico ocupa 50% da largura disponível */
-  max-width: 200px; /* Aumentando um pouco o tamanho máximo para 200px */
-  text-align: center;
-  font-size: small;
+  flex: 1 1 200px; /* largura mínima de cada item */
+  max-width: 10vw;
+  min-height: 7vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
+
 
 .graficoItem p {
   font-weight: bold;
   margin-top: -25px;
   color: black;
-  font-size: 1rem;
+  font-size: 0.9rem;
+}
+
+tspan{
+  font-size: x-small;
 }
 
 /* Media Query para telas pequenas (tablets e celulares) */

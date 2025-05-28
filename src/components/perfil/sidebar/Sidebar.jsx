@@ -33,37 +33,37 @@ const Sidebar = () => {
                     <ul>
                         <li className={isActive("/perfil/editar-usuario") ? styles.ativo : ""}>
                             <Link to="/perfil/editar-usuario" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faUserPen} /> Editar dados do responsável
+                                <FontAwesomeIcon icon={faUserPen} /> ‎ Editar dados do responsável
                             </Link>
                         </li>
                         <li className={isActive("/perfil/cadastrar-dependente") ? styles.ativo : ""}>
                             <Link to="/perfil/cadastrar-dependente" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faClipboard} /> Cadastrar criança
+                                <FontAwesomeIcon icon={faClipboard} /> ‎  Cadastrar criança
                             </Link>
                         </li>
                         <li className={isActive("/perfil/editar-dependente") ? styles.ativo : ""}>
                             <Link to="/perfil/editar-dependente" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faPencilAlt} /> Editar dados da criança
+                                <FontAwesomeIcon icon={faPencilAlt} /> ‎  Editar dados da criança
                             </Link>
                         </li>
                         <li className={isActive("/perfil/resultados") ? styles.ativo : ""}>
                             <Link to="/perfil/resultados" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faChartBar} /> Ver Resultados
+                                <FontAwesomeIcon icon={faChartBar} /> ‎  Ver Resultados
                             </Link>
                         </li>
                         <li className={isActive("/selecionar-jogador") ? styles.ativo : ""}>
                             <Link to="/selecionar-jogador" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faPeopleArrows} /> Selecionar / alterar Jogador
+                                <FontAwesomeIcon icon={faPeopleArrows} /> ‎  Selecionar / alterar Jogador
                             </Link>
                         </li>
                         <li className={isActive("/") ? styles.ativo : ""}>
                             <Link to="/" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faHome} /> Voltar à Home
+                                <FontAwesomeIcon icon={faHome} /> ‎  Voltar à Home
                             </Link>
                         </li>
                         <li>
                             <Link to="/" onClick={() => { setIsOpen(false); handleLogout(); }}>
-                                <FontAwesomeIcon icon={faRunning} /> Fazer Logout
+                                <FontAwesomeIcon icon={faRunning} /> ‎  Fazer Logout
                             </Link>
                         </li>
                     </ul>

@@ -20,8 +20,6 @@ const GraficoRadar = ({ dados, nome }) => {
     "Cores": "Percepção visual",
   };
 
-  // Não filtra mais, assume que "dados" já são só do dependente "nome"
-  // Inicializa os dados com 0%
   const radarData = Object.values(mapaJogos).map((area) => ({
     area,
     Porcentagem: 0,
@@ -39,7 +37,7 @@ const GraficoRadar = ({ dados, nome }) => {
   });
 
   return (
-    <div style={{ width: "100%", height: 350 }}>
+    <div style={{ width: "100%", height: 250 }}>
       <h3>Desempenho por capacidade de {nome} (%)</h3>
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>

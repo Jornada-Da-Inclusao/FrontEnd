@@ -4,35 +4,29 @@ import {
 } from "recharts";
 
 const GraficoTentativas = ({ dados, viewMode }) => {
-  // Definindo os jogos predefinidos
   const jogos = ["Memória", "Números", "Vogais", "Cores"];
 
-  // Mapeando os dados para incluir todos os jogos, preenchendo com zero se não houver dados
   const data = jogos.map((jogo) => {
-    
-    // Procurar se há dados para o jogo atual
     const jogoData = dados.find((item) => item.jogo === jogo);
-    
-    // Se houver dados para o jogo, usa eles, senão coloca zero
     return {
       nome: jogo,
-      tentativas: jogoData ? jogoData.acertos + jogoData.erros : 0,  // Total de tentativas (acertos + erros)
-      acertos: jogoData ? jogoData.acertos : 0,  // Acertos
-      erros: jogoData ? jogoData.erros : 0,  // Erros
-      jogo: jogo,  // Nome do jogo
+      tentativas: jogoData ? jogoData.acertos + jogoData.erros : 0,
+      acertos: jogoData ? jogoData.acertos : 0,
+      erros: jogoData ? jogoData.erros : 0,
+      jogo: jogo,
     };
   });
 
   return (
-    <div style={{ width: "100%", height: 300 }}>
+    <div style={{ width: "100%", height: "auto" }}>
       <h3>
         Tentativas, Acertos e Erros por {viewMode === "geral" ? "Jogo" : "Jogo"}
       </h3>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+      <ResponsiveContainer width="100%" height={data.length * 50}>
+        <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="nome" />
-          <YAxis />
+          <XAxis type="number" />
+          <YAxis dataKey="nome" type="category" />
           <Tooltip />
           <Legend />
           <Bar dataKey="tentativas" stackId="a" fill="#FF9800" name="Tentativas" />

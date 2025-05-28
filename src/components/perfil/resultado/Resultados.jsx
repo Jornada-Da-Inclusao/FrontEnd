@@ -226,36 +226,42 @@ const Resultados = () => {
 
   return (
     <div className={`${styles.container} ${dependenteSelecionado ? "" : styles.centralizado}`}>
-      <div className={styles.content}>
+      <div className={styles.topSection}>
         <div className={styles.tituPag}>
           <h2>Resultados dos Jogos</h2>
-          <h3>Acompanhe o desempenho das crianças nos jogos educativos.</h3>
         </div>
-
         <section className={styles.filter}>
-          <label>Filtrar por nome:</label>
-          <select
-            value={dependenteSelecionado}
-            onChange={(e) => setDependenteSelecionado(e.target.value)}
-          >
-            <option value="" disabled>
-              Selecione uma criança
-            </option>
-            {dependentes.map((dep) => (
-              <option key={dep.id} value={dep.id}>
-                {dep.nome}
+          <div className={styles.selectGroup}>
+            <label>Escolha a criança:</label>
+            <select
+              value={dependenteSelecionado}
+              onChange={(e) => setDependenteSelecionado(e.target.value)}
+            >
+              <option value="" disabled>
+                Selecione uma criança
               </option>
-            ))}
-          </select>
+              {dependentes.map((dep) => (
+                <option key={dep.id} value={dep.id}>
+                  {dep.nome}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <label>Modo de visualização:</label>
-          <select value={tipoGrafico} onChange={(e) => setTipoGrafico(e.target.value)}>
-            <option value="bar">Tentativas, Acertos e Erros</option>
-            <option value="gauge">Tempo</option>
-            <option value="radar">Desempenho por capacidades</option>
-          </select>
+          <div className={styles.selectGroup}>
+            <label>Mudar visualização de dados:</label>
+            <select value={tipoGrafico} onChange={(e) => setTipoGrafico(e.target.value)}>
+              <option value="bar">Tentativas, Acertos e Erros</option>
+              <option value="gauge">Tempo</option>
+              <option value="radar">Desempenho por capacidades</option>
+            </select>
+          </div>
+        </section>
+      </div>
 
-          <FormControlLabel
+      <div className={styles.bottomSection}>
+        <div className={styles.graphSection}>
+        <FormControlLabel
             control={
               <Switch
                 checked={mostrarUltimoJogo}
@@ -265,95 +271,76 @@ const Resultados = () => {
             }
             label="Mostrar último resultado de todos os jogos"
           />
-        </section>
+          {dependenteSelecionado && historicoJogos.length > 0 && (
+            <section className={styles.textContent}>{renderGrafico()}</section>
+          )}
+        </div>
 
-        {dependenteSelecionado && historicoJogos.length > 0 && (
-          <section className={styles.textContent}>{renderGrafico()}</section>
-        )}
-      </div>
+        {dependenteSelecionado && (
+          <div className={styles.historySection}>
+            <div className={styles.headerTop}>
+              <h2>Histórico de partidas:</h2>
+              <div className={styles.buttons}>
+                <button className={styles.relatory} onClick={downloadPdf}>
+                  {isLoadingPdf ? (
+                    <RotatingLines strokeColor="red" strokeWidth="5" animationDuration="0.75" width="24" visible={true} />
+                  ) : (
+                    <span>Gerar PDF</span>
+                  )}
+                </button>
 
-      {dependenteSelecionado && (
-        <div className={styles.content}>
-          <div className={styles.headerTop}>
-            <h2>Histórico de partidas:</h2>
-            <div className={styles.buttons}>
-              <button className={styles.relatory} onClick={downloadPdf}>
-                {isLoadingPdf ? (
-                  <RotatingLines
-                    strokeColor="red"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    width="24"
-                    visible={true}
-                  />
-                ) : (
-                  <span>Gerar PDF</span>
-                )}
-
-              </button>
-
-              <button className={styles.relatory} onClick={downloadExcel}>
-                {isLoadingExcel ? (
-                  <RotatingLines
-                    strokeColor="white"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    width="24"
-                    visible={true}
-                  />
-                ) : (
-                  <span>Gerar EXCEL</span>
-                )}
-
-              </button>
+                <button className={styles.relatory} onClick={downloadExcel}>
+                  {isLoadingExcel ? (
+                    <RotatingLines strokeColor="white" strokeWidth="5" animationDuration="0.75" width="24" visible={true} />
+                  ) : (
+                    <span>Gerar Planilha</span>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-          <div className={styles.history}>
-            {historicoJogos.length === 0 ? (
-              <p>Carregando histórico...</p>
-            ) : (
-              historicoJogos
-                .sort((a, b) => new Date(b.createDate) - new Date(a.createDate))
-                .map((jogo) => {
-                  const nomeJogo = jogo.infoJogos_id_fk?.nome || "";
-                  const data = formatarData(jogo.createDate);
+            <div className={styles.history}>
+              {historicoJogos.length === 0 ? (
+                <p>Carregando histórico...</p>
+              ) : (
+                historicoJogos
+                  .sort((a, b) => new Date(b.createDate) - new Date(a.createDate))
+                  .map((jogo) => {
+                    const nomeJogo = jogo.infoJogos_id_fk?.nome || "";
+                    const data = formatarData(jogo.createDate);
 
-                  // Verifica se o jogo está entre os exibidos no modo "mostrarUltimoJogo"
-                  const estaSelecionadoNoGrafico =
-                    mostrarUltimoJogo &&
-                    jogosPorTipo.some((j) => j.id === jogo.id);
+                    const estaSelecionadoNoGrafico =
+                      mostrarUltimoJogo && jogosPorTipo.some((j) => j.id === jogo.id);
+                    const estaSelecionadoIndividualmente =
+                      !mostrarUltimoJogo && jogoSelecionado?.id === jogo.id;
 
-                  const estaSelecionadoIndividualmente =
-                    !mostrarUltimoJogo && jogoSelecionado?.id === jogo.id;
-
-                  return (
-                    <button
-                      key={jogo.id}
-                      className={`${styles.btnHistory} ${estaSelecionadoIndividualmente || estaSelecionadoNoGrafico
+                    return (
+                      <button
+                        key={jogo.id}
+                        className={`${styles.btnHistory} ${estaSelecionadoIndividualmente || estaSelecionadoNoGrafico
                           ? styles.selected
                           : ""
-                        }`}
-                      onClick={() => selecionarJogo(jogo)}
-                    >
-                      {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"} ${data ? data.toLocaleTimeString() : ""}`}
-                      <button
-                        className={styles.btnExcluir}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenDeleteModal(jogo.id);
-                        }}
-                        title="Excluir jogo"
+                          }`}
+                        onClick={() => selecionarJogo(jogo)}
                       >
-                        ❌
+                        {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"} ${data ? data.toLocaleTimeString() : ""}`}
+                        <button
+                          className={styles.btnExcluir}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenDeleteModal(jogo.id);
+                          }}
+                          title="Excluir jogo"
+                        >
+                          ❌
+                        </button>
                       </button>
-                    </button>
-                  );
-                })
-            )}
+                    );
+                  })
+              )}
+            </div>
           </div>
-
-        </div>
-      )}
+        )}
+      </div>
 
       <JogosModal
         modalConfirmDelete={modalConfirmDelete}

@@ -99,9 +99,8 @@ const EditarDep = () => {
       <div className={styles.content}>
         <h2>Alterar dados das crianças</h2>
 
-        <h3>Alterar dados de qual criança:</h3>
         <select id="idSelect" value={selectedId ?? ""} onChange={handleSelectId}>
-          <option value="" disabled>-- Escolha uma criança --</option>
+          <option value="" disabled>-- Qual criança? --</option>
           {ids.map((crianca) => (
             <option key={crianca.id} value={crianca.id}>
               {crianca.nome}
@@ -109,7 +108,7 @@ const EditarDep = () => {
           ))}
         </select>
 
-        <h3>Troque o avatar:</h3>
+        <h3>Trocar o avatar:</h3>
         <div className={styles.figures}>
           {icons.map((icon, index) => (
             <button key={index} type="button" onClick={() => setAvatarSelecionado(icon)}>
