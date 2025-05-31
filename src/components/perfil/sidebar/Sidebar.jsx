@@ -4,7 +4,7 @@ import styles from "../sidebar/Sidebar.module.css";
 import { AuthContext } from '../../../contexts/AuthContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPen, faClipboard, faPencilAlt, faChartBar, faHome, faRunning, faPeopleArrows, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUserPen, faChild, faPencilAlt, faChartBar, faArrowLeft, faRightFromBracket, faChildren, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
     const { usuario, handleLogout } = useContext(AuthContext);
@@ -33,17 +33,17 @@ const Sidebar = () => {
                     <ul>
                         <li className={isActive("/perfil/editar-usuario") ? styles.ativo : ""}>
                             <Link to="/perfil/editar-usuario" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faUserPen} /> ‎ Editar dados do responsável
+                                <FontAwesomeIcon icon={faPencilAlt} /> ‎ Editar dados do responsável
                             </Link>
                         </li>
                         <li className={isActive("/perfil/cadastrar-dependente") ? styles.ativo : ""}>
                             <Link to="/perfil/cadastrar-dependente" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faClipboard} /> ‎  Cadastrar criança
+                                <FontAwesomeIcon icon={faChild} /> ‎  Cadastrar criança
                             </Link>
                         </li>
                         <li className={isActive("/perfil/editar-dependente") ? styles.ativo : ""}>
                             <Link to="/perfil/editar-dependente" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faPencilAlt} /> ‎  Editar dados da criança
+                                <FontAwesomeIcon icon={faUserPen} /> ‎  Editar dados da criança
                             </Link>
                         </li>
                         <li className={isActive("/perfil/resultados") ? styles.ativo : ""}>
@@ -53,17 +53,17 @@ const Sidebar = () => {
                         </li>
                         <li className={isActive("/selecionar-jogador") ? styles.ativo : ""}>
                             <Link to="/selecionar-jogador" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faPeopleArrows} /> ‎  Selecionar / alterar Jogador
+                                <FontAwesomeIcon icon={faChildren} /> ‎  Selecionar / alterar Jogador
                             </Link>
                         </li>
                         <li className={isActive("/") ? styles.ativo : ""}>
                             <Link to="/" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faHome} /> ‎  Voltar à Home
+                                <FontAwesomeIcon icon={faArrowLeft} /> ‎  Voltar à Home
                             </Link>
                         </li>
                         <li>
                             <Link to="/" onClick={() => { setIsOpen(false); handleLogout(); }}>
-                                <FontAwesomeIcon icon={faRunning} /> ‎  Fazer Logout
+                                <FontAwesomeIcon icon={faRightFromBracket} /> ‎  Fazer Logout
                             </Link>
                         </li>
                     </ul>

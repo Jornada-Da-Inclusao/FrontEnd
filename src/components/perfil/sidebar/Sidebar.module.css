@@ -59,14 +59,14 @@
 
 /* Esconde a sidebar e "empurra" para fora da tela */
 .hidden {
-  transform: translateX(-400px);
+  transform: translateX(-450px);
 }
 
 /* Mobile */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    transform: translateX(-400px); /* escondida por padrão */
+    transform: translateX(-450px); /* escondida por padrão */
     width: 100%;
   }
 

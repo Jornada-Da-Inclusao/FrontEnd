@@ -1,11 +1,12 @@
 @import url('../../../assets/styles/color_pallete.css');
+
 * {
   box-sizing: border-box;
 }
 
 .carouselSection {
   width: 100%;
-  height: 80vh;
+  height: 85vh;
   padding-top: 80px;
   overflow: hidden;
   position: relative;
@@ -13,7 +14,7 @@
   background-color: var(--white);
 }
 
-.carouselInner { 
+.carouselInner {
   display: flex;
   width: 100%;
   /* 3 slides = 300% da largura */
@@ -25,7 +26,7 @@
   flex: 100%;
   width: 100%;
   height: 100%;
-  display: flex; 
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -35,6 +36,7 @@
   height: 100%;
   /* Mantém a proporção da imagem */
   object-fit: cover;
+  object-position: top;
   /* Garante que a imagem se ajuste sem cortar */
   display: block;
   max-height: 100%;
@@ -59,25 +61,47 @@ input[type="radio"] {
   display: inline-block;
   width: 10px;
   height: 10px;
-  background-color: #ccc;
+  background-color: white;
   border-radius: 50%;
   cursor: pointer;
 }
 
-.item1:checked ~ .carouselInner { /* Corrigido o nome da classe */
+.item1:checked~.carouselInner {
+  /* Corrigido o nome da classe */
   transform: translateX(0%);
 }
 
-.item2:checked ~ .carouselInner { /* Corrigido o nome da classe */
+.item2:checked~.carouselInner {
+  /* Corrigido o nome da classe */
   transform: translateX(-100%);
 }
 
-.item3:checked ~ .carouselInner { /* Corrigido o nome da classe */
+.item3:checked~.carouselInner {
+  /* Corrigido o nome da classe */
   transform: translateX(-200%);
 }
 
-.item1:checked ~ .controls label[for="item-1"],
-.item2:checked ~ .controls label[for="item-2"],
-.item3:checked ~ .controls label[for="item-3"] {
-  background-color: #333;
+.item4:checked~.carouselInner {
+  /* Corrigido o nome da classe */
+  transform: translateX(-300%);
+}
+
+.item5:checked~.carouselInner {
+  /* Corrigido o nome da classe */
+  transform: translateX(-400%);
+}
+
+.item1:checked~.controls label[for="item-1"],
+.item2:checked~.controls label[for="item-2"],
+.item3:checked~.controls label[for="item-3"],
+.item4:checked~.controls label[for="item-4"],
+.item5:checked~.controls label[for="item-5"] {
+  background-color: #007bff;
+}
+
+
+@media (max-width: 768px) {
+  .carouselSection{
+    height: 40vh;
+  }
 }

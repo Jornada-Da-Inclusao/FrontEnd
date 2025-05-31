@@ -17,10 +17,10 @@ const SelectPlayer = () => {
         const resultado = await fetchDependentes();
         setDependentes(resultado);
 
-        // Recupera ID do player salvo no sessionStorage (como string)
-        const playerId = sessionStorage.getItem('player');
-        if (playerId) {
-          setPerfilSelecionado(playerId);
+        // Recupera jogador salvo no sessionStorage como objeto
+        const jogadorSalvo = JSON.parse(sessionStorage.getItem('player'));
+        if (jogadorSalvo?.id) {
+          setPerfilSelecionado(String(jogadorSalvo.id));
         }
       } catch (error) {
         console.error('Erro ao carregar dependentes:', error);
@@ -32,7 +32,13 @@ const SelectPlayer = () => {
 
   const selecionarPerfil = (dependente) => {
     escolherDependenteComoPlayer(dependente);
-    sessionStorage.setItem('player', String(dependente.id)); // garante string
+
+    const jogadorSelecionado = {
+      id: String(dependente.id),
+      nome: dependente.nome,
+      icone: dependente.foto
+    };
+    sessionStorage.setItem('player', JSON.stringify(jogadorSelecionado));
     setPerfilSelecionado(String(dependente.id));
     navigate(-1);
   };
@@ -60,7 +66,7 @@ const SelectPlayer = () => {
               nome={dep.nome}
               imagem={dep.foto}
               onClick={() => selecionarPerfil(dep)}
-              ativo={String(dep.id) === perfilSelecionado} // Comparação como string
+              ativo={String(dep.id) === perfilSelecionado}
             />
           ))}
           <PerfilCard nome="Adicionar" onClick={adicionarPerfil} adicionar />

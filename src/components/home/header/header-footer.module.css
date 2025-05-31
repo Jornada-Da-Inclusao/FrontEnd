@@ -9,14 +9,19 @@ div.head {
     background-color: var(--white);
     padding: 12px;
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-    position: fixed; /* Adiciona posição fixa */
-    top: 0; /* Fixa o cabeçalho ao topo */
-    left: 0; /* Alinha à esquerda */
-    right: 0; /* Alinha à direita */
-    z-index: 1000; /* Mantém o cabeçalho acima de outros elementos */
+    position: fixed;
+    /* Adiciona posição fixa */
+    top: 0;
+    /* Fixa o cabeçalho ao topo */
+    left: 0;
+    /* Alinha à esquerda */
+    right: 0;
+    /* Alinha à direita */
+    z-index: 1000;
+    /* Mantém o cabeçalho acima de outros elementos */
 }
 
-.head li{
+.head li {
     margin-bottom: 0;
 }
 
@@ -28,7 +33,7 @@ div.head {
     cursor: pointer;
 }
 
-.linkStylesLast{
+.linkStylesLast {
     background-color: var(--red);
     padding: 10px 30px;
     border-radius: 25px;
@@ -37,14 +42,15 @@ div.head {
     transition: 0.5s;
 }
 
-.linkStylesLast:hover{
+.linkStylesLast:hover {
     background-color: var(--white);
     color: var(--red);
     transition: 0.5s;
 }
 
-.linkStylesLast2{
+.linkStylesLast2 {
     background-color: var(--red);
+    align-items: center;
     flex-direction: row;
     gap: 15px;
     display: flex;
@@ -56,14 +62,14 @@ div.head {
     transition: 0.5s;
 }
 
-.linkStylesLast2:hover{
+.linkStylesLast2:hover {
     text-decoration: none;
     background-color: var(--white);
     color: var(--red);
     transition: 0.5s;
 }
 
-li > select {
+li>select {
     width: 20px;
 }
 
@@ -114,53 +120,90 @@ li {
 .logoutButton {
     background-color: var(--red);
     padding: 8px 30px;
-    border-radius:0 25px 25px 0;
+    border-radius: 0 25px 25px 0;
     color: var(--white);
     border: 2px solid var(--red);
     transition: 0.5s;
-  }
-  
-  .logoutButton:hover {
+}
+
+.logoutButton:hover {
     background-color: var(--white);
     color: var(--red);
     transition: 0.5s;
-  }
-  
-  .userArea {
-      display: flex;
-      gap: 2px; /* Espaçamento entre a imagem e o nome */
-    }
+}
 
-    @media (max-width: 768px) {
+.linkStyles svg {
+    margin-right: 10px;
+}
+
+.jogadorButton {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--red);
+    align-items: center;
+    padding: 10px 15px;
+    color: var(--white);
+    border: 2px solid var(--red);
+}
+
+.jogadorButton img {
+    width: 23px;
+    margin-right: 15px;
+}
+
+.jogadorButton:hover {
+    text-decoration: none;
+    background-color: var(--white);
+    color: var(--red);
+    transition: 0.5s;
+}
+
+.userArea {
+    display: flex;
+    gap: 2px;
+    /* Espaçamento entre a imagem e o nome */
+}
+
+@media (max-width: 768px) {
     div.head {
         gap: 10px;
     }
 
-    .linkStyles {
-        font-size: small;
+    .linkStyles span,
+    .linkStylesLast2 span,
+    .jogadorButton span,
+    .logoutButton span {
+        display: none;
     }
 
-    .linkStylesLast2, .logoutButton{
+    .linkStylesLast2,
+    .logoutButton {
         padding: 7px;
         font-size: small;
     }
 
-    .linkStylesLast{
-        padding: 15px; 
-        border-radius: 12px; 
+    .linkStylesLast {
+        padding: 10px;
+        border-radius: 12px;
     }
 
-    .logoutButton{
-        border-radius:0 12px 12px 0;
+    .logoutButton {
+        border-radius: 0 12px 12px 0;
+        padding: 10px;
     }
 
-    .linkStylesLast2{
+    .linkStylesLast2 {
         border-radius: 12px 0 0 12px;
+        padding: 15px;
     }
 
-    .head li img{
-        max-width: max-content;
-        width: 50px;
+    .jogadorButton {
+        padding: 10px;
+
+    }
+
+    .jogadorButton>img {
+        width: 15px;
+        margin-right: 0;
     }
 }
-

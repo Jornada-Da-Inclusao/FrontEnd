@@ -22,3 +22,11 @@ div.home {
 body {
   margin: 0;
 }
+
+
+@media (max-width: 768px) {
+  .home h1{
+    font-size: x-large;
+  }
+}
+
