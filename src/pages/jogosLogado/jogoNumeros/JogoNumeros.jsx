@@ -38,7 +38,7 @@ export default function JogoNumeros() {
   const { usuario } = useContext(AuthContext);
   const [modalConfig, setModalConfig] = useState({ show: false });
   const idJogoNumeros = 2;
-  const idDependente = parseInt(sessionStorage.getItem("player"));
+  const idDependente = parseInt(sessionStorage.getItem("playerId"));
   const [jogoRegistrado, setJogoRegistrado] = useState(false);
   const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 

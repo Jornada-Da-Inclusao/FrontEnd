@@ -33,7 +33,7 @@ const Sidebar = () => {
                     <ul>
                         <li className={isActive("/perfil/editar-usuario") ? styles.ativo : ""}>
                             <Link to="/perfil/editar-usuario" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faPencilAlt} /> ‎ Editar dados do responsável
+                                <FontAwesomeIcon icon={faPencilAlt} /> ‎ Editar dados do usuario
                             </Link>
                         </li>
                         <li className={isActive("/perfil/cadastrar-dependente") ? styles.ativo : ""}>

@@ -39,7 +39,7 @@ export default function JogoCores() {
     const { usuario } = useContext(AuthContext);
     const [modalConfig, setModalConfig] = useState({ show: false });
     const idJogoCores = 4;
-    const idDependente = parseInt(sessionStorage.getItem("player"));
+    const idDependente = parseInt(sessionStorage.getItem("playerId"));
     const [jogoRegistrado, setJogoRegistrado] = useState(false);
     const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 

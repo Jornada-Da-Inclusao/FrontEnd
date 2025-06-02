@@ -37,7 +37,7 @@ const GraficoRadar = ({ dados, nome }) => {
   });
 
   return (
-    <div style={{ width: "100%", height: 250 }}>
+    <div style={{ width: "100%", height: 200 }}>
       <h3>Desempenho por capacidade de {nome} (%)</h3>
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
@@ -49,7 +49,7 @@ const GraficoRadar = ({ dados, nome }) => {
             tickFormatter={(v) => `${v}%`}
           />
           <Tooltip formatter={(value) => `${value}%`} />
-          <Legend />
+          <Legend wrapperStyle={{ top: 170 }} />
           <Radar
             name="Desempenho (%)"
             dataKey="Porcentagem"

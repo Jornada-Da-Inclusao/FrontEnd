@@ -39,7 +39,7 @@ function FaceJogoVogais() {
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
     const idJogoVogais = 3;
-    const idDependente = parseInt(sessionStorage.getItem("player"));
+    const idDependente = parseInt(sessionStorage.getItem("playerId"));
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoVogais, setInfoJogoVogais] = useState({});
     const { usuario } = useContext(AuthContext);

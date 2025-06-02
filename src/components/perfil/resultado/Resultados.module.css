@@ -235,8 +235,26 @@
 }
 
 @media (max-width: 768px) {
-  .historySection{
-    width: 100vw;
+
+  .container{
+    max-height: 100vh;
+    justify-content: center;
+  }
+
+  .content{
+    padding: 0 !important;
+  }
+
+  .topSection, .bottomSection, .historySection{
+    width: 85vw;
+  }
+
+  .selectGroup{
+    width: 100%;
+  }
+
+  .buttons{
+    gap: 0;
   }
 }
 

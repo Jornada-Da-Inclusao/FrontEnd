@@ -67,7 +67,7 @@
   .sidebar {
     position: fixed;
     transform: translateX(-450px); /* escondida por padrão */
-    width: 100%;
+    width: 100vw;
   }
 
   .sidebar:not(.hidden) {
@@ -84,7 +84,7 @@
 }
 
 /* Mantém o estilo desktop original para telas maiores */
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .sidebar {
     transform: translateX(0) !important;
   }
@@ -152,6 +152,12 @@
 }
 
 .ativo {
-  margin-left: 30px;
+  background-color: white;
+  border-radius: 8px;
+  padding-left: 30px !important;
   transition: 0.5s;  
+}
+
+.ativo a{
+  color: var(--red) !important;
 }

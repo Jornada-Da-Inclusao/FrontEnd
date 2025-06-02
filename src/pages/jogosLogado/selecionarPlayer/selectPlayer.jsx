@@ -20,7 +20,7 @@ const SelectPlayer = () => {
         // Recupera jogador salvo no sessionStorage como objeto
         const jogadorSalvo = JSON.parse(sessionStorage.getItem('player'));
         if (jogadorSalvo?.id) {
-          setPerfilSelecionado(String(jogadorSalvo.id));
+          setPerfilSelecionado(jogadorSalvo.id);
         }
       } catch (error) {
         console.error('Erro ao carregar dependentes:', error);
@@ -34,12 +34,13 @@ const SelectPlayer = () => {
     escolherDependenteComoPlayer(dependente);
 
     const jogadorSelecionado = {
-      id: String(dependente.id),
+      id: dependente.id,
       nome: dependente.nome,
-      icone: dependente.foto
+      foto: dependente.foto
     };
     sessionStorage.setItem('player', JSON.stringify(jogadorSelecionado));
-    setPerfilSelecionado(String(dependente.id));
+    sessionStorage.setItem('playerId', dependente.id.toString());
+    setPerfilSelecionado(dependente.id);
     navigate(-1);
   };
 
@@ -66,7 +67,7 @@ const SelectPlayer = () => {
               nome={dep.nome}
               imagem={dep.foto}
               onClick={() => selecionarPerfil(dep)}
-              ativo={String(dep.id) === perfilSelecionado}
+              ativo={dep.id === perfilSelecionado}
             />
           ))}
           <PerfilCard nome="Adicionar" onClick={adicionarPerfil} adicionar />

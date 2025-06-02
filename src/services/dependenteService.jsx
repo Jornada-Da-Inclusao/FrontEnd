@@ -182,7 +182,6 @@ export const escolherDependenteComoPlayer = (dependente) => {
   };
 
   sessionStorage.setItem("player", JSON.stringify(player));
-  console.log("Player definido:", player);
 };
 
 

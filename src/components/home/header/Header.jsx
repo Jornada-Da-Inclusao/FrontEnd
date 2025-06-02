@@ -5,7 +5,7 @@ import PiLogo from '../../../assets/images/nano-icon.png';
 import { AuthContext } from '../../../contexts/AuthContext.jsx';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGamepad, faEnvelope, faHome, faIdCardClip, faDoorOpen, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faGamepad, faEnvelope, faHome, faIdCardClip, faDoorOpen, faUser, faRightFromBracket, faChildren } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
   const { usuario, handleLogout } = useContext(AuthContext);
@@ -39,14 +39,14 @@ export default function Header() {
       <li>
         {userLogado && userLogado.token ? (
           <div className={styles.userArea}>
-            <Link className={styles.linkStylesLast2} to="/perfil">
+            <Link className={styles.linkStylesLast2} to="/perfil/editar-usuario">
               <FontAwesomeIcon icon={faUser} /><span>Perfil</span>
             </Link>
 
             {jogadorSelecionado && (
               <Link className={styles.jogadorButton} to="/selecionar-jogador">
                 <img
-                  src={jogadorSelecionado.icone}
+                  src={jogadorSelecionado.foto}
                   alt={`Ícone de ${jogadorSelecionado.nome}`}
                   className={styles.avatarIcon}
                 />
@@ -56,7 +56,7 @@ export default function Header() {
 
             {!jogadorSelecionado && (
               <Link className={styles.jogadorButton} to="/selecionar-jogador">
-                <span>Selecionar jogador</span>
+                <FontAwesomeIcon icon={faChildren} /><span>Selecionar jogador</span>
               </Link>
             )}
 

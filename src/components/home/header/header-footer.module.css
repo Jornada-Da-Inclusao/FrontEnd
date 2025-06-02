@@ -40,6 +40,7 @@ div.head {
     color: var(--white);
     border: 2px solid var(--red);
     transition: 0.5s;
+    text-decoration: none;
 }
 
 .linkStylesLast:hover {
@@ -60,6 +61,7 @@ div.head {
     color: var(--white);
     border: 2px solid var(--red);
     transition: 0.5s;
+    text-decoration: none;
 }
 
 .linkStylesLast2:hover {
@@ -144,10 +146,15 @@ li {
     padding: 10px 15px;
     color: var(--white);
     border: 2px solid var(--red);
+    text-decoration: none;
 }
 
 .jogadorButton img {
     width: 23px;
+    margin-right: 15px;
+}
+
+.jogadorButton svg {
     margin-right: 15px;
 }
 
@@ -201,6 +208,12 @@ li {
         padding: 10px;
 
     }
+
+    .jogadorButton svg,
+    .linkStyles svg {
+        margin-right: 0;
+    }
+
 
     .jogadorButton>img {
         width: 15px;
