@@ -68,6 +68,8 @@
     position: fixed;
     transform: translateX(-450px); /* escondida por padrão */
     width: 100vw;
+    height: 100dvh;
+    overflow-y: hidden;
   }
 
   .sidebar:not(.hidden) {
