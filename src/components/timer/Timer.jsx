@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "./timer.css";
 import React from "react";
+import JogoNavbar from "../jogoNavbar/jogoNavbar";
 
 const Timer = ({ isActive, resetTrigger, onTimeUpdate }) => {
     const totalTime = 180;
@@ -51,6 +52,7 @@ const Timer = ({ isActive, resetTrigger, onTimeUpdate }) => {
 
     return (
         <>
+        <JogoNavbar />
             <div style={circleStyle} className={remainingTime === 0 ? "alerta-final" : ""}>
                 <div style={{
                     width: "65px",

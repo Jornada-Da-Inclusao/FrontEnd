@@ -13,6 +13,8 @@ import { JogoContext } from "../../../contexts/JogoContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 
+import JogoNavbar from '@/components/jogoNavbar/jogoNavbar';
+
 const JogoMemoria = () => {
     const navigate = useNavigate(); // Usado para navegar para outras páginas quando necessário.
     // Define os dados das cartas (nome e imagem) que serão usadas no jogo.
@@ -41,6 +43,7 @@ const JogoMemoria = () => {
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
     const { usuario } = useContext(AuthContext);
+    const [loadingModal, setLoadingModal] = useState(false);
     const [modalConfig, setModalConfig] = useState({ show: false });
     const idJogoMemoria = 1;
     const idDependente = parseInt(sessionStorage.getItem("playerId"));
@@ -85,8 +88,8 @@ const JogoMemoria = () => {
     }
 
     useEffect(() => {
-        
-        
+
+
         const executarAsync = async () => {
             const minutosConvertidos = convertToMinutes(time);
             const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
@@ -101,39 +104,46 @@ const JogoMemoria = () => {
 
             if (cardsWon.length === 8 && !jogoRegistrado) {
                 setJogoRegistrado(true);
-                registrarInfosJogo().then((resultado) => {
-                    console.log(resultado);
-                    setStateTimerAtivo(false);
-    
-                    setModalConfig({
-                        show: true,
-                        title: "Missão concluída!",
-                        message: "Parabéns! Você completou o jogo.",
-                        icon: "🏆",
-                        color: "#4caf50",
-                        doneButton: {
-                            label: "Voltar",
-                            onClick: () => navigate("/"),
-                        },
-                        onClose: () => navigate("/"),
+                setLoadingModal(true); // mostra o modal de carregamento
+
+                registrarInfosJogo()
+                    .then((resultado) => {
+                        console.log(resultado);
+                        setStateTimerAtivo(false);
+                        setLoadingModal(false); // esconde o modal ao terminar
+
+                        setModalConfig({
+                            show: true,
+                            title: "Missão concluída!",
+                            message: "Parabéns! Você completou o jogo.",
+                            icon: "🏆",
+                            color: "#4caf50",
+                            doneButton: {
+                                label: "Voltar",
+                                onClick: () => navigate("/"),
+                            },
+                            onClose: () => navigate("/"),
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao registrar informações do jogo:", error);
+                        setLoadingModal(false); // esconde o modal mesmo em erro
+
+                        setModalConfig({
+                            show: true,
+                            title: "Erro",
+                            message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                            icon: "❌",
+                            color: "#f44336",
+                            doneButton: {
+                                label: "Voltar",
+                                onClick: () => navigate("/"),
+                            },
+                            onClose: () => navigate("/"),
+                        });
                     });
-                }).catch((error) => {
-                    console.error("Erro ao registrar informações do jogo:", error);
-    
-                    setModalConfig({
-                        show: true,
-                        title: "Erro",
-                        message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
-                        icon: "❌",
-                        color: "#f44336",
-                        doneButton: {
-                            label: "Voltar",
-                            onClick: () => navigate("/"),
-                        },
-                        onClose: () => navigate("/"),
-                    });
-                });
             }
+
         };
 
         executarAsync();
@@ -262,6 +272,20 @@ const JogoMemoria = () => {
             />
         </>
     );
+    {
+        loadingModal && (
+            <CustomModal
+                show={true}
+                title="Enviando dados..."
+                message="Aguarde um instante, estamos salvando seu progresso."
+                icon="⏳"
+                color="#2196f3"
+                hideButtons={true}
+                backdropClickDisabled={true}
+                loading={true}
+            />
+        )
+    }
 };
 
 export default JogoMemoria; // Exporta o componente para ser utilizado em outras partes do aplicativo.

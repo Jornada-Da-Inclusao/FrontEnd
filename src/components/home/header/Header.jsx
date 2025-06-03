@@ -39,7 +39,7 @@ export default function Header() {
       <li>
         {userLogado && userLogado.token ? (
           <div className={styles.userArea}>
-            <Link className={styles.linkStylesLast2} to="/perfil/editar-usuario">
+            <Link className={styles.linkStylesLast2} to="/perfil/cadastrar-dependente">
               <FontAwesomeIcon icon={faUser} /><span>Perfil</span>
             </Link>
 

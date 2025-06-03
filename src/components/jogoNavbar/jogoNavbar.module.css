@@ -1,0 +1,91 @@
+.navbar{
+    width: 55vw;
+    margin: 20px;
+    background-color: lightblue;
+    flex-direction: column;
+    border-radius: 18px;
+    border: 5px solid rgba(255, 255, 255, 0.219);
+    justify-self: center;
+}
+
+.navbar ul{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    height: min-content; 
+}
+
+.navbar ul li{
+    margin-bottom: 0; 
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.navbar ul li span{
+    color: white;
+}
+
+.navbar ul li button{
+    background-color: transparent;
+    border: 2px solid lightcyan;
+    border-radius: 12px;
+    padding: 10px;
+    width: max-content;
+}
+
+.navbar ul li svg{
+    margin-right: 10px;
+}
+
+.navbar ul li:last-child:hover svg{
+    transform: rotate(360deg);
+    transition: 0.5s;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  min-width: 300px;
+}
+
+.modalOptions {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.modalOptions li {
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+.modalOptions li button{
+    background-color: lightblue;
+    padding: 10px;
+    width: 100%;
+    border-radius: 12px;
+    border: none;
+
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+  object-fit: cover;
+}
+

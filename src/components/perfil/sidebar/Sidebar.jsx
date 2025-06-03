@@ -31,11 +31,6 @@ const Sidebar = () => {
                 <nav className={styles.menu}>
                     <h2 className={styles.options}>Menu</h2>
                     <ul>
-                        <li className={isActive("/perfil/editar-usuario") ? styles.ativo : ""}>
-                            <Link to="/perfil/editar-usuario" onClick={() => setIsOpen(false)}>
-                                <FontAwesomeIcon icon={faPencilAlt} /> ‎ Editar dados do usuario
-                            </Link>
-                        </li>
                         <li className={isActive("/perfil/cadastrar-dependente") ? styles.ativo : ""}>
                             <Link to="/perfil/cadastrar-dependente" onClick={() => setIsOpen(false)}>
                                 <FontAwesomeIcon icon={faChild} /> ‎  Cadastrar criança
@@ -44,6 +39,11 @@ const Sidebar = () => {
                         <li className={isActive("/perfil/editar-dependente") ? styles.ativo : ""}>
                             <Link to="/perfil/editar-dependente" onClick={() => setIsOpen(false)}>
                                 <FontAwesomeIcon icon={faUserPen} /> ‎  Editar dados da criança
+                            </Link>
+                        </li>
+                        <li className={isActive("/perfil/editar-usuario") ? styles.ativo : ""}>
+                            <Link to="/perfil/editar-usuario" onClick={() => setIsOpen(false)}>
+                                <FontAwesomeIcon icon={faPencilAlt} /> ‎ Editar dados do usuario
                             </Link>
                         </li>
                         <li className={isActive("/perfil/resultados") ? styles.ativo : ""}>
