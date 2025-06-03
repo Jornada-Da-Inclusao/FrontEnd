@@ -13,8 +13,6 @@ import { JogoContext } from "../../../contexts/JogoContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 
-import JogoNavbar from '@/components/jogoNavbar/jogoNavbar';
-
 const JogoMemoria = () => {
     const navigate = useNavigate(); // Usado para navegar para outras páginas quando necessário.
     // Define os dados das cartas (nome e imagem) que serão usadas no jogo.
