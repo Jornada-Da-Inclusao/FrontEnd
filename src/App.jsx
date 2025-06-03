@@ -49,9 +49,9 @@ const App = () => (
           <Route path="/jogo-cores" element={<JogoCores />} />
 
           <Route path="/jogo-memoria-deslogado" element={<JogoMemoriaDeslogado />} />
-          <Route path="/jogo-numeros-deslogado" element={<JogoNumerosDeslogado  />} />
-          <Route path="/jogo-vogais-deslogado" element={<FaceJogoVogaisDeslogado  />} />
-          <Route path="/jogo-cores-deslogado" element={<JogoCoresDeslogado  />} />
+          <Route path="/jogo-numeros-deslogado" element={<JogoNumerosDeslogado />} />
+          <Route path="/jogo-vogais-deslogado" element={<FaceJogoVogaisDeslogado />} />
+          <Route path="/jogo-cores-deslogado" element={<JogoCoresDeslogado />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/sendToken" element={<SendToken />} />

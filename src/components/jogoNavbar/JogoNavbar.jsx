@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import style from "../../components/jogoNavbar/jogoNavbar.module.css";
 
@@ -12,7 +12,11 @@ import {
     faGamepad,
     faRotateRight,
     faTrophy,
-    faXmark
+    faXmark,
+    faDroplet,
+    faBrain,
+    faFont,
+    faArrowDown19
 } from '@fortawesome/free-solid-svg-icons';
 
 function reload() {
@@ -21,10 +25,12 @@ function reload() {
 
 const JogoNavbar = ({ acertos = 0, erros = 0 }) => {
     const navigate = useNavigate();
+    const location = useLocation(); 
     const [nome, setNome] = useState("Visitante");
     const [foto, setFoto] = useState("");
     const [isLogado, setIsLogado] = useState(false);
     const [modalAberto, setModalAberto] = useState(false);
+    const isActive = (path) => location.pathname === path;
 
     useEffect(() => {
     const playerData = sessionStorage.getItem("player");
@@ -52,7 +58,7 @@ const JogoNavbar = ({ acertos = 0, erros = 0 }) => {
                 <ul>
                     <li>
                         <button onClick={() => navigate("/")}>
-                            <FontAwesomeIcon icon={faArrowLeft} /> Voltar
+                            <FontAwesomeIcon icon={faArrowLeft} /> <span>Voltar</span>
                         </button>
                     </li>
 
@@ -67,7 +73,7 @@ const JogoNavbar = ({ acertos = 0, erros = 0 }) => {
 
                     <li>
                         <span>
-                            <FontAwesomeIcon icon={faTrophy} /> pontuação:&nbsp;
+                            <FontAwesomeIcon icon={faTrophy} /> <span>pontuação</span>:&nbsp;
                             <span style={{ color: 'green', fontWeight: 'bold' }}><FontAwesomeIcon icon={faCheck} />{acertos}</span> /{" "}
                             <span style={{ color: 'red', fontWeight: 'bold' }}><FontAwesomeIcon icon={faXmark} />{erros}</span>
                         </span>
@@ -79,19 +85,19 @@ const JogoNavbar = ({ acertos = 0, erros = 0 }) => {
                             disabled={!isLogado}
                             style={!isLogado ? { opacity: 0.5, cursor: "not-allowed" } : {}}
                         >
-                            <FontAwesomeIcon icon={faChildren} /> Mudar Jogador
+                            <FontAwesomeIcon icon={faChildren} /> <span>Mudar Jogador</span>
                         </button>
                     </li>
 
                     <li>
                         <button onClick={() => setModalAberto(true)}>
-                            <FontAwesomeIcon icon={faGamepad} /> Mudar Jogo
+                            <FontAwesomeIcon icon={faGamepad} /> <span>Mudar Jogo</span>
                         </button>
                     </li>
 
                     <li>
                         <button onClick={reload}>
-                            <FontAwesomeIcon icon={faRotateRight} /> Reiniciar
+                            <FontAwesomeIcon icon={faRotateRight} /> <span>Reiniciar</span>
                         </button>
                     </li>
                 </ul>
@@ -103,27 +109,39 @@ const JogoNavbar = ({ acertos = 0, erros = 0 }) => {
                         <h3>Escolha o jogo</h3>
                         <ul className={style.modalOptions}>
                             <li>
-                                <button onClick={() => navigate(isLogado ? '/jogo-memoria' : '/jogo-memoria-deslogado')}>
-                                    Jogo da Memória
+                                <button
+                                  className={isActive(isLogado ? '/jogo-memoria' : '/jogo-memoria-deslogado') ? style.ativo : ''}
+                                  onClick={() => navigate(isLogado ? '/jogo-memoria' : '/jogo-memoria-deslogado')}
+                                >
+                                    <FontAwesomeIcon icon={faBrain} />Jogo da Memória
                                 </button>
                             </li>
                             <li>
-                                <button onClick={() => navigate(isLogado ? '/jogo-cores' : '/jogo-cores-deslogado')}>
-                                    Jogo das Cores
+                                <button
+                                  className={isActive(isLogado ? '/jogo-cores' : '/jogo-cores-deslogado') ? style.ativo : ''}
+                                  onClick={() => navigate(isLogado ? '/jogo-cores' : '/jogo-cores-deslogado')}
+                                >
+                                    <FontAwesomeIcon icon={faDroplet} />Jogo das Cores
                                 </button>
                             </li>
                             <li>
-                                <button onClick={() => navigate(isLogado ? '/jogo-vogais' : '/jogo-vogais-deslogado')}>
-                                    Jogo das Vogais
+                                <button
+                                  className={isActive(isLogado ? '/jogo-vogais' : '/jogo-vogais-deslogado') ? style.ativo : ''}
+                                  onClick={() => navigate(isLogado ? '/jogo-vogais' : '/jogo-vogais-deslogado')}
+                                >
+                                    <FontAwesomeIcon icon={faFont} />Jogo das Vogais
                                 </button>
                             </li>
                             <li>
-                                <button onClick={() => navigate(isLogado ? '/jogo-numeros' : '/jogo-numeros-deslogado')}>
-                                    Jogo dos Números
+                                <button
+                                  className={isActive(isLogado ? '/jogo-numeros' : '/jogo-numeros-deslogado') ? style.ativo : ''}
+                                  onClick={() => navigate(isLogado ? '/jogo-numeros' : '/jogo-numeros-deslogado')}
+                                >
+                                    <FontAwesomeIcon icon={faArrowDown19} />Jogo dos Números
                                 </button>
                             </li>
                         </ul>
-                        <button onClick={() => setModalAberto(false)}>Voltar</button>
+                        <button onClick={() => setModalAberto(false)}><FontAwesomeIcon icon={faArrowLeft} />Voltar</button>
                     </div>
                 </div>
             )}

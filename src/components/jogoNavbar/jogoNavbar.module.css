@@ -1,5 +1,5 @@
 .navbar{
-    width: 55vw;
+    width: max-content;
     margin: 20px;
     background-color: lightblue;
     flex-direction: column;
@@ -13,6 +13,7 @@
     display: flex;
     align-items: center;
     height: min-content; 
+    gap: 15px;
 }
 
 .navbar ul li{
@@ -28,10 +29,17 @@
 
 .navbar ul li button{
     background-color: transparent;
-    border: 2px solid lightcyan;
+    border: 2px solid lightblue;
     border-radius: 12px;
     padding: 10px;
     width: max-content;
+    color: white;
+    transition: 0.5s;
+}
+
+.navbar ul li button:hover{
+    border-color: lightcyan;
+    transition: 0.5s;
 }
 
 .navbar ul li svg{
@@ -58,7 +66,24 @@
   padding: 2rem;
   border-radius: 1rem;
   text-align: center;
-  min-width: 300px;
+  min-width: 350px;
+}
+
+.modal button{
+    color: white;
+    padding: 10px;
+    background-color: lightblue;
+    text-align: center;
+    width: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.404);
+    border-radius: 12px;
+}
+
+.modal h3{
+    font-size: larger;
+    border-bottom: 2px solid lightblue;
+    width: 100%;
+    font-weight: bold;
 }
 
 .modalOptions {
@@ -77,8 +102,25 @@
     padding: 10px;
     width: 100%;
     border-radius: 12px;
-    border: none;
+    border: 2px solid lightblue;
+    text-align: left;
+    transition: 0.5s;
+}
 
+.modalOptions li button:hover{
+    border-color: lightslategray;
+    transition: 0.5s;
+}
+
+.modalOptions li button svg{
+    margin-right: 10px;
+}
+
+.ativo{
+    background-color: white !important;
+    border: 2px solid lightblue !important;
+    color: lightblue !important;
+    text-align: center !important;
 }
 
 .avatar {
@@ -87,5 +129,36 @@
   border-radius: 50%;
   margin-right: 8px;
   object-fit: cover;
+}
+
+.avatarIcon{
+    color: white;
+}
+
+@media (max-width: 768px) {
+.navbar{
+    width: 67vw;
+    margin: 30px 0 0 10px;
+    justify-self: flex-start;
+}
+
+.navbar span{
+    display: none;
+}
+
+.navbar ul li button svg{
+    margin-right: 0;
+}
+
+.navbar ul li button{
+    padding: 5px;
+}
+
+.avatar{
+    width: 20px;
+    height: 20px;
+    margin-right: 0;
+    margin: 10px;
+}
 }
 
