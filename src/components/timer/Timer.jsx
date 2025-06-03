@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import "./timer.css";
 import React from "react";
-import JogoNavbar from "../jogoNavbar/jogoNavbar";
+import JogoNavbar from "../jogoNavbar/JogoNavbar";
 
 const Timer = ({ isActive, resetTrigger, onTimeUpdate }) => {
     const totalTime = 180;
