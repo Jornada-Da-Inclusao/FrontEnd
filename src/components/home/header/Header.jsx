@@ -21,11 +21,19 @@ export default function Header() {
   );
 
   function scrollToElement(id) {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const element = document.getElementById(id);
+  if (element) {
+    const headerHeight = 100; // ajuste conforme o seu CSS real
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - headerHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
   }
+}
+
 
   return (
     <div className={styles.head}>
@@ -33,7 +41,7 @@ export default function Header() {
         <img src={PiLogo} alt="Logo da página Integra Kids, ilustrando um jogo educativo" />
       </li>
       <li onClick={() => scrollToElement('pagina-principal')} className={styles.linkStyles}> <FontAwesomeIcon icon={faHome} /> <span>Início</span></li>
-      <li onClick={() => scrollToElement('lista-jogos')} className={styles.linkStyles}> <FontAwesomeIcon icon={faGamepad} /> <span>Jogos</span></li>
+      <li onClick={() => scrollToElement('games-section')} className={styles.linkStyles}> <FontAwesomeIcon icon={faGamepad} /> <span>Jogos</span></li>
       <li onClick={() => scrollToElement('sobre-nos')} className={styles.linkStyles}> <FontAwesomeIcon icon={faIdCardClip} /> <span>Sobre</span></li>
       <li onClick={() => scrollToElement('contato')} className={styles.linkStyles}> <FontAwesomeIcon icon={faEnvelope} /> <span>Contato</span></li>
       <li>

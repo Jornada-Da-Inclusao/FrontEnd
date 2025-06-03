@@ -33,7 +33,7 @@ const ScrollButton = () => {
     }, []);
 
     const scrollDown = () => {
-        window.scrollBy({ top: 100, behavior: "smooth" });
+        window.scrollBy({ top: 200, behavior: "smooth" });
     };
 
     const scrollToTop = () => {

@@ -34,8 +34,8 @@ const JogoMemoria = () => {
     const [cardsWon, setCardsWon] = useState([]); // Armazena as cartas que já foram combinadas
     const [popupMessage, setPopupMessage] = useState(''); // Mensagem que será exibida no popup
     const [showPopup, setShowPopup] = useState(false); // Controla se o popup será exibido
-    const [acertos, setAcertos] = useState(0); // Armazena a quantidade de acertos no jogo
-    const [erros, setErros] = useState(0); // Armazena a quantidade de erros no jogo
+    const [acertos, setAcertos] = useState(() => Number(sessionStorage.getItem('acertos')) || 0);
+    const [erros, setErros] = useState(() => Number(sessionStorage.getItem('erros')) || 0);
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");  // Estado para armazenar o tempo formatado
     const { registrarInfos } = useContext(JogoContext);
@@ -203,9 +203,17 @@ const JogoMemoria = () => {
                 setShowPopup(true); // Exibe o popup.
             } else if (optionOneName === optionTwoName) {
                 setCardsWon(prev => [...prev, optionOneId, optionTwoId]); // Adiciona as cartas combinadas ao estado 'cardsWon'.
-                setAcertos(prev => prev + 1); // Incrementa o contador de acertos.
+                setAcertos(prev => {
+                    const novoValor = prev + 1;
+                    sessionStorage.setItem('acertos', novoValor);
+                    return novoValor;
+                }); 
             } else {
-                setErros(prev => prev + 1); // Incrementa o contador de erros.
+                setErros(prev => {
+                    const novoValor = prev + 1;
+                    sessionStorage.setItem('erros', novoValor);
+                    return novoValor;
+                });
             }
             console.log(cardsChosenId, cardsChosen)
 

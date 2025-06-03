@@ -24,15 +24,15 @@ export default function JogoNumeros() {
   const [showPopup, setShowPopup] = useState(false);
   const [numbers, setNumbers] = useState(
     Array.from({ length: 10 }, (_, index) => ({
-      id: index + 1, // Identificador único para cada número.
-      value: index, // Valor numérico do número (1 = A, 2 = B, etc.).
+      id: index + 1,
+      value: index,
     })),
   );
   const [droppedNumbers, setDroppedNumbers] = useState([]);
-  const [acertos, setAcertos] = useState(0);
-  const [erros, setErros] = useState(0);
+  const [acertos, setAcertos] = useState(() => Number(sessionStorage.getItem('acertos')) || 0);
+  const [erros, setErros] = useState(() => Number(sessionStorage.getItem('erros')) || 0);
   const [tentativas, setTentativas] = useState(0);
-  const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
+  const [time, setTime] = useState("03:00");
   const { registrarInfos } = useContext(JogoContext);
   const [infoJogoNumeros, setInfoJogoNumeros] = useState({});
   const { usuario } = useContext(AuthContext);
@@ -41,6 +41,9 @@ export default function JogoNumeros() {
   const idDependente = parseInt(sessionStorage.getItem("playerId"));
   const [jogoRegistrado, setJogoRegistrado] = useState(false);
   const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
+
+  // Novo estado para loading do modal
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (usuario.token === "") {
@@ -67,24 +70,19 @@ export default function JogoNumeros() {
   }, []);
 
   const convertToMinutes = (time) => {
-    // Divide o tempo em minutos e segundos
     const [minutes, seconds] = time.split(":").map(Number);
-
-    // Converte tudo para minutos, incluindo os segundos
     return minutes + seconds / 60;
   };
 
   const handleTimeUpdate = (newTime) => {
-    setTime(newTime); // Atualiza o estado com o novo tempo
+    setTime(newTime);
   };
-
 
   async function registrarInfosJogo() {
     return await registrarInfos(infoJogoNumeros, token);
   }
 
   useEffect(() => {
-    
     const executarAsync = async () => {
       const minutosConvertidos = convertToMinutes(time);
       const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
@@ -99,42 +97,47 @@ export default function JogoNumeros() {
 
       if (droppedNumbers.length === 10 && !jogoRegistrado) {
         setJogoRegistrado(true);
-        registrarInfosJogo().then((resultado) => {
+
+        // Mostrar modal loading
+        setLoading(true);
+
+        try {
+          const resultado = await registrarInfosJogo();
           console.log(resultado);
           setStateTimerAtivo(false);
           setModalConfig({
-              show: true,
-              title: "Missão concluída!",
-              message: "Parabéns! Você completou o jogo.",
-              icon: "🏆",
-              color: "#4caf50",
-              doneButton: {
-                  label: "Voltar",
-                  onClick: () => navigate("/"),
-              },
-              onClose: () => navigate("/"),
+            show: true,
+            title: "Missão concluída!",
+            message: "Parabéns! Você completou o jogo.",
+            icon: "🏆",
+            color: "#4caf50",
+            doneButton: {
+              label: "Voltar",
+              onClick: () => navigate("/"),
+            },
+            onClose: () => navigate("/"),
           });
-      }).catch((error) => {
+        } catch (error) {
           console.error("Erro ao registrar informações do jogo:", error);
-
           setModalConfig({
-              show: true,
-              title: "Erro",
-              message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
-              icon: "❌",
-              color: "#f44336",
-              doneButton: {
-                  label: "Voltar",
-                  onClick: () => navigate("/"),
-              },
-              onClose: () => navigate("/"),
+            show: true,
+            title: "Erro",
+            message: "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+            icon: "❌",
+            color: "#f44336",
+            doneButton: {
+              label: "Voltar",
+              onClick: () => navigate("/"),
+            },
+            onClose: () => navigate("/"),
           });
-      });
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
     executarAsync();
-
   }, [droppedNumbers, navigate, time, tentativas, acertos, erros, idJogoNumeros, idDependente]);
 
   useEffect(() => {
@@ -165,7 +168,6 @@ export default function JogoNumeros() {
               className={styles.numberInDroppable}
             >
               {number.value}{" "}
-              {/* Converte o valor numérico para a letra correspondente. */}
             </div>
           ))}
         </div>
@@ -176,11 +178,8 @@ export default function JogoNumeros() {
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
-    console.log(active, over)
-
     setTentativas((prev) => prev + 1);
 
-    // Se o item não for solto sobre uma área válida, incremente erros.
     if (!over) {
       setErros((prev) => prev + 1);
       return;
@@ -190,10 +189,13 @@ export default function JogoNumeros() {
 
     if (!numberToDrop) return;
 
-    // Se há números anteriores ao número arrastado, incremente erros.
     const less = numbers.find((number) => number.value < numberToDrop.value);
     if (less) {
-      setErros((prev) => prev + 1);
+      setErros(prev => {
+        const novoValor = prev + 1;
+        sessionStorage.setItem('erros', novoValor);
+        return novoValor;
+      });
       return;
     }
 
@@ -201,8 +203,11 @@ export default function JogoNumeros() {
     setNumbers((prevNumbers) =>
       prevNumbers.filter((number) => number.id !== numberToDrop.id),
     );
-    setAcertos((prev) => prev + 1);
-    
+    setAcertos(prev => {
+      const novoValor = prev + 1;
+      sessionStorage.setItem('acertos', novoValor);
+      return novoValor;
+    });
   };
 
   return (
@@ -245,15 +250,32 @@ export default function JogoNumeros() {
         defer
       ></script>
 
-      <CustomModal
-        show={modalConfig.show}
-        onClose={modalConfig.onClose}
-        title={modalConfig.title}
-        message={modalConfig.message}
-        icon={modalConfig.icon}
-        color={modalConfig.color}
-        doneButton={modalConfig.doneButton}
-      />
+      {/* Modal loading */}
+      {loading && (
+        <CustomModal
+          show={true}
+          title="Enviando dados..."
+          message="Aguarde um instante, estamos salvando seu progresso."
+          icon="⏳"
+          color="#2196f3"
+          // Hide buttons on loading modal
+          doneButton={null}
+          onClose={() => { }}
+        />
+      )}
+
+      {/* Modal principal */}
+      {!loading && (
+        <CustomModal
+          show={modalConfig.show}
+          onClose={modalConfig.onClose}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          icon={modalConfig.icon}
+          color={modalConfig.color}
+          doneButton={modalConfig.doneButton}
+        />
+      )}
     </>
   );
 }

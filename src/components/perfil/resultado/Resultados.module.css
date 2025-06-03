@@ -25,6 +25,7 @@
 }
 
 @media (max-width: 768px) {
+
   .headerTop h2,
   .tituPag h2 {
     font-size: 1.1rem;
@@ -200,7 +201,7 @@
   padding: 20px;
 }
 
-.topSection label{
+.topSection label {
   margin-bottom: 10px;
 }
 
@@ -234,28 +235,37 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.relatory svg {
+  height: 10px;
+  width: 100%;
+}
+
+.relatory:hover svg{
+  color: white;
+}
+
 @media (max-width: 768px) {
-  .container{
+  .container {
     width: 100%;
     max-height: 100vh;
     padding: 20px 0;
   }
 
-  .topSection, .bottomSection, .historySection{
+  .topSection,
+  .bottomSection,
+  .historySection {
     width: 80vw;
   }
 
-  .topSection{
+  .topSection {
     padding-top: 20px;
   }
 
-  .selectGroup{
+  .selectGroup {
     width: 100%;
   }
 
-  .buttons{
+  .buttons {
     gap: 0;
   }
 }
-
-

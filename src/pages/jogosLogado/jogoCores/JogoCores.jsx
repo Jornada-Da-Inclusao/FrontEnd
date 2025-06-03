@@ -30,14 +30,15 @@ export default function JogoCores() {
     const sensors = useSensors(useSensor(PointerSensor));
     const [popupMessage, setPopupMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
-    const [acertos, setAcertos] = useState(0);
-    const [erros, setErros] = useState(0);
+    const [acertos, setAcertos] = useState(() => Number(sessionStorage.getItem('acertos')) || 0);
+    const [erros, setErros] = useState(() => Number(sessionStorage.getItem('erros')) || 0);
     const [tentativas, setTentativas] = useState(0);
     const [time, setTime] = useState("03:00");
     const { registrarInfos } = useContext(JogoContext);
     const [infoJogoCores, setInfoJogoCores] = useState({});
     const { usuario } = useContext(AuthContext);
     const [modalConfig, setModalConfig] = useState({ show: false });
+    const [loadingModal, setLoadingModal] = useState(false);  // <-- NOVO estado para modal loading
     const idJogoCores = 4;
     const idDependente = parseInt(sessionStorage.getItem("playerId"));
     const [jogoRegistrado, setJogoRegistrado] = useState(false);
@@ -91,10 +92,12 @@ export default function JogoCores() {
 
             if (droppedColors.length === 6 && !jogoRegistrado) {
                 setJogoRegistrado(true);
+                setLoadingModal(true);  // <-- mostrar modal loading
                 try {
                     const resultado = await registrarInfos(novoInfo, token);
                     console.log(resultado);
                     setStateTimerAtivo(false);
+                    setLoadingModal(false);  // <-- esconder modal loading
                     setModalConfig({
                         show: true,
                         title: "Missão concluída!",
@@ -109,6 +112,7 @@ export default function JogoCores() {
                     });
                 } catch (error) {
                     console.error("Erro ao registrar informações do jogo:", error);
+                    setLoadingModal(false);  // <-- esconder modal loading mesmo em erro
                     setModalConfig({
                         show: true,
                         title: "Erro",
@@ -162,9 +166,17 @@ export default function JogoCores() {
             const colorToDrop = colorsData.find(color => color.id === active.id);
             setDroppedColors(prev => [...prev, colorToDrop]);
             setColors(prevColors => prevColors.filter(color => color.id !== colorToDrop.id));
-            setAcertos((prev) => prev + 1);
+            setAcertos(prev => {
+                const novoValor = prev + 1;
+                sessionStorage.setItem('acertos', novoValor);
+                return novoValor;
+            });
         } else {
-            setErros((prev) => prev + 1);
+            setErros(prev => {
+                const novoValor = prev + 1;
+                sessionStorage.setItem('erros', novoValor);
+                return novoValor;
+            });
         }
     };
 
@@ -260,6 +272,19 @@ export default function JogoCores() {
                     </dialog>
                 </div>
             </div>
+
+            {/* Modal de loading - fica sempre visível enquanto loadingModal for true */}
+            {loadingModal && (
+                <CustomModal
+                    show={true}
+                    title="Enviando dados..."
+                    message="Aguarde um instante, estamos salvando seu progresso."
+                    icon="⏳"
+                    color="#2196f3"
+                    hideButtons={true} // se seu CustomModal suportar bloquear o fechamento
+                // onClose={() => {}} // opcional: não permitir fechar enquanto carregando
+                />
+            )}
 
             <CustomModal
                 show={modalConfig.show}
