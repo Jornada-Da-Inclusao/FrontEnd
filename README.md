@@ -37,6 +37,7 @@ Este projeto visa contribuir diretamente para os seguintes ODS:
 ## Integrantes
 - [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo) 
 - [Manuela Tenorio da Silva](https://github.com/ManuelaTenorio)
+- [Maria Clara Cavalcante](https://github.com/MariaClara)
 - [Marcos Vinícius de Oliveira](https://github.com/ViniMarkos283)
 - [Maria Clara Cavalcante](https://github.com/ClaraCavalcant-One)
 - [Pedro Henrique Santos Bernardo](https://github.com/Pedro-HSB)
