@@ -154,4 +154,4 @@ O sistema encontra-se hospedado através do Firebase Hosting, podendo ser acessa
 
 ## Considerações Finais
 
-Nós, colaboradores do projeto 'Jornada da Inclusão', agradecemos a contribuição e a orientação dos docentes das disciplinas que participaram desse projeto Integrador, e aos nossos colegas de turma e de outros ciclos que prestigiaram nossa apresentação e acessaram esse repositório para compreender melhor nosso projeto. 
+Nós, desenvolvedores do projeto 'Jornada da Inclusão', agradecemos a contribuição e a orientação dos docentes das disciplinas que participaram desse projeto Integrador, e aos nossos colegas de turma e de outros ciclos que prestigiaram nossa apresentação e acessaram esse repositório para compreender melhor nosso projeto. 
