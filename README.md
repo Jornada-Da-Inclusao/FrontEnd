@@ -91,6 +91,13 @@ Para usar no navegador, execute:
 npm run dev
 ```
 
+### Ativando o Back-end
+Inicialmente, o banco estará offline, para liga-lo:
+- abra esse link: https://backend-9qjw.onrender.com/
+- permaneça na pagina até que ele exija o login
+- caso peça login e senha, significa que o Backend está ativo.
+- Caso demore muito ou não peça nenhum login, provavelmente o Backend está expirado.
+
 ## Screenshots
 
 As seguintes imagens são telas de captura do projeto que foram tiradas durante sua fase de desenvolvimento.

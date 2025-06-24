@@ -95,6 +95,13 @@ To run it in the browser, run:
 npm run dev
 ```
 
+### Activating the Back-end
+Initially, the database will be offline. To activate it:
+- Open this link: https://backend-9qjw.onrender.com/
+- Stay on the page until it asks for a login
+- If it asks for a login and password, it means that the Back-end is active.
+- If it takes a long time or does not ask for a login, the Back-end has probably expired.
+
 ## Screenshots
 
 The following are screenshots of the project during its development phase.
