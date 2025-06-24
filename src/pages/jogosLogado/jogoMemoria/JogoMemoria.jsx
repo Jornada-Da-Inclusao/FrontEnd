@@ -49,6 +49,13 @@ const JogoMemoria = () => {
     const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 
     useEffect(() => {
+        sessionStorage.setItem('acertos', "0");
+        sessionStorage.setItem('erros', "0");
+        setAcertos(0);
+        setErros(0);
+    }, []);
+
+    useEffect(() => {
         if (usuario.token === "") {
             setModalConfig({
                 show: true,
@@ -207,7 +214,7 @@ const JogoMemoria = () => {
                     const novoValor = prev + 1;
                     sessionStorage.setItem('acertos', novoValor);
                     return novoValor;
-                }); 
+                });
             } else {
                 setErros(prev => {
                     const novoValor = prev + 1;
@@ -276,22 +283,21 @@ const JogoMemoria = () => {
                 color={modalConfig.color}
                 doneButton={modalConfig.doneButton}
             />
+
+            {/* Modal de loading */}
+            {loadingModal && (
+                <CustomModal
+                    show={true}
+                    title="Enviando dados..."
+                    message="Aguarde um instante, estamos salvando seu progresso."
+                    icon="⏳"
+                    color="#2196f3"
+                    doneButton={null}       // Oculta botões
+                    onClose={() => { }}     // Impede fechamento manual
+                />
+            )}
         </>
     );
-    {
-        loadingModal && (
-            <CustomModal
-                show={true}
-                title="Enviando dados..."
-                message="Aguarde um instante, estamos salvando seu progresso."
-                icon="⏳"
-                color="#2196f3"
-                hideButtons={true}
-                backdropClickDisabled={true}
-                loading={true}
-            />
-        )
-    }
 };
 
 export default JogoMemoria; // Exporta o componente para ser utilizado em outras partes do aplicativo.

@@ -1,7 +1,9 @@
+@import url('../../assets/styles/color_pallete.css');
+
 .navbar{
     width: max-content;
-    margin: 20px;
-    background-color: lightblue;
+    margin: 15px;
+    background-color: #a7d6dc;
     flex-direction: column;
     border-radius: 18px;
     border: 5px solid rgba(255, 255, 255, 0.219);
@@ -29,7 +31,7 @@
 
 .navbar ul li button{
     background-color: transparent;
-    border: 2px solid lightblue;
+    border: 2px solid #a7d6dc;
     border-radius: 12px;
     padding: 10px;
     width: max-content;
@@ -46,9 +48,13 @@
     margin-right: 10px;
 }
 
-.navbar ul li:last-child:hover svg{
+.navbar ul li:nth-child(2):hover svg{
     transform: rotate(360deg);
     transition: 0.5s;
+}
+
+.navbar ul li:last-child span{
+    padding: 0 5px;
 }
 
 .modalOverlay {
@@ -72,7 +78,7 @@
 .modal button{
     color: white;
     padding: 10px;
-    background-color: lightblue;
+    background-color: var(--red);
     text-align: center;
     width: 100%;
     border: 2px solid rgba(255, 255, 255, 0.404);
@@ -81,7 +87,7 @@
 
 .modal h3{
     font-size: larger;
-    border-bottom: 2px solid lightblue;
+    border-bottom: 2px solid var(--red);
     width: 100%;
     font-weight: bold;
 }
@@ -98,17 +104,17 @@
 }
 
 .modalOptions li button{
-    background-color: lightblue;
+    background-color: var(--red);
     padding: 10px;
     width: 100%;
     border-radius: 12px;
-    border: 2px solid lightblue;
+    border: 2px solid var(--red);
     text-align: left;
     transition: 0.5s;
 }
 
 .modalOptions li button:hover{
-    border-color: lightslategray;
+    padding-left: 15%;
     transition: 0.5s;
 }
 
@@ -118,8 +124,8 @@
 
 .ativo{
     background-color: white !important;
-    border: 2px solid lightblue !important;
-    color: lightblue !important;
+    border: 2px solid var(--red) !important;
+    color: var(--red) !important;
     text-align: center !important;
 }
 
@@ -137,6 +143,7 @@
 
 @media (max-width: 768px) {
 .navbar{
+    display: none;
     width: 67vw;
     margin: 30px 0 0 10px;
     justify-self: flex-start;

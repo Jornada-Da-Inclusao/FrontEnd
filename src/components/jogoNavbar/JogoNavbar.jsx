@@ -36,10 +36,6 @@ const JogoNavbar = () => {
     const isActive = (path) => location.pathname === path;
 
     useEffect(() => {
-        // Zera os valores ao iniciar
-        sessionStorage.setItem("acertos", "0");
-        sessionStorage.setItem("erros", "0");
-
         const playerData = sessionStorage.getItem("player");
         try {
             const player = JSON.parse(playerData);
@@ -82,6 +78,29 @@ const JogoNavbar = () => {
                         </button>
                     </li>
 
+                    <li>
+                        <button onClick={reload}>
+                            <FontAwesomeIcon icon={faRotateRight} /> <span>Reiniciar</span>
+                        </button>
+                    </li>
+
+
+                    <li>
+                        <button onClick={() => setModalAberto(true)}>
+                            <FontAwesomeIcon icon={faGamepad} /> <span>Mudar Jogo</span>
+                        </button>
+                    </li>
+                    
+                    <li>
+                        <button
+                            onClick={() => navigate('/selecionar-jogador')}
+                            disabled={!isLogado}
+                            style={!isLogado ? { opacity: 0.5, cursor: "not-allowed" } : {}}
+                        >
+                            <FontAwesomeIcon icon={faChildren} /> <span>Mudar Jogador</span>
+                        </button>
+                    </li>
+
                     <li className={style.dependenteInfo}>
                         {foto ? (
                             <img src={foto} alt="Dependente" className={style.avatar} />
@@ -104,27 +123,6 @@ const JogoNavbar = () => {
                         </span>
                     </li>
 
-                    <li>
-                        <button
-                            onClick={() => navigate('/selecionar-jogador')}
-                            disabled={!isLogado}
-                            style={!isLogado ? { opacity: 0.5, cursor: "not-allowed" } : {}}
-                        >
-                            <FontAwesomeIcon icon={faChildren} /> <span>Mudar Jogador</span>
-                        </button>
-                    </li>
-
-                    <li>
-                        <button onClick={() => setModalAberto(true)}>
-                            <FontAwesomeIcon icon={faGamepad} /> <span>Mudar Jogo</span>
-                        </button>
-                    </li>
-
-                    <li>
-                        <button onClick={reload}>
-                            <FontAwesomeIcon icon={faRotateRight} /> <span>Reiniciar</span>
-                        </button>
-                    </li>
                 </ul>
             </div>
 

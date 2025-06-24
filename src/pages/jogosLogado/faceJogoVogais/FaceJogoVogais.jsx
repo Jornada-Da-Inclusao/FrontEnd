@@ -46,6 +46,13 @@ function FaceJogoVogais() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        sessionStorage.setItem('acertos', "0");
+        sessionStorage.setItem('erros', "0");
+        setAcertos(0);
+        setErros(0);
+    }, []);    
+
+    useEffect(() => {
         if (usuario.token === "") {
             setModalConfig({
                 show: true,

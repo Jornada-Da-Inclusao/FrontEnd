@@ -45,6 +45,13 @@ export default function JogoCores() {
     const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
 
     useEffect(() => {
+        sessionStorage.setItem('acertos', "0");
+        sessionStorage.setItem('erros', "0");
+        setAcertos(0);
+        setErros(0);
+    }, []);    
+
+    useEffect(() => {
         if (usuario.token === "") {
             setModalConfig({
                 show: true,
