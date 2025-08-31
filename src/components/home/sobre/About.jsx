@@ -2,7 +2,7 @@ import styles from './about.module.css';
 import card1 from '../../../assets/images/card1.jpeg';
 import card2 from '../../../assets/images/card2.jpeg';
 import card3 from '../../../assets/images/card3.jpeg';
-import card4 from '../../../assets/images/little_prince.png';
+import card4 from '../../../assets/images/littlePrince2.png';
 
 // TODO: Generate cards programatically
 const About = () => {
