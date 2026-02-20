@@ -34,6 +34,14 @@ Este projeto visa contribuir diretamente para os seguintes ODS:
 
 - **Objetivo 4**: Assegurar a educação inclusiva e equitativa e de qualidade, e promover oportunidades de aprendizagem ao longo da vida para todas e todos.
 
+## Repositórios adicionais
+
+Segue abaixo os links das outras partes do projeto, sendo elas o Mobile feito em Java e o back-end utilizado em todo o projeto:
+
+[Mobile](https://github.com/jornadadainclusao/jornadadainclusao-mobile)
+
+[Back-End principal](https://github.com/Jornada-Da-Inclusao/BackEnd)
+
 ## Integrantes
 - [Luciana Guedes de Araújo](https://github.com/Luciana-Guedes-de-Araujo) 
 - [Manuela Tenorio da Silva](https://github.com/ManuelaTenorio)
