@@ -1,107 +1,119 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Usuario from '../../models/Usuario.js'
-import { cadastrarUsuario } from '../../services/Service.jsx'
-import styles from './cadastro.module.css'
-import React from 'react'
-import { CustomModal } from '../../components/Modal-custom-alert/CustomModal.jsx' // ajuste o caminho conforme a estrutura do seu projeto
-import { RotatingLines } from 'react-loader-spinner'
-import logo from '../../assets/images/LOGO.png'; // ajuste o caminho conforme seu projeto
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./cadastro.module.css";
+import React from "react";
+import { CustomModal } from "../../components/Modal-custom-alert/CustomModal.jsx";
+import { RotatingLines } from "react-loader-spinner";
+import logo from "../../assets/images/LOGO.png";
+import { UsuarioService } from "@/services/usuario.service.js";
 
 function Cadastro() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [confirmaSenha, setConfirmaSenha] = useState("")
-  const [usuario, setUsuario] = useState(Usuario)
-  const [loading, setLoading] = useState(false)
+  const [usuario, setUsuario] = useState({
+    nome: "",
+    usuario: "",
+    senha: "",
+  });
 
-  // Estados dos modais
-  const [modalSucesso, setModalSucesso] = useState(false)
-  const [modalErro, setModalErro] = useState(false)
-  const [modalInvalido, setModalInvalido] = useState(false)
+  const [confirmaSenha, setConfirmaSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function retornar() {
-    navigate('/login')
-  }
+  const [modalSucesso, setModalSucesso] = useState(false);
+  const [modalErro, setModalErro] = useState(false);
+  const [modalInvalido, setModalInvalido] = useState(false);
 
   function atualizarEstado(e) {
-    setUsuario({
-      ...usuario,
-      [e.target.name]: e.target.value
-    })
-  }
+    const { name, value } = e.target;
 
-  function handleConfirmarSenha(e) {
-    setConfirmaSenha(e.target.value)
+    setUsuario((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
 
   async function cadastrarNovoUsuario(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (confirmaSenha === usuario.senha && usuario.senha.length >= 8) {
-      try {
-        setLoading(true)
-        await cadastrarUsuario(`/usuarios/cadastrar`, usuario, setUsuario)
-        setModalSucesso(true)
-      } catch (error) {
-        setModalErro(true)
-      } finally {
-        setLoading(false)
-      }
-    } else {
-      setModalInvalido(true)
-      setUsuario({ ...usuario, senha: '' })
-      setConfirmaSenha('')
+    const senhaValida =
+      usuario.senha.length >= 8 && usuario.senha === confirmaSenha;
+
+    if (!senhaValida) {
+      setModalInvalido(true);
+      setUsuario((prev) => ({ ...prev, senha: "" }));
+      setConfirmaSenha("");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await UsuarioService.cadastrar(usuario);
+
+      setModalSucesso(true);
+
+      setUsuario({
+        nome: "",
+        usuario: "",
+        senha: "",
+      });
+      setConfirmaSenha("");
+    } catch (error) {
+      console.error("Erro ao cadastrar usuário:", error);
+      setModalErro(true);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <>
-      {/* FORMULÁRIO */}
       <div className={styles.containerGeral}>
         <div className={styles.imgContainer}></div>
+
         <div className={styles.formArea}>
           <img src={logo} alt="Logo Integra Kids" className={styles.logo} />
+
           <p className={styles.boasVindas}>Bem-vindo!</p>
           <p className={styles.instrucao}>Crie sua conta para continuar.</p>
+
           <form onSubmit={cadastrarNovoUsuario} className={styles.formCad}>
-            <label htmlFor="parent-name">Nome do Pai/Responsável</label>
+            <label>Nome do Pai/Responsável</label>
             <input
               type="text"
               name="nome"
-              id="parent-name"
-              placeholder="Digite o nome do responsável"
               value={usuario.nome}
               onChange={atualizarEstado}
             />
-            <label htmlFor="parent-email">E-mail</label>
+
+            <label>E-mail</label>
             <input
               type="email"
               name="usuario"
-              id="parent-email"
-              placeholder="Digite o e-mail"
               value={usuario.usuario}
               onChange={atualizarEstado}
             />
-            <label htmlFor="parent-password">Senha</label>
+
+            <label>Senha</label>
             <input
               type="password"
-              id="parent-password"
               name="senha"
-              placeholder="Digite a senha"
               value={usuario.senha}
               onChange={atualizarEstado}
             />
-            <label htmlFor="parent-password-confirmation">Confirmar Senha</label>
+
+            <label>Confirmar Senha</label>
             <input
               type="password"
-              id="parent-password-confirmation"
-              placeholder="Digite novamente a senha"
               value={confirmaSenha}
-              onChange={handleConfirmarSenha}
+              onChange={(e) => setConfirmaSenha(e.target.value)}
             />
-            <button type="submit" className={styles.botaoLogin} disabled={loading}>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={styles.botaoLogin}
+            >
               {loading ? (
                 <RotatingLines
                   strokeColor="white"
@@ -114,29 +126,31 @@ function Cadastro() {
                 "Cadastrar"
               )}
             </button>
+
             <p className={styles.cadlinks}>
-               <a href="/login">Já tem conta? Faça login</a>
+              <a href="/login">Já tem conta? Faça login</a>
             </p>
-            <p className={styles.cadlinks}><a href="/">Voltar para Home</a></p>
+
+            <p className={styles.cadlinks}>
+              <a href="/">Voltar para Home</a>
+            </p>
           </form>
         </div>
       </div>
 
-      {/* MODAL DE SUCESSO */}
       <CustomModal
         show={modalSucesso}
         onClose={() => {
-          setModalSucesso(false)
-          navigate("/login")
+          setModalSucesso(false);
+          navigate("/login");
         }}
         title="Sucesso!"
         message="Usuário cadastrado com sucesso!"
         icon="✔️"
         color="#4caf50"
-        doneButton={{ label: "OK", onClick: () => navigate("/") }}
+        doneButton={{ label: "OK", onClick: () => navigate("/login") }}
       />
 
-      {/* MODAL DE ERRO */}
       <CustomModal
         show={modalErro}
         onClose={() => setModalErro(false)}
@@ -147,18 +161,17 @@ function Cadastro() {
         doneButton={{ label: "Fechar" }}
       />
 
-      {/* MODAL DE DADOS INVÁLIDOS */}
       <CustomModal
         show={modalInvalido}
         onClose={() => setModalInvalido(false)}
         title="Dados Inválidos"
-        message="Verifique os dados informados. A senha precisa ter ao menos 8 caracteres e coincidir com a confirmação."
+        message="A senha precisa ter ao menos 8 caracteres e coincidir com a confirmação."
         icon="⚠️"
         color="#ff9800"
         doneButton={{ label: "Entendi" }}
       />
     </>
-  )
+  );
 }
 
-export default Cadastro
+export default Cadastro;

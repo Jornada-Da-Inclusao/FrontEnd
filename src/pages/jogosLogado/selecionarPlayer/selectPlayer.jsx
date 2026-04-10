@@ -1,83 +1,88 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PerfilCard from '../../../components/selecionarPlayer/PerfilCard';
-import { escolherDependenteComoPlayer, fetchDependentes } from '../../../services/dependenteService';
-import DependenteModals from '../../../components/Modal-custom-alert/DependenteModal';
-import style from './selectPlayer.module.css';
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import PerfilCard from "../../../components/selecionarPlayer/PerfilCard";
+import DependenteModals from "../../../components/Modal-custom-alert/DependenteModal";
+
+import { DependenteService } from "../../../services/dependente.service";
+import { playerStorage } from "../../../helper/playerStorage";
+
+import style from "./selectPlayer.module.css";
 
 const SelectPlayer = () => {
   const [dependentes, setDependentes] = useState([]);
   const [showAddPerfilModal, setShowAddPerfilModal] = useState(false);
   const [perfilSelecionado, setPerfilSelecionado] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const carregarDependentes = async () => {
+    const carregar = async () => {
       try {
-        const resultado = await fetchDependentes();
-        setDependentes(resultado);
+        // ⚠️ ideal: pegar usuário logado de auth context
+        const usuarioId = sessionStorage.getItem("userId");
 
-        // Recupera jogador salvo no sessionStorage como objeto
-        const jogadorSalvo = JSON.parse(sessionStorage.getItem('player'));
-        if (jogadorSalvo?.id) {
-          setPerfilSelecionado(jogadorSalvo.id);
+        const data = await DependenteService.buscarPorUsuario(usuarioId);
+        setDependentes(data || []);
+
+        const player = playerStorage.get();
+        if (player?.id) {
+          setPerfilSelecionado(player.id);
         }
-      } catch (error) {
-        console.error('Erro ao carregar dependentes:', error);
+      } catch (err) {
+        console.error("Erro ao carregar dependentes:", err);
       }
     };
 
-    carregarDependentes();
+    carregar();
   }, []);
 
-  const selecionarPerfil = (dependente) => {
-    escolherDependenteComoPlayer(dependente);
+  const selecionarPerfil = useCallback(
+    (dependente) => {
+      playerStorage.set(dependente);
+      setPerfilSelecionado(dependente.id);
+      navigate(-1);
+    },
+    [navigate],
+  );
 
-    const jogadorSelecionado = {
-      id: dependente.id,
-      nome: dependente.nome,
-      foto: dependente.foto
-    };
-    sessionStorage.setItem('player', JSON.stringify(jogadorSelecionado));
-    sessionStorage.setItem('playerId', dependente.id.toString());
-    setPerfilSelecionado(dependente.id);
-    navigate(-1);
-  };
-
-  const adicionarPerfil = () => {
+  const abrirModal = useCallback(() => {
     setShowAddPerfilModal(true);
-  };
+  }, []);
 
-  const confirmarAdicionarPerfil = () => {
-    navigate('/perfil/cadastrar-dependente');
-  };
+  const confirmarAdd = useCallback(() => {
+    navigate("/perfil/cadastrar-dependente");
+  }, [navigate]);
 
-  const cancelarAdicionarPerfil = () => {
+  const cancelarAdd = useCallback(() => {
     setShowAddPerfilModal(false);
-  };
+  }, []);
 
   return (
     <div className={style.body}>
       <div className={style.container}>
         <h1>🎮 Quem irá jogar?</h1>
+
         <div className={style.perfis}>
-          {dependentes.map((dep, index) => (
+          {dependentes.map((dep) => (
             <PerfilCard
-              key={index}
+              key={dep.id}
               nome={dep.nome}
               imagem={dep.foto}
               onClick={() => selecionarPerfil(dep)}
               ativo={dep.id === perfilSelecionado}
             />
           ))}
-          <PerfilCard nome="Adicionar" onClick={adicionarPerfil} adicionar />
+
+          <PerfilCard nome="Adicionar" onClick={abrirModal} adicionar />
         </div>
       </div>
 
       <DependenteModals
         showAddPerfilModal={showAddPerfilModal}
         setShowAddPerfilModal={setShowAddPerfilModal}
-        onConfirmAddPerfil={confirmarAdicionarPerfil}
+        onConfirmAddPerfil={confirmarAdd}
+        onCancel={cancelarAdd}
       />
     </div>
   );

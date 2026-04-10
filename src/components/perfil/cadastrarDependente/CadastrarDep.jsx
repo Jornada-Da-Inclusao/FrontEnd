@@ -1,62 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "../cadastrarDependente/cadastrarDep.module.css";
-import { cadastrarDependente } from "../../../services/dependenteService";
-import { calcularIdade } from '../calcularIdade';
-import DependenteModals from '../../../components/Modal-custom-alert/DependenteModal';
+import { DependenteService } from "../../../services/dependente.service";
+import { calcularIdade } from "../calcularIdade";
+import DependenteModals from "../../../components/Modal-custom-alert/DependenteModal";
 import { icons } from "../icons";
 
-const CadastroForm = () => {
-  const [nome, setNome] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
-  const [sexo, setSexo] = useState("");
-  const [avatarSelecionado, setAvatarSelecionado] = useState("");
+// ---------------- helpers ----------------
+const getUsuarioId = () => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  return usuario?.id || null;
+};
 
-  // Estados para modais
+const getDateLimits = () => {
+  const hoje = new Date();
+  const anoAtual = hoje.getFullYear();
+
+  return {
+    min: new Date(anoAtual - 10, hoje.getMonth(), hoje.getDate()),
+    max: new Date(anoAtual - 3, hoje.getMonth(), hoje.getDate()),
+  };
+};
+
+const formatarData = (data) => data.toISOString().split("T")[0];
+
+const initialForm = {
+  nome: "",
+  dataNascimento: "",
+  sexo: "",
+  avatar: "",
+};
+
+// ---------------- component ----------------
+const CadastroForm = () => {
+  const [form, setForm] = useState(initialForm);
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  const hoje = new Date();
-  const anoAtual = hoje.getFullYear();
-  const dataMinima = new Date(anoAtual - 10, hoje.getMonth(), hoje.getDate());
-  const dataMaxima = new Date(anoAtual - 3, hoje.getMonth(), hoje.getDate());
+  const { min, max } = useMemo(() => getDateLimits(), []);
 
-  const formatarData = (data) => data.toISOString().split("T")[0];
+  const handleChange = (field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const resetForm = () => setForm(initialForm);
+
+  const getPayload = (usuarioId) => ({
+    nome: form.nome,
+    idade: calcularIdade(form.dataNascimento),
+    sexo: form.sexo,
+    foto: form.avatar,
+    usuario_id_fk: {
+      id: usuarioId,
+    },
+  });
+
+  const validate = () => {
+    const usuarioId = getUsuarioId();
+
+    return (
+      form.nome && form.dataNascimento && form.sexo && form.avatar && usuarioId
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!avatarSelecionado || !nome || !dataNascimento || !sexo) {
+    if (!validate()) {
       setShowErrorModal(true);
       return;
     }
 
-    const idade = calcularIdade(dataNascimento);
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    const usuarioId = usuario?.id;
-
-    if (!usuarioId) {
-      setShowErrorModal(true);
-      return;
-    }
-
-    const dependente = {
-      nome,
-      idade,
-      sexo,
-      foto: avatarSelecionado,
-      usuario_id_fk: {
-        id: usuarioId
-      }
-    };
+    const usuarioId = getUsuarioId();
 
     try {
-      await cadastrarDependente(dependente);
+      await DependenteService.cadastrar(getPayload(usuarioId));
+
       setShowConfirmModal(true);
-      // Limpar formulário após sucesso
-      setNome("");
-      setDataNascimento("");
-      setSexo("");
-      setAvatarSelecionado("");
+      resetForm();
     } catch (error) {
       console.error(error);
       setShowErrorModal(true);
@@ -69,12 +93,17 @@ const CadastroForm = () => {
         <h2>Cadastrar crianças</h2>
 
         <h3>Escolha um avatar:</h3>
+
         <div className={styles.figures}>
           {icons.map((icon, index) => (
-            <button key={index} type="button" onClick={() => setAvatarSelecionado(icon)}>
+            <button
+              key={index}
+              type="button"
+              onClick={() => handleChange("avatar", icon)}
+            >
               <img
                 src={icon}
-                className={avatarSelecionado === icon ? styles.avatarSelecionado : ""}
+                className={form.avatar === icon ? styles.avatarSelecionado : ""}
                 alt={`avatar ${index}`}
               />
             </button>
@@ -82,29 +111,30 @@ const CadastroForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="nome">Nome da Criança:</label>
+          <label>Nome da Criança:</label>
           <input
             type="text"
-            name="nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          
+            value={form.nome}
+            onChange={(e) => handleChange("nome", e.target.value)}
           />
 
-          <label htmlFor="dataNascimento">Data de nascimento (intervalo entre 3 anos a 10 anos):</label>
+          <label>Data de nascimento (3 a 10 anos):</label>
           <input
             type="date"
-            name="dataNascimento"
-            min={formatarData(dataMinima)}
-            max={formatarData(dataMaxima)}
-            value={dataNascimento}
-            onChange={(e) => setDataNascimento(e.target.value)}
-          
+            min={formatarData(min)}
+            max={formatarData(max)}
+            value={form.dataNascimento}
+            onChange={(e) => handleChange("dataNascimento", e.target.value)}
           />
 
-          <label htmlFor="sexo">Sexo:</label>
-          <select value={sexo} onChange={(e) => setSexo(e.target.value)}>
-            <option value="" disabled>--- escolha ---</option>
+          <label>Sexo:</label>
+          <select
+            value={form.sexo}
+            onChange={(e) => handleChange("sexo", e.target.value)}
+          >
+            <option value="" disabled>
+              --- escolha ---
+            </option>
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
           </select>

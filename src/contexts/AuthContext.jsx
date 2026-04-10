@@ -1,70 +1,82 @@
 import React, { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";  
-import { login } from "../services/UsuarioService";
-import { CustomModal } from "../components/Modal-custom-alert/CustomModal"; 
-import UsuarioLogin from "../models/UsuarioLogin";
+import { useNavigate } from "react-router-dom";
+import { UsuarioService } from "../services/usuario.service";
+import { CustomModal } from "../components/Modal-custom-alert/CustomModal";
 
 export const AuthContext = createContext({});
 
+const STORAGE_KEYS = {
+  token: "token",
+  usuario: "usuario",
+};
+
+const initialUserState = {
+  id: 0,
+  nome: "",
+  email: "",
+  usuario: "",
+  foto: "",
+  token: "",
+};
+
 export function AuthProvider({ children }) {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
-  const [usuario, setUsuario] = useState({
-    id: 0,
-    nome: "",
-    email: "",
-    usuario: "",
-    foto: "",
-    senha: "",
-    token: ""
-  });
-
+  const [usuario, setUsuario] = useState(initialUserState);
   const [isLoading, setIsLoading] = useState(false);
   const [showExpireModal, setShowExpireModal] = useState(false);
 
+  // 🔐 Carrega usuário do storage
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const dadosUsuario = localStorage.getItem("usuario");
+    const token = localStorage.getItem(STORAGE_KEYS.token);
+    const storedUser = localStorage.getItem(STORAGE_KEYS.usuario);
 
-    if (token && dadosUsuario) {
-      const usuarioParse = JSON.parse(dadosUsuario);
+    if (!token || !storedUser) return;
+
+    try {
+      const parsedUser = JSON.parse(storedUser);
+
       setUsuario({
-        ...usuarioParse,
-        token: token
+        ...parsedUser,
+        token,
       });
+    } catch (err) {
+      handleLogout();
     }
   }, []);
 
+  // ⏰ Expiração de sessão (30 min)
   useEffect(() => {
-    if (usuario.token) {
-      const timer = setTimeout(() => {
-        setShowExpireModal(true);
-      }, 1800000);
+    if (!usuario.token) return;
 
-      return () => clearTimeout(timer);
-    }
+    const timer = setTimeout(() => {
+      setShowExpireModal(true);
+    }, 1800000);
+
+    return () => clearTimeout(timer);
   }, [usuario.token]);
 
-  async function handleLogin(usuarioLogin) {
+  // 🔑 LOGIN
+  async function handleLogin(credentials) {
     setIsLoading(true);
+
     try {
-      await login("/usuarios/logar", usuarioLogin, (resposta) => {
-        setUsuario(resposta);
+      const resposta = await UsuarioService.login(credentials);
 
-        localStorage.clear();
-        sessionStorage.clear();
+      const userData = {
+        id: resposta.id,
+        nome: resposta.nome,
+        email: resposta.usuario,
+        foto: resposta.foto,
+      };
 
-        localStorage.setItem("token", resposta.token);
-        localStorage.setItem(
-          "usuario",
-          JSON.stringify({
-            id: resposta.id,
-            nome: resposta.nome,
-            email: resposta.usuario,
-            foto: resposta.foto,
-          })
-        );
-      });
+      const token = resposta.token;
+
+      setUsuario({ ...userData, token });
+
+      saveAuthToStorage(token, userData);
+
+      navigate("/home");
     } catch (error) {
       throw new Error("Usuário ou senha inválidos");
     } finally {
@@ -72,23 +84,25 @@ export function AuthProvider({ children }) {
     }
   }
 
-  function handleLogout() {
-    setUsuario({
-      id: 0,
-      nome: "",
-      email: "",
-      usuario: "",
-      foto: "",
-      senha: "",
-      token: "",
-    });
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
-
-    navigate("/"); 
+  // 💾 Persistência centralizada
+  function saveAuthToStorage(token, userData) {
+    localStorage.setItem(STORAGE_KEYS.token, token);
+    localStorage.setItem(STORAGE_KEYS.usuario, JSON.stringify(userData));
   }
 
+  // 🚪 LOGOUT
+  function handleLogout() {
+    setUsuario(initialUserState);
+    clearAuthStorage();
+    navigate("/");
+  }
+
+  function clearAuthStorage() {
+    localStorage.removeItem(STORAGE_KEYS.token);
+    localStorage.removeItem(STORAGE_KEYS.usuario);
+  }
+
+  // ⏰ modal de expiração
   function handleCloseModal() {
     setShowExpireModal(false);
     handleLogout();
@@ -96,7 +110,13 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ usuario, handleLogin, handleLogout, isLoading }}
+      value={{
+        usuario,
+        handleLogin,
+        handleLogout,
+        isLoading,
+        isAuthenticated: !!usuario.token,
+      }}
     >
       {children}
 

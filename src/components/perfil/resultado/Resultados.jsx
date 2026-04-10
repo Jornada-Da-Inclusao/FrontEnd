@@ -7,8 +7,8 @@ import BarSizeChart from "../resultado/graficos/GraficoBarSize";
 import GaugeChart from "../resultado/graficos/GraficoMedidor";
 import RadarChart from "../resultado/graficos/GraficoRadar";
 
-import { fetchDependentes, downloadExcelInfoJogos, downloadPdfInfoJogos } from "../../../services/dependenteService";
-import { getJogosPorDependente } from "../../../services/jogosService";
+import { DependenteService } from "../../../services/dependente.service";
+import { JogoService } from "../../../services/jogo.service";
 
 import { JogosModal } from "../../Modal-custom-alert/JogosModal";
 
@@ -16,31 +16,41 @@ const Resultados = () => {
   const [dependentes, setDependentes] = useState([]);
   const [dependenteSelecionado, setDependenteSelecionado] = useState("");
   const [tipoGrafico, setTipoGrafico] = useState("bar");
+
   const [historicoJogos, setHistoricoJogos] = useState([]);
   const [jogoSelecionado, setJogoSelecionado] = useState(null);
+
   const [mostrarUltimoJogo, setMostrarUltimoJogo] = useState(true);
   const [jogosPorTipo, setJogosPorTipo] = useState([]);
-  const [jogadaSelecionada, setJogadaSelecionada] = useState(null);
-  const [isLoadingPdf, setIsLoadingPdf] = useState(false);
-  const [isLoadingExcel, setIsLoadingExecel] = useState(false);
 
-  // Modais
+  const [jogadaSelecionada, setJogadaSelecionada] = useState(null);
+
+  const [isLoadingPdf, setIsLoadingPdf] = useState(false);
+  const [isLoadingExcel, setIsLoadingExcel] = useState(false);
+
   const [modalConfirmDelete, setModalConfirmDelete] = useState(false);
   const [modalSuccess, setModalSuccess] = useState(false);
   const [modalError, setModalError] = useState(false);
 
+  // =========================
+  // LOAD DEPENDENTES
+  // =========================
   useEffect(() => {
-    const carregarDependentes = async () => {
+    const load = async () => {
       try {
-        const dependentesAPI = await fetchDependentes();
-        setDependentes(dependentesAPI);
-      } catch (error) {
-        console.error("Erro ao buscar dependentes:", error);
+        const data = (await DependenteService.buscarTodos?.()) || [];
+        setDependentes(data);
+      } catch (err) {
+        console.error("Erro ao buscar dependentes:", err);
       }
     };
-    carregarDependentes();
+
+    load();
   }, []);
 
+  // =========================
+  // LOAD JOGOS
+  // =========================
   useEffect(() => {
     if (!dependenteSelecionado) {
       setHistoricoJogos([]);
@@ -51,12 +61,16 @@ const Resultados = () => {
 
     sessionStorage.setItem("idDependente", dependenteSelecionado);
 
-    getJogosPorDependente(dependenteSelecionado).then((jogos) => {
-      setHistoricoJogos(jogos);
+    const loadJogos = async () => {
+      try {
+        const jogos = await JogoService.getPorDependente(dependenteSelecionado);
 
-      if (jogos.length > 0) {
+        setHistoricoJogos(jogos);
+
+        if (jogos.length === 0) return;
+
         const ordenados = [...jogos].sort(
-          (a, b) => new Date(b.createDate) - new Date(a.createDate)
+          (a, b) => new Date(b.createDate) - new Date(a.createDate),
         );
 
         if (mostrarUltimoJogo) {
@@ -78,119 +92,100 @@ const Resultados = () => {
               ultimosPorTipo.push(jogo);
             }
           }
+
           setJogosPorTipo(ultimosPorTipo);
           setJogoSelecionado(null);
         } else {
           setJogoSelecionado(ordenados[0]);
           setJogosPorTipo([]);
         }
+      } catch (err) {
+        console.error("Erro ao carregar jogos:", err);
       }
-    });
+    };
+
+    loadJogos();
   }, [dependenteSelecionado, mostrarUltimoJogo]);
 
+  // =========================
+  // HELPERS
+  // =========================
   const padronizarNomeJogo = (nomeOriginal) => {
     if (!nomeOriginal) return "Desconhecido";
     const nome = nomeOriginal.toLowerCase();
+
     if (nome.includes("mem")) return "Memória";
     if (nome.includes("num")) return "Números";
     if (nome.includes("let")) return "Letras";
     if (nome.includes("vog")) return "Vogais";
     if (nome.includes("cor")) return "Cores";
+
     return nomeOriginal;
   };
 
-  const renderGrafico = () => {
-    if (dependenteSelecionado === "" || (!jogoSelecionado && !mostrarUltimoJogo)) {
-      return <p>Selecione uma criança e um jogo para ver o desempenho.</p>;
-    }
-
-    const jogosParaMostrar = mostrarUltimoJogo
-      ? jogosPorTipo.map((jogo) => ({
-        acertos: jogo.acertos,
-        erros: jogo.erros,
-        tentativas: jogo.tentativas,
-        tempoTotal: jogo.tempoTotal > 0 ? jogo.tempoTotal : 1,
-        jogo: padronizarNomeJogo(jogo.infoJogos_id_fk?.nome),
-      }))
-      : [
-        {
-          acertos: jogoSelecionado.acertos,
-          erros: jogoSelecionado.erros,
-          tentativas: jogoSelecionado.tentativas,
-          tempoTotal: jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
-          jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome),
-        },
-      ];
-
-    switch (tipoGrafico) {
-      case "bar":
-        return <BarSizeChart dados={jogosParaMostrar} viewMode="individual" />;
-      case "gauge":
-        return <GaugeChart dados={jogosParaMostrar} viewMode="individual" />;
-      case "radar":
-        return <RadarChart dados={jogosParaMostrar} nome={obterNomeDependente()} />;
-      default:
-        return null;
-    }
-  };
-
   const obterNomeDependente = () => {
-    const dep = dependentes.find((d) => d.id === parseInt(dependenteSelecionado));
+    const dep = dependentes.find((d) => d.id === Number(dependenteSelecionado));
     return dep?.nome || "";
   };
 
   const formatarData = (data) => {
-    const dataFormatada = new Date(data);
-    if (isNaN(dataFormatada.getTime())) return null;
-    dataFormatada.setHours(dataFormatada.getHours() - 3);
-    return dataFormatada;
+    const d = new Date(data);
+    if (isNaN(d.getTime())) return null;
+    d.setHours(d.getHours() - 3);
+    return d;
   };
 
-  const selecionarJogo = (jogo) => {
-    setJogoSelecionado(jogo);
-    setMostrarUltimoJogo(false);
-  };
-
+  // =========================
+  // DOWNLOADS (SERVICE)
+  // =========================
   const downloadPdf = async () => {
-    const idDependente = sessionStorage.getItem("idDependente");
-    if (!idDependente) return;
+    const id = sessionStorage.getItem("idDependente");
+    if (!id) return;
 
     setIsLoadingPdf(true);
 
     try {
-      await downloadPdfInfoJogos(idDependente);
-    } catch (error) {
-      console.error("Erro ao gerar o PDF", error);
+      await DependenteService.downloadPdf(id);
+    } catch (err) {
+      console.error("Erro ao gerar PDF:", err);
     } finally {
-      setIsLoadingPdf(false); // Desativa o loading após a conclusão da operação
+      setIsLoadingPdf(false);
     }
   };
 
   const downloadExcel = async () => {
-    const idDependente = sessionStorage.getItem("idDependente");
-    if (!idDependente) return;
+    const id = sessionStorage.getItem("idDependente");
+    if (!id) return;
 
-    setIsLoadingExecel(true);
+    setIsLoadingExcel(true);
 
     try {
-      await downloadExcelInfoJogos(idDependente);
-    } catch (error) {
-      console.error("Erro ao gerar o EXCEL", error);
+      await DependenteService.downloadExcel(id);
+    } catch (err) {
+      console.error("Erro ao gerar Excel:", err);
     } finally {
-      setIsLoadingExecel(false); // Desativa o loading após a conclusão da operação
+      setIsLoadingExcel(false);
     }
   };
 
-  const buscarHistoricoJogos = async () => {
-    if (!dependenteSelecionado) return;
+  // =========================
+  // DELETE (SERVICE)
+  // =========================
+  const deleteJogo = async () => {
+    if (!jogadaSelecionada) return;
+
     try {
-      const jogos = await getJogosPorDependente(dependenteSelecionado);
+      await JogoService.deletar(jogadaSelecionada);
+
+      setModalConfirmDelete(false);
+      setModalSuccess(true);
+
+      const jogos = await JogoService.getPorDependente(dependenteSelecionado);
       setHistoricoJogos(jogos);
-      setJogoSelecionado(null);
-      setMostrarUltimoJogo(false);
-      setJogosPorTipo([]);
-    } catch (error) {
-      console.error("Erro ao buscar histórico após exclusão", error);
+    } catch (err) {
+      console.error("Erro ao excluir jogo:", err);
+      setModalConfirmDelete(false);
+      setModalError(true);
     }
   };
 
@@ -199,37 +194,65 @@ const Resultados = () => {
     setModalConfirmDelete(true);
   };
 
-  const deleteJogo = async () => {
-    const token = localStorage.getItem("token");
-    if (!token || !jogadaSelecionada) return;
+  const selecionarJogo = (jogo) => {
+    setJogoSelecionado(jogo);
+    setMostrarUltimoJogo(false);
+  };
 
-    try {
-      const response = await fetch(
-        `https://backend-9qjw.onrender.com/infoJogos/${jogadaSelecionada}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: token },
-        }
-      );
+  // =========================
+  // RENDER GRAFICO
+  // =========================
+  const renderGrafico = () => {
+    if (
+      dependenteSelecionado === "" ||
+      (!jogoSelecionado && !mostrarUltimoJogo)
+    ) {
+      return <p>Selecione uma criança e um jogo.</p>;
+    }
 
-      if (!response.ok) throw new Error("Erro ao excluir o jogo.");
+    const dados = mostrarUltimoJogo
+      ? jogosPorTipo.map((jogo) => ({
+          acertos: jogo.acertos,
+          erros: jogo.erros,
+          tentativas: jogo.tentativas,
+          tempoTotal: jogo.tempoTotal > 0 ? jogo.tempoTotal : 1,
+          jogo: padronizarNomeJogo(jogo.infoJogos_id_fk?.nome),
+        }))
+      : [
+          {
+            acertos: jogoSelecionado.acertos,
+            erros: jogoSelecionado.erros,
+            tentativas: jogoSelecionado.tentativas,
+            tempoTotal:
+              jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
+            jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome),
+          },
+        ];
 
-      setModalConfirmDelete(false);
-      setModalSuccess(true);
-      await buscarHistoricoJogos();
-    } catch (error) {
-      console.error("Erro ao excluir o jogo:", error);
-      setModalConfirmDelete(false);
-      setModalError(true);
+    switch (tipoGrafico) {
+      case "bar":
+        return <BarSizeChart dados={dados} viewMode="individual" />;
+      case "gauge":
+        return <GaugeChart dados={dados} viewMode="individual" />;
+      case "radar":
+        return <RadarChart dados={dados} nome={obterNomeDependente()} />;
+      default:
+        return null;
     }
   };
 
+  // =========================
+  // UI
+  // =========================
   return (
-    <div className={`${styles.container} ${dependenteSelecionado ? "" : styles.centralizado}`}>
+    <div
+      className={`${styles.container} ${
+        dependenteSelecionado ? "" : styles.centralizado
+      }`}
+    >
       <div className={styles.topSection}>
-        <div className={styles.tituPag}>
-          <h2>Resultados dos Jogos</h2>
-        </div>
+        <h2>Resultados dos Jogos</h2>
+
         <section className={styles.filter}>
           <div className={styles.selectGroup}>
             <label>Escolha a criança:</label>
@@ -237,99 +260,86 @@ const Resultados = () => {
               value={dependenteSelecionado}
               onChange={(e) => setDependenteSelecionado(e.target.value)}
             >
-              <option value="" disabled>
-                Selecione uma criança
-              </option>
-              {dependentes.map((dep) => (
-                <option key={dep.id} value={dep.id}>
-                  {dep.nome}
+              <option value="">Selecione</option>
+              {dependentes.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.nome}
                 </option>
               ))}
             </select>
           </div>
 
           <div className={styles.selectGroup}>
-            <label>Mudar visualização de dados:</label>
-            <select value={tipoGrafico} onChange={(e) => setTipoGrafico(e.target.value)}>
-              <option value="bar">Tentativas, Acertos e Erros</option>
+            <label>Visualização:</label>
+            <select
+              value={tipoGrafico}
+              onChange={(e) => setTipoGrafico(e.target.value)}
+            >
+              <option value="bar">Acertos/Erros</option>
               <option value="gauge">Tempo</option>
-              <option value="radar">Desempenho por capacidades</option>
+              <option value="radar">Habilidades</option>
             </select>
           </div>
         </section>
       </div>
 
       <div className={styles.bottomSection}>
-        <div className={styles.graphSection}>
         <FormControlLabel
-            control={
-              <Switch
-                checked={mostrarUltimoJogo}
-                onChange={() => setMostrarUltimoJogo(!mostrarUltimoJogo)}
-                color="primary"
-              />
-            }
-            label="Mostrar último resultado de todos os jogos"
-          />
-          {dependenteSelecionado && historicoJogos.length > 0 && (
-            <section className={styles.textContent}>{renderGrafico()}</section>
-          )}
-        </div>
+          control={
+            <Switch
+              checked={mostrarUltimoJogo}
+              onChange={() => setMostrarUltimoJogo((v) => !v)}
+            />
+          }
+          label="Mostrar último resultado por jogo"
+        />
+
+        {dependenteSelecionado && historicoJogos.length > 0 && (
+          <section className={styles.textContent}>{renderGrafico()}</section>
+        )}
 
         {dependenteSelecionado && (
           <div className={styles.historySection}>
             <div className={styles.headerTop}>
-              <h2>Histórico de partidas:</h2>
+              <h2>Histórico</h2>
+
               <div className={styles.buttons}>
-                <button className={styles.relatory} onClick={downloadPdf}>
-                  {isLoadingPdf ? (
-                    <RotatingLines strokeColor="red" strokeWidth="5" animationDuration="0.75" width="24" visible={true} />
-                  ) : (
-                    <span>Gerar PDF</span>
-                  )}
+                <button onClick={downloadPdf}>
+                  {isLoadingPdf ? "Gerando..." : "PDF"}
                 </button>
 
-                <button className={styles.relatory} onClick={downloadExcel}>
-                  {isLoadingExcel ? (
-                    <RotatingLines strokeColor="white" strokeWidth="5" animationDuration="0.75" width="24" visible={true} />
-                  ) : (
-                    <span>Gerar Planilha</span>
-                  )}
+                <button onClick={downloadExcel}>
+                  {isLoadingExcel ? "Gerando..." : "Excel"}
                 </button>
               </div>
             </div>
+
             <div className={styles.history}>
               {historicoJogos.length === 0 ? (
-                <p>Carregando histórico...</p>
+                <p>Carregando...</p>
               ) : (
                 historicoJogos
-                  .sort((a, b) => new Date(b.createDate) - new Date(a.createDate))
+                  .sort(
+                    (a, b) => new Date(b.createDate) - new Date(a.createDate),
+                  )
                   .map((jogo) => {
-                    const nomeJogo = jogo.infoJogos_id_fk?.nome || "";
                     const data = formatarData(jogo.createDate);
-
-                    const estaSelecionadoNoGrafico =
-                      mostrarUltimoJogo && jogosPorTipo.some((j) => j.id === jogo.id);
-                    const estaSelecionadoIndividualmente =
-                      !mostrarUltimoJogo && jogoSelecionado?.id === jogo.id;
 
                     return (
                       <button
                         key={jogo.id}
-                        className={`${styles.btnHistory} ${estaSelecionadoIndividualmente || estaSelecionadoNoGrafico
-                          ? styles.selected
-                          : ""
-                          }`}
+                        className={styles.btnHistory}
                         onClick={() => selecionarJogo(jogo)}
                       >
-                        {`${nomeJogo} - ${data ? data.toLocaleDateString() : "Data inválida"} ${data ? data.toLocaleTimeString() : ""}`}
+                        {jogo.infoJogos_id_fk?.nome} -{" "}
+                        {data?.toLocaleDateString()}{" "}
+                        {data?.toLocaleTimeString()}
                         <button
                           className={styles.btnExcluir}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleOpenDeleteModal(jogo.id);
                           }}
-                          title="Excluir jogo"
                         >
                           ❌
                         </button>
