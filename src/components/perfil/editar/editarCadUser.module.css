@@ -1,87 +1,112 @@
-@import url('../../../assets/styles/color_pallete.css');
+@import url("../../../assets/styles/color_pallete.css");
 
-h2,h3, input, label, select{
-    color: black;
-    background-color: transparent;
+h2,
+h3,
+input,
+label,
+select {
+  color: black;
+  background-color: transparent;
 }
 
-.container{
-align-items: center;
-justify-items: center;
+.container {
+  align-items: center;
+  justify-items: center;
 }
 
-.content{
-    background-color: white;
-    width: min-content;
-    padding: 20px;
-    border-radius: 18px;
+.content {
+  background-color: white;
+  width: min-content;
+  padding: 20px;
+  border-radius: 18px;
 }
 
-.content form{
-    gap: 10px;
-    align-items: baseline;
+.content form {
+  gap: 10px;
+  align-items: baseline;
 }
 
-.content form h2{
-    font-size: large;
-    font-weight: bolder;
-    width: 100%;
-    text-align: center;
-    border-bottom: 3px solid var(--red);
+.content form h2 {
+  font-size: large;
+  font-weight: bolder;
+  width: 100%;
+  text-align: center;
+  border-bottom: 3px solid var(--red);
 }
 
-.content form input{
-    padding: 5px;
-    margin-bottom: 10px;
-    width: 40vw;
-    border-radius: 12px;
-    border: 3px solid #ddd;
-    
+.content form input {
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 40vw;
+  border-radius: 12px;
+  border: 3px solid #ddd;
 }
 
-.content form button{
-    background-color: var(--red);
-    border: none;
-    padding: 10px;
-    width: 100%;
-    color: var(--white);
-    border-radius: 12px;
-    border: 2px solid transparent;
-    transition: 0.2s;
+.content form button {
+  background-color: var(--red);
+  border: none;
+  padding: 10px;
+  width: 100%;
+  color: var(--white);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: 0.2s;
 }
 
-.content form button:hover{
-    background-color: var(--white);
-    border: 2px solid var(--red);
-    color: var(--red);
-    transition: 0.2s;
+.content form button:hover {
+  background-color: var(--white);
+  border: 2px solid var(--red);
+  color: var(--red);
+  transition: 0.2s;
 }
 
-.content button{
-    width: 100%;
-    color: var(--red);
-    margin-top: 10px;
-    background-color: transparent;
-    border: none;
+.content button {
+  width: 100%;
+  color: var(--red);
+  margin-top: 10px;
+  background-color: transparent;
+  border: none;
 }
 
-.content button:hover{
-    text-decoration: underline;
+.content button:hover {
+  text-decoration: underline;
+}
+
+.passwordHint {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+
+  transition: all 5s ease;
+}
+
+.passwordHint li {
+  margin-left: 14px;
+  margin-bottom: 4px;
+}
+
+/* 👇 classe para esconder */
+.passwordHintInvisivel {
+  display: none;
 }
 
 @media (max-width: 768px) {
-    .content{
-        width: 80vw;
-        display: flex;
-        flex-direction: column;
-    }  
+  .content {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+  }
 
-    .content form h2{
-        font-size: larger;
-    }
+  .content form h2 {
+    font-size: larger;
+  }
 
-    .content form input{
-        width: 100%;
-        margin-bottom: 20px;
-    }
+  .content form input {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }

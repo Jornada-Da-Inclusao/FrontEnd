@@ -1,36 +1,43 @@
+import { downloadFile } from "@/helper/downloadFile";
 import request from "./api.service";
 
 export const DependenteService = {
   cadastrar: (dependente) =>
     request({
       method: "POST",
-      url: "/dependente",
+      url: "/dependentes",
       data: dependente,
     }),
 
   buscarPorUsuario: (usuarioId) =>
     request({
       method: "GET",
-      url: `/dependente/getDependenteByIdUsuario/${usuarioId}`,
+      url: `/dependentes/usuario/${usuarioId}`,
+    }),
+
+  getInfoJogosByDependente: (usuarioId) =>
+    request({
+      method: "GET",
+      url: `/dependentes/infoJogos/${usuarioId}`,
     }),
 
   atualizar: (id, dados) =>
     request({
       method: "PATCH",
-      url: `/dependente/${id}`,
+      url: `/dependentes/${id}`,
       data: dados,
     }),
 
   deletar: (id) =>
     request({
       method: "DELETE",
-      url: `/dependente/${id}`,
+      url: `/dependentes/${id}`,
     }),
 
   downloadPdf: async (dependenteId) => {
     const blob = await request({
       method: "GET",
-      url: `/dependente/exportPdf/${dependenteId}`,
+      url: `/dependentes/${dependenteId}/export/pdf`,
       responseType: "blob",
     });
 
@@ -40,7 +47,7 @@ export const DependenteService = {
   downloadExcel: async (dependenteId) => {
     const blob = await request({
       method: "GET",
-      url: `/dependente/exportExcel/${dependenteId}`,
+      url: `/dependentes/${dependenteId}/export/excel`,
       responseType: "blob",
     });
 

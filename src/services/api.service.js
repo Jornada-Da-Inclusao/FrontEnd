@@ -17,13 +17,20 @@ api.interceptors.request.use((config) => {
 });
 
 // Função genérica
-const request = async ({ method, url, data = null, headers = {} }) => {
+const request = async ({
+  method,
+  url,
+  data = null,
+  headers = {},
+  responseType = "json",
+}) => {
   try {
     const response = await api({
       method,
       url,
       data,
       headers,
+      responseType,
     });
 
     return response.data;

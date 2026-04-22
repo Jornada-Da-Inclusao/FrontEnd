@@ -9,23 +9,20 @@ import {
   PointerSensor,
 } from "@dnd-kit/core";
 
-import { JogoContext } from "@/contexts/JogoContext";
-import { AuthContext } from "@/contexts/AuthContext";
-
 import { randomizeArr } from "@/utils/utils.js";
 import NumerosGrid from "@/components/jogoNumeros/numerosGrid/NumerosGrid.jsx";
 import Timer from "@/components/timer/Timer.jsx";
 import styles from "./JogoNumeros.module.css";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
+import { InfoJogosService } from "@/services/infoJogos.service";
+import { convertToSeconds } from "@/helper/formataTime";
 
 export default function JogoNumeros() {
   const navigate = useNavigate();
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const { registrarInfos } = useContext(JogoContext);
-  const { usuario } = useContext(AuthContext);
-
-  const dialog = useRef(null);
+  const usuario = UsuarioStorage.get();
 
   const [numbers, setNumbers] = useState(
     Array.from({ length: 10 }, (_, i) => ({
@@ -34,6 +31,7 @@ export default function JogoNumeros() {
     })),
   );
 
+  const [totalNumber, setTotalNumber] = useState(0);
   const [droppedNumbers, setDroppedNumbers] = useState([]);
 
   const [acertos, setAcertos] = useState(
@@ -60,51 +58,37 @@ export default function JogoNumeros() {
     sessionStorage.setItem("erros", "0");
     setAcertos(0);
     setErros(0);
-
     setNumbers((prev) => randomizeArr([...prev]));
+    setTotalNumber(numbers.length);
   }, []);
 
   useEffect(() => {
-    if (!usuario?.token) {
-      setModalConfig({
-        show: true,
-        title: "Atenção",
-        message: "Você precisa estar logado.",
-        icon: "⚠️",
-        color: "#ff9800",
-        doneButton: {
-          label: "OK",
-          onClick: () => navigate("/"),
-        },
-        onClose: () => navigate("/"),
-      });
-    }
+    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
   }, [usuario, navigate]);
-
-  const convertToMinutes = (t) => {
-    const [m, s] = t.split(":").map(Number);
-    return m + s / 60;
-  };
 
   const handleTimeUpdate = (t) => setTime(t);
 
   const infoJogo = {
-    tempoTotal: parseFloat(convertToMinutes(time).toFixed(2)),
-    tentativas,
-    acertos,
-    erros,
-    infoJogos_id_fk: { id: idJogoNumeros },
+    tempoTotal: convertToSeconds(time),
+    totalTentativas: tentativas,
+    totalAcertos: acertos,
+    totalErros: erros,
+    jogo: { id: idJogoNumeros },
     dependente: { id: idDependente },
   };
 
   useEffect(() => {
     const finalizar = async () => {
-      if (droppedNumbers.length === numbers.length && !jogoRegistrado) {
+      if (
+        droppedNumbers.length >= totalNumber &&
+        numbers.length === 0 &&
+        !jogoRegistrado
+      ) {
         setJogoRegistrado(true);
         setLoading(true);
 
         try {
-          await registrarInfos(infoJogo);
+          await InfoJogosService.registrar(infoJogo);
 
           setTimerActive(false);
 
@@ -197,6 +181,21 @@ export default function JogoNumeros() {
       </div>
     );
   };
+
+  function chamaRotinaDeslogado() {
+    setModalConfig({
+      show: true,
+      title: "Atenção",
+      message: "Você precisa estar logado.",
+      icon: "⚠️",
+      color: "#ff9800",
+      doneButton: {
+        label: "OK",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
+  }
 
   return (
     <>

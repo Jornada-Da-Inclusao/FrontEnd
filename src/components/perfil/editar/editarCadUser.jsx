@@ -8,6 +8,7 @@ const EditarUsuario = () => {
   const usuarioData = JSON.parse(localStorage.getItem("usuario") || "{}");
 
   const [formData, setFormData] = useState({
+    id: usuarioData.id || 0,
     nome: usuarioData.nome || "",
     email: usuarioData.email || "",
     senha: "",
@@ -15,7 +16,10 @@ const EditarUsuario = () => {
   });
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showErrorPassWd, setShowErrorPassWd] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [stateExibeDicaSenha, setStateExibeDicaSenha] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,21 +34,29 @@ const EditarUsuario = () => {
     e.preventDefault();
 
     if (formData.senha && formData.senha !== formData.confirmarSenha) {
-      alert("As senhas não coincidem!");
+      setShowErrorPassWd(true);
+      // alert("As senhas não coincidem!");
       return;
     }
 
     const payload = {
-      nome: formData.nome,
-      email: formData.email,
+      id: formData.id,
     };
 
     if (formData.senha) {
       payload.senha = formData.senha;
     }
 
+    if (formData.email) {
+      payload.email = formData.email;
+    }
+
+    if (formData.nome) {
+      payload.nome = formData.nome;
+    }
+
     try {
-      await UsuarioService.atualizar(usuarioData.id, payload);
+      await UsuarioService.atualizarParcial(usuarioData.id, payload);
 
       const updatedUser = {
         ...usuarioData,
@@ -110,7 +122,11 @@ const EditarUsuario = () => {
             type="password"
             name="senha"
             value={formData.senha}
+            minLength={8}
+            maxLength={100}
             onChange={handleChange}
+            onFocus={() => setStateExibeDicaSenha(true)}
+            onBlur={() => setStateExibeDicaSenha(false)}
           />
 
           <label>Digite a nova senha novamente:</label>
@@ -118,8 +134,22 @@ const EditarUsuario = () => {
             type="password"
             name="confirmarSenha"
             value={formData.confirmarSenha}
+            minLength={8}
+            maxLength={100}
             onChange={handleChange}
+            onFocus={() => setStateExibeDicaSenha(true)}
+            onBlur={() => setStateExibeDicaSenha(false)}
           />
+          <ul
+            className={`${styles.passwordHint} ${
+              !stateExibeDicaSenha ? styles.passwordHintInvisivel : ""
+            }`}
+          >
+            <li>Mínimo de 8 caracteres</li>
+            <li>Pelo menos 1 letra maiúscula</li>
+            <li>Pelo menos 1 número</li>
+            <li>Pelo menos 1 caractere especial</li>
+          </ul>
 
           <button type="submit">Alterar dados</button>
         </form>
@@ -133,6 +163,8 @@ const EditarUsuario = () => {
         showDelete={showDeleteModal}
         setShowDelete={setShowDeleteModal}
         onConfirmDelete={confirmDelete}
+        setShowErrorPassWd={setShowErrorPassWd}
+        showErrorPassWd={showErrorPassWd}
       />
     </div>
   );

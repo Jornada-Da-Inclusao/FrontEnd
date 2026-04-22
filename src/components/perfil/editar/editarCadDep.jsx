@@ -19,6 +19,7 @@ const getDateLimits = () => {
 const formatarData = (data) => data.toISOString().split("T")[0];
 
 const initialForm = {
+  id: "",
   nome: "",
   dataNascimento: "",
   sexo: "",
@@ -33,6 +34,8 @@ const EditarDep = () => {
 
   const [showEditConfirm, setShowEditConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDeleteFinished, setShowDeleteFinished] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const { min, max } = useMemo(() => getDateLimits(), []);
 
@@ -76,6 +79,7 @@ const EditarDep = () => {
     if (!dep) return;
 
     setForm({
+      id: id || 0,
       nome: dep.nome || "",
       dataNascimento: dep.dataNascimento || "",
       sexo: dep.sexo || "",
@@ -90,16 +94,30 @@ const EditarDep = () => {
     if (!selectedId) return;
 
     const payload = {
-      nome: form.nome,
-      idade: calcularIdade(form.dataNascimento),
-      sexo: form.sexo,
-      foto: form.avatar,
+      id: form.id,
     };
+
+    if (form.nome) {
+      payload.nome = form.nome;
+    }
+
+    if (form.dataNascimento) {
+      payload.dataNascimento = new Date(form.dataNascimento).toISOString();
+    }
+
+    if (form.sexo) {
+      payload.sexo = form.sexo;
+    }
+
+    if (form.avatar) {
+      payload.foto = form.avatar;
+    }
 
     try {
       await DependenteService.atualizar(selectedId, payload);
       setShowEditConfirm(true);
     } catch (err) {
+      setShowErrorModal(true);
       console.error("Erro ao alterar dependente:", err);
     }
   };
@@ -112,16 +130,22 @@ const EditarDep = () => {
 
   const confirmDelete = async () => {
     try {
+      setShowDeleteConfirm(false);
       await DependenteService.deletar(selectedId);
-
+      setShowDeleteFinished(true);
       setDependentes((prev) => prev.filter((d) => d.id !== selectedId));
-
       setSelectedId("");
       resetForm();
     } catch (err) {
+      setShowErrorModal(true);
       console.error("Erro ao remover dependente:", err);
     }
   };
+
+  function formatarParaInputDate(dataISO) {
+    if (!dataISO) return "";
+    return new Date(dataISO).toISOString().split("T")[0];
+  }
 
   // ---------------- render ----------------
   return (
@@ -170,7 +194,7 @@ const EditarDep = () => {
           <label>Data de nascimento:</label>
           <input
             type="date"
-            value={form.dataNascimento}
+            value={formatarParaInputDate(form.dataNascimento)}
             min={formatarData(min)}
             max={formatarData(max)}
             onChange={(e) => handleChange("dataNascimento", e.target.value)}
@@ -199,7 +223,11 @@ const EditarDep = () => {
         setShowEditConfirm={setShowEditConfirm}
         showDeleteConfirm={showDeleteConfirm}
         setShowDeleteConfirm={setShowDeleteConfirm}
+        showDeleteFinished={showDeleteFinished}
+        setShowDeleteFinished={setShowDeleteFinished}
         onConfirmDelete={confirmDelete}
+        showCreateError={showErrorModal}
+        setShowCreateError={setShowErrorModal}
       />
     </div>
   );

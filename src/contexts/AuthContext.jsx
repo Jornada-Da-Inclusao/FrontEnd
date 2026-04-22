@@ -7,7 +7,7 @@ export const AuthContext = createContext({});
 
 const STORAGE_KEYS = {
   token: "token",
-  usuario: "usuario",
+  email: "usuario",
 };
 
 const initialUserState = {
@@ -22,21 +22,21 @@ const initialUserState = {
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
-  const [usuario, setUsuario] = useState(initialUserState);
+  const [email, setEmail] = useState(initialUserState);
   const [isLoading, setIsLoading] = useState(false);
   const [showExpireModal, setShowExpireModal] = useState(false);
 
   // 🔐 Carrega usuário do storage
   useEffect(() => {
     const token = localStorage.getItem(STORAGE_KEYS.token);
-    const storedUser = localStorage.getItem(STORAGE_KEYS.usuario);
+    const storedUser = localStorage.getItem(STORAGE_KEYS.email);
 
     if (!token || !storedUser) return;
 
     try {
       const parsedUser = JSON.parse(storedUser);
 
-      setUsuario({
+      setEmail({
         ...parsedUser,
         token,
       });
@@ -45,16 +45,15 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // ⏰ Expiração de sessão (30 min)
   useEffect(() => {
-    if (!usuario.token) return;
+    if (!email.token) return;
 
     const timer = setTimeout(() => {
       setShowExpireModal(true);
     }, 1800000);
 
     return () => clearTimeout(timer);
-  }, [usuario.token]);
+  }, [email.token]);
 
   // 🔑 LOGIN
   async function handleLogin(credentials) {
@@ -66,13 +65,13 @@ export function AuthProvider({ children }) {
       const userData = {
         id: resposta.id,
         nome: resposta.nome,
-        email: resposta.usuario,
+        email: resposta.email,
         foto: resposta.foto,
       };
 
       const token = resposta.token;
 
-      setUsuario({ ...userData, token });
+      setEmail({ ...userData, token });
 
       saveAuthToStorage(token, userData);
 
@@ -87,19 +86,19 @@ export function AuthProvider({ children }) {
   // 💾 Persistência centralizada
   function saveAuthToStorage(token, userData) {
     localStorage.setItem(STORAGE_KEYS.token, token);
-    localStorage.setItem(STORAGE_KEYS.usuario, JSON.stringify(userData));
+    localStorage.setItem(STORAGE_KEYS.email, JSON.stringify(userData));
   }
 
   // 🚪 LOGOUT
   function handleLogout() {
-    setUsuario(initialUserState);
+    setEmail(initialUserState);
     clearAuthStorage();
     navigate("/");
   }
 
   function clearAuthStorage() {
     localStorage.removeItem(STORAGE_KEYS.token);
-    localStorage.removeItem(STORAGE_KEYS.usuario);
+    localStorage.removeItem(STORAGE_KEYS.email);
   }
 
   // ⏰ modal de expiração
@@ -111,11 +110,11 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
-        usuario,
+        email,
         handleLogin,
         handleLogout,
         isLoading,
-        isAuthenticated: !!usuario.token,
+        isAuthenticated: !!email.token,
       }}
     >
       {children}

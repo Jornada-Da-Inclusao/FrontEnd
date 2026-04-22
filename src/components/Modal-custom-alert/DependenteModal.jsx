@@ -1,12 +1,20 @@
-import { CustomModal } from './CustomModal';
+import { CustomModal } from "./CustomModal";
 
 const DependenteModals = ({
-  showCreateConfirm, setShowCreateConfirm,
-  showCreateError, setShowCreateError,
-  showEditConfirm, setShowEditConfirm,
-  showDeleteConfirm, setShowDeleteConfirm,
-  showAddPerfilModal, setShowAddPerfilModal,
-  onConfirmDelete, onConfirmAddPerfil
+  showCreateConfirm,
+  setShowCreateConfirm,
+  showCreateError,
+  setShowCreateError,
+  showEditConfirm,
+  setShowEditConfirm,
+  showDeleteConfirm,
+  setShowDeleteConfirm,
+  showDeleteFinished,
+  setShowDeleteFinished,
+  showAddPerfilModal,
+  setShowAddPerfilModal,
+  onConfirmDelete,
+  onConfirmAddPerfil,
 }) => {
   return (
     <>
@@ -21,7 +29,7 @@ const DependenteModals = ({
           color="#4caf50"
           doneButton={{
             label: "Fechar",
-            onClick: () => setShowCreateConfirm(false)
+            onClick: () => setShowCreateConfirm(false),
           }}
         />
       )}
@@ -37,7 +45,7 @@ const DependenteModals = ({
           color="#f44336"
           doneButton={{
             label: "OK",
-            onClick: () => setShowCreateError(false)
+            onClick: () => setShowCreateError(false),
           }}
         />
       )}
@@ -53,7 +61,7 @@ const DependenteModals = ({
           color="#4caf50"
           doneButton={{
             label: "Fechar",
-            onClick: () => setShowEditConfirm(false)
+            onClick: () => setShowEditConfirm(false),
           }}
         />
       )}
@@ -69,14 +77,30 @@ const DependenteModals = ({
           color="#f44336"
           firstButton={{
             label: "Cancelar",
-            onClick: () => setShowDeleteConfirm(false)
+            onClick: () => setShowDeleteConfirm(false),
           }}
           doneButton={{
             label: "Sim, excluir",
             onClick: () => {
               setShowDeleteConfirm(false);
               onConfirmDelete && onConfirmDelete();
-            }
+            },
+          }}
+        />
+      )}
+
+      {/* confirma Exclusão */}
+      {showDeleteFinished && (
+        <CustomModal
+          show={showDeleteFinished}
+          onClose={() => setShowDeleteFinished(false)}
+          title="Sucesso!"
+          message="Dados atualizados com sucesso."
+          icon="✔️"
+          color="#4caf50"
+          firstButton={{
+            label: "Fechar",
+            onClick: () => setShowDeleteFinished(false),
           }}
         />
       )}
@@ -92,14 +116,14 @@ const DependenteModals = ({
           color="#007bff"
           firstButton={{
             label: "Cancelar",
-            onClick: () => setShowAddPerfilModal(false)
+            onClick: () => setShowAddPerfilModal(false),
           }}
           doneButton={{
             label: "Confirmar",
             onClick: () => {
               setShowAddPerfilModal(false);
               onConfirmAddPerfil && onConfirmAddPerfil();
-            }
+            },
           }}
         />
       )}

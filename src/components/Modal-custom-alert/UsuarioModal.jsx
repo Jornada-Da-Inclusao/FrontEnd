@@ -1,9 +1,13 @@
-import { CustomModal } from './CustomModal';
+import { CustomModal } from "./CustomModal";
 
 const UsuarioModals = ({
-  showConfirm, setShowConfirm,
-  showDelete, setShowDelete,
-  onConfirmDelete
+  showConfirm,
+  setShowConfirm,
+  showErrorPassWd,
+  setShowErrorPassWd,
+  showDelete,
+  setShowDelete,
+  onConfirmDelete,
 }) => {
   return (
     <>
@@ -16,7 +20,20 @@ const UsuarioModals = ({
         color="#4caf50"
         doneButton={{
           label: "Fechar",
-          onClick: () => setShowConfirm(false)
+          onClick: () => setShowConfirm(false),
+        }}
+      />
+
+      <CustomModal
+        show={showErrorPassWd}
+        onClose={() => setShowErrorPassWd(false)}
+        title="Erro!"
+        message="As senhas não coincidem!"
+        icon="⚠️"
+        color="#f44336"
+        doneButton={{
+          label: "Fechar",
+          onClick: () => setShowErrorPassWd(false),
         }}
       />
 
@@ -29,14 +46,14 @@ const UsuarioModals = ({
         color="#f44336"
         firstButton={{
           label: "Cancelar",
-          onClick: () => setShowDelete(false)
+          onClick: () => setShowDelete(false),
         }}
         doneButton={{
           label: "Sim, excluir",
           onClick: () => {
             setShowDelete(false);
             onConfirmDelete();
-          }
+          },
         }}
       />
     </>

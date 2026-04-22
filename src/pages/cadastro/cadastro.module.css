@@ -15,7 +15,7 @@
 
 .imgContainer {
   flex: 3;
-  background-image: url('../../assets/images/kidscadastro.jpg');
+  background-image: url("../../assets/images/kidscadastro.jpg");
   background-size: cover;
   background-position: center;
   position: relative;
@@ -24,7 +24,7 @@
 }
 
 .imgContainer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -102,7 +102,7 @@
   filter: brightness(1.1);
 }
 
-.botaoLogin>svg {
+.botaoLogin > svg {
   height: 50%;
   width: 100%;
 }
@@ -113,6 +113,28 @@
   margin-bottom: 0;
   font-size: 0.9rem;
   line-height: 1.2;
+}
+
+.passwordHint {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+
+  transition: all 5s ease;
+}
+
+.passwordHint li {
+  margin-left: 14px;
+  margin-bottom: 4px;
+}
+
+/* 👇 classe para esconder */
+.passwordHintInvisivel {
+  display: none;
 }
 
 @media (max-width: 768px) {

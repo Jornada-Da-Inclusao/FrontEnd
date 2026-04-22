@@ -16,28 +16,25 @@ import {
 } from "@dnd-kit/core";
 
 import { CSS } from "@dnd-kit/utilities";
-import { JogoContext } from "@/contexts/JogoContext";
-import { AuthContext } from "@/contexts/AuthContext";
-import { randomizeArr } from "@/utils/utils.js";
 import Timer from "@/components/timer/Timer.jsx";
 import styles from "./jogoCores.module.css";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal.jsx";
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado.js";
+import { InfoJogosService } from "@/services/infoJogos.service.js";
+import { convertToSeconds } from "@/helper/formataTime.js";
 
 export default function JogoCores() {
   const navigate = useNavigate();
-  const sensors = useSensors(useSensor(PointerSensor));
-
-  const { registrarInfos } = useContext(JogoContext);
-  const { usuario } = useContext(AuthContext);
-
-  const dialog = useRef(null);
-
+  const animals = [...animalsData];
   const [colors, setColors] = useState(
-    colorsData.map((c, index) => ({
+    Array.from({ length: colorsData.length }, (_, index) => ({
       id: index,
-      value: c.code,
+      value: colorsData[index].code,
     })),
   );
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const usuario = UsuarioStorage.get();
 
   const [droppedColors, setDroppedColors] = useState([]);
 
@@ -67,36 +64,34 @@ export default function JogoCores() {
     setErros(0);
   }, []);
 
-  useEffect(() => {
-    if (!usuario?.token) {
-      setModalConfig({
-        show: true,
-        title: "Atenção",
-        message: "Você precisa estar logado.",
-        icon: "⚠️",
-        color: "#ff9800",
-        doneButton: {
-          label: "OK",
-          onClick: () => navigate("/"),
-        },
-        onClose: () => navigate("/"),
-      });
-    }
-  }, [usuario, navigate]);
+  function chamaRotinaDeslogado() {
+    setModalConfig({
+      show: true,
+      title: "Atenção",
+      message: "Você precisa estar logado.",
+      icon: "⚠️",
+      color: "#ff9800",
+      doneButton: {
+        label: "OK",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
+  }
 
-  const convertToMinutes = (t) => {
-    const [m, s] = t.split(":").map(Number);
-    return m + s / 60;
-  };
+  // redirect if not logged
+  useEffect(() => {
+    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
+  }, [usuario, navigate]);
 
   const handleTimeUpdate = (newTime) => setTime(newTime);
 
   const infoJogo = {
-    tempoTotal: parseFloat(convertToMinutes(time).toFixed(2)),
-    tentativas,
-    acertos,
-    erros,
-    infoJogos_id_fk: { id: idJogoCores },
+    tempoTotal: convertToSeconds(time),
+    totalTentativas: tentativas,
+    totalAcertos: acertos,
+    totalErros: erros,
+    jogo: { id: idJogoCores },
     dependente: { id: idDependente },
   };
 
@@ -107,7 +102,7 @@ export default function JogoCores() {
         setLoading(true);
 
         try {
-          await registrarInfos(infoJogo);
+          await InfoJogosService.registrar(infoJogo);
 
           setTimerActive(false);
           setLoading(false);
@@ -148,130 +143,160 @@ export default function JogoCores() {
     finalizar();
   }, [droppedColors, acertos, erros, tentativas, time]);
 
-  const { setNodeRef } = useDroppable({ id: "root" });
-
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
-
-    setTentativas((prev) => prev + 1);
-
-    if (!over) {
-      setErros((prev) => {
-        const v = prev + 1;
-        sessionStorage.setItem("erros", v);
-        return v;
-      });
-      return;
-    }
-
-    const color = colorsData.find((c) => c.id === active.id);
-    if (!color) return;
-
-    const animalId = over.id;
-    const correct = color.id === animalId;
-
-    if (correct && !droppedColors.some((c) => c.id === color.id)) {
-      setDroppedColors((prev) => [...prev, color]);
-      setColors((prev) => prev.filter((c) => c.id !== color.id));
-
-      setAcertos((prev) => {
-        const v = prev + 1;
-        sessionStorage.setItem("acertos", v);
-        return v;
-      });
-      return;
-    }
-
-    setErros((prev) => {
-      const v = prev + 1;
-      sessionStorage.setItem("erros", v);
-      return v;
-    });
-  };
-
   const DroppableArea = ({ id, children }) => {
     const { setNodeRef } = useDroppable({
       id,
+      data: { accepts: [id] },
     });
 
     return (
-      <div ref={setNodeRef} className={styles.dropArea}>
+      <div id={id} ref={setNodeRef} className={styles.dropArea}>
         {children}
       </div>
     );
   };
 
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    setTentativas((prev) => prev + 1);
+
+    if (over && over.data.current.accepts.includes(active.data.current.type)) {
+      const colorToDrop = colorsData.find((color) => color.id === active.id);
+      setDroppedColors((prev) => [...prev, colorToDrop]);
+      setColors((prevColors) =>
+        prevColors.filter((color) => color.id !== colorToDrop.id),
+      );
+      setAcertos((prev) => {
+        const novoValor = prev + 1;
+        sessionStorage.setItem("acertos", novoValor);
+        return novoValor;
+      });
+    } else {
+      setErros((prev) => {
+        const novoValor = prev + 1;
+        sessionStorage.setItem("erros", novoValor);
+        return novoValor;
+      });
+    }
+  };
+
+  const Image = ({ animal }) => (
+    <img src={animal.img} width={100} alt={animal.name} />
+  );
+
+  const Card = ({ animal }) => (
+    <div className={styles.card}>
+      <Image animal={animal} />
+      <DroppableArea id={animal.id}>
+        {droppedColors.find((color) => color.id === animal.id) ? (
+          <ColorBox
+            id={colorsData[animal.id].id}
+            color={colorsData[animal.id].code}
+          />
+        ) : null}
+      </DroppableArea>
+    </div>
+  );
+
+  const Cards = () =>
+    animals.map((animal) => <Card key={animal.id} animal={animal} />);
+
   const ColorBox = ({ id, color }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useDraggable({
         id,
+        data: { type: id },
       });
 
     return (
       <div
-        ref={setNodeRef}
-        {...attributes}
-        {...listeners}
         className={styles.square}
+        id={id}
+        ref={setNodeRef}
         style={{
           backgroundColor: color,
           transform: CSS.Translate.toString(transform),
           transition,
+          willChange: "transform",
         }}
+        {...attributes}
+        {...listeners}
       />
     );
   };
 
-  const Cards = () =>
-    animalsData.map((animal) => (
-      <div key={animal.id} className={styles.card}>
-        <img src={animal.img} width={100} alt={animal.name} />
-
-        <DroppableArea id={animal.id}>
-          {droppedColors.find((c) => c.id === animal.id) && (
-            <ColorBox id={animal.id} color={colorsData[animal.id].code} />
-          )}
-        </DroppableArea>
-      </div>
+  const Colors = () =>
+    colors.map((color) => (
+      <ColorBox key={color.id} id={color.id} color={color.value} />
     ));
 
-  const Colors = () =>
-    colors.map((c) => <ColorBox key={c.id} id={c.id} color={c.value} />);
+  const Description = ({ animal, color, string }) => (
+    <p className={styles.paragraph}>
+      {animal.article} <b>{animal.name}</b> {string.body} {color.name}
+    </p>
+  );
+
+  const Descriptions = () =>
+    animals.map((animal) => {
+      const color = colorsData[animal.id];
+      const string = stringsData[animal.id];
+      return (
+        <Description
+          key={animal.id}
+          animal={animal}
+          color={color}
+          string={string}
+        />
+      );
+    });
 
   return (
     <>
-      <Timer isActive={timerActive} onTimeUpdate={handleTimeUpdate} />
-
+      <Timer
+        isActive={timerActive}
+        resetTrigger={false}
+        onTimeUpdate={handleTimeUpdate}
+      />
       <div className={styles.gameBody}>
-        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-          <div className={styles.infoArea}>
-            <h1>Jogo das Cores</h1>
-            <p>Arraste as cores para os animais corretos</p>
-
-            <div className={styles.colorArea}>
-              <Colors />
+        <div className={styles.game}>
+          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+            <div className={styles.infoArea}>
+              <h1 className={styles.heading}>Jogo das Cores</h1>
+              <p className={styles.paragraph}>
+                Arraste as cores para seus respectivos animais.
+              </p>
+              <div className={styles.info}>
+                <Descriptions />
+                <p className={styles.paragraph}>
+                  Coloque a cor favorita em cada bichinho.
+                </p>
+              </div>
+              <div className={styles.colorArea}>
+                <Colors />
+              </div>
             </div>
-          </div>
-
-          <div className={styles.cardGrid}>
-            <Cards />
-          </div>
-        </DndContext>
+            <div className={styles.cardGrid}>
+              <Cards />
+            </div>
+          </DndContext>
+        </div>
       </div>
 
+      {/* Modal de loading - fica sempre visível enquanto loadingModal for true */}
       {loading && (
         <CustomModal
-          show
+          show={true}
           title="Enviando dados..."
-          message="Salvando progresso..."
+          message="Aguarde um instante, estamos salvando seu progresso."
           icon="⏳"
           color="#2196f3"
-          hideButtons
+          hideButtons={true} // se seu CustomModal suportar bloquear o fechamento
+          // onClose={() => {}} // opcional: não permitir fechar enquanto carregando
         />
       )}
 
       <CustomModal
-        show={modalConfig.show && !loading}
+        show={modalConfig.show}
         onClose={modalConfig.onClose}
         title={modalConfig.title}
         message={modalConfig.message}

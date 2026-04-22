@@ -4,11 +4,11 @@ import styles from "./GraficoGaugeTempo.module.css";
 
 const jogosEsperados = ["Memória", "Números", "Vogais", "Cores"];
 
-const convertToSeconds = (time) => {
-  if (typeof time === "number") {
-    return Math.floor(time * 60);
-  }
-  return 0;
+// Agora só garante número válido (não converte mais minutos)
+const normalizarTempo = (tempo) => {
+  const valor = Number(tempo);
+  if (isNaN(valor) || valor < 0) return 0;
+  return Math.floor(valor);
 };
 
 const formatarTempo = (segundos) => {
@@ -17,18 +17,15 @@ const formatarTempo = (segundos) => {
   return `${min}m ${seg.toString().padStart(2, "0")}s`;
 };
 
-const GraficoGaugeTempo = ({ dados }) => {
-  const TEMPO_MAXIMO = 180; // 3 minutos em segundos
+const GraficoGaugeTempo = ({ dados = [] }) => {
+  // 🔥 melhora performance (evita find dentro do map)
+  const dadosMap = new Map(dados.map((d) => [d.jogo, d]));
 
   const temposPorJogo = jogosEsperados.map((jogo) => {
-    const entrada = dados.find((d) => d.jogo === jogo);
+    const entrada = dadosMap.get(jogo);
 
-    let tempoGasto = 0;
-    if (entrada && entrada.tempoTotal > 0) {
-      const tempoRestanteSeg = convertToSeconds(entrada.tempoTotal);
-      tempoGasto = TEMPO_MAXIMO - tempoRestanteSeg;
-      if (tempoGasto < 0) tempoGasto = 0;
-    }
+    const tempoGasto =
+      entrada?.tempoTotal != null ? normalizarTempo(entrada.tempoTotal) : 0;
 
     return {
       jogo,
@@ -36,31 +33,31 @@ const GraficoGaugeTempo = ({ dados }) => {
     };
   });
 
+  const maxTempo = Math.max(...temposPorJogo.map((t) => t.tempo), 60);
+
   return (
     <div>
-  <h3>Tempo gasto por jogo</h3>
-  <div className={styles.container}>
-    {temposPorJogo.map(({ jogo, tempo }) => (
-      <div key={jogo} className={styles.graficoItem}>
-        <Gauge
-          value={Math.min(tempo, TEMPO_MAXIMO)}
-          valueMax={TEMPO_MAXIMO}
-          startAngle={-110}
-          endAngle={110}
-          sx={{
-            "& .MuiGauge-valueArc": {
-              fill: "rgb(0, 183, 255)",
-            },
-          }}
-          text={() =>
-            `${formatarTempo(tempo)} / ${formatarTempo(TEMPO_MAXIMO)}`
-          }
-        />
-        <p>{jogo}</p>
+      <h3>Tempo gasto por jogo</h3>
+      <div className={styles.container}>
+        {temposPorJogo.map(({ jogo, tempo }) => (
+          <div key={jogo} className={styles.graficoItem}>
+            <Gauge
+              value={Math.min(tempo, maxTempo)}
+              valueMax={maxTempo + 20}
+              startAngle={-110}
+              endAngle={110}
+              sx={{
+                "& .MuiGauge-valueArc": {
+                  fill: "rgb(0, 183, 255)",
+                },
+              }}
+              text={() => `${formatarTempo(tempo)}`}
+            />
+            <p>{jogo}</p>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
+    </div>
   );
 };
 

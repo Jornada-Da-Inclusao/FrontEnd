@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useContext } from "react"; // Importa os hooks 'useState' e 'useEffect' do React para gerenciar o estado e os efeitos colaterais no componente.
 import { useNavigate } from "react-router-dom"; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
 import Timer from "../../../components/timer/Timer";
@@ -9,9 +8,11 @@ import img4 from "@assets/images/memoria/pequena5.png";
 import imgPlaceholder from "@assets/images/memoria/rosa.png"; // Imagem que será exibida nas cartas viradas para baixo.
 import { randomizeArr } from "@/utils/utils";
 import styles from "./jogoMemoria.module.css"; // Importa os estilos CSS para estilizar o componente.
-import { JogoContext } from "../../../contexts/JogoContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
+import { InfoJogosService } from "@/services/infoJogos.service";
+import { convertToSeconds } from "@/helper/formataTime";
 
 const JogoMemoria = () => {
   const navigate = useNavigate(); // Usado para navegar para outras páginas quando necessário.
@@ -42,9 +43,8 @@ const JogoMemoria = () => {
   );
   const [tentativas, setTentativas] = useState(0);
   const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
-  const { registrarInfos } = useContext(JogoContext);
   const [infoJogoMemoria, setInfoJogoMemoria] = useState({});
-  const { usuario } = useContext(AuthContext);
+  const usuario = UsuarioStorage.get();
   const [loadingModal, setLoadingModal] = useState(false);
   const [modalConfig, setModalConfig] = useState({ show: false });
   const idJogoMemoria = 1;
@@ -59,51 +59,42 @@ const JogoMemoria = () => {
     setErros(0);
   }, []);
 
+  function chamaRotinaDeslogado() {
+    setModalConfig({
+      show: true,
+      title: "Atenção",
+      message: "Você precisa estar logado.",
+      icon: "⚠️",
+      color: "#ff9800",
+      doneButton: {
+        label: "OK",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
+  }
+
+  // redirect if not logged
   useEffect(() => {
-    if (usuario.token === "") {
-      setModalConfig({
-        show: true,
-        title: "Atenção",
-        message: "Você precisa estar logado.",
-        icon: "⚠️",
-        color: "#ff9800",
-        doneButton: {
-          label: "OK",
-          onClick: () => navigate("/"),
-        },
-        onClose: () => navigate("/"),
-      });
-    }
-  }, [usuario.token]);
-
-  const token = usuario.token;
-
-  const convertToMinutes = (time) => {
-    // Divide o tempo em minutos e segundos
-    const [minutes, seconds] = time.split(":").map(Number);
-
-    // Converte tudo para minutos, incluindo os segundos
-    return minutes + seconds / 60;
-  };
+    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
+  }, [usuario, navigate]);
 
   const handleTimeUpdate = (newTime) => {
     setTime(newTime); // Atualiza o estado com o novo tempo
   };
 
   async function registrarInfosJogo() {
-    return await registrarInfos(infoJogoMemoria, token);
+    return await InfoJogosService.registrar(infoJogoMemoria);
   }
 
   useEffect(() => {
     const executarAsync = async () => {
-      const minutosConvertidos = convertToMinutes(time);
-      const minutosArredondado = parseFloat(minutosConvertidos.toFixed(2));
       setInfoJogoMemoria({
-        tempoTotal: minutosArredondado,
-        tentativas: tentativas,
-        acertos: acertos,
-        erros: erros,
-        infoJogos_id_fk: { id: idJogoMemoria },
+        tempoTotal: convertToSeconds(time),
+        totalTentativas: tentativas,
+        totalAcertos: acertos,
+        totalErros: erros,
+        jogo: { id: idJogoMemoria },
         dependente: { id: idDependente },
       });
 

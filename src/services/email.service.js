@@ -1,15 +1,16 @@
 import request from "./api.service";
 
 export const EmailService = {
-  postToken: () =>
+  sendToken: (data) =>
     request({
       method: "POST",
-      url: "/email/token",
+      url: "/emailApi/token",
+      data,
     }),
 
-  getToken: () =>
+  verifyToken: (token) =>
     request({
       method: "GET",
-      url: "/email/token",
+      url: `/emailApi/token/${token}`,
     }),
 };

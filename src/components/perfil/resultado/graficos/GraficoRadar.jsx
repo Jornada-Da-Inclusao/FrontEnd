@@ -14,10 +14,10 @@ const GraficoRadar = ({ dados, nome }) => {
   if (!nome || !dados) return null;
 
   const mapaJogos = {
-    "Memória": "Memorização",
-    "Vogais": "Alfabetização inicial",
-    "Números": "Raciocínio lógico-matemático",
-    "Cores": "Percepção visual",
+    Memória: "Memorização",
+    Vogais: "Alfabetização inicial",
+    Números: "Raciocínio lógico-matemático",
+    Cores: "Percepção visual",
   };
 
   const radarData = Object.values(mapaJogos).map((area) => ({
@@ -29,9 +29,11 @@ const GraficoRadar = ({ dados, nome }) => {
     const area = mapaJogos[jogo.jogo];
     if (area) {
       const index = radarData.findIndex((item) => item.area === area);
-      const total = jogo.acertos + jogo.erros;
+      const total = jogo.totalAcertos + jogo.totalErros;
       if (total > 0) {
-        radarData[index].Porcentagem = Math.round((jogo.acertos / total) * 100);
+        radarData[index].Porcentagem = Math.round(
+          (jogo.totalAcertos / total) * 100,
+        );
       }
     }
   });

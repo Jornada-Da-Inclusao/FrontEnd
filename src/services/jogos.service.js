@@ -1,13 +1,4 @@
-import request from "./api.service";
-
-export const JogoService = {
-  registrar: (dados) =>
-    request({
-      method: "POST",
-      url: "/jogos",
-      data: dados,
-    }),
-
+export const JogosService = {
   getPorDependente: async (dependenteId) => {
     try {
       const data = await request({

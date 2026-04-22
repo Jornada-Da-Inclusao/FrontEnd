@@ -11,22 +11,19 @@ import {
   PointerSensor,
 } from "@dnd-kit/core";
 
-import { JogoContext } from "@/contexts/JogoContext";
-import { AuthContext } from "@/contexts/AuthContext";
-
 import GameVogais from "../gameVogais/GameVogais.jsx";
 import { randomizeArr } from "@/utils/utils";
 import Timer from "@/components/timer/Timer";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
+import { InfoJogosService } from "@/services/infoJogos.service";
+import { convertToSeconds } from "@/helper/formataTime";
 
 function FaceJogoVogais() {
   const navigate = useNavigate();
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const { registrarInfos } = useContext(JogoContext);
-  const { usuario } = useContext(AuthContext);
-
-  const dialog = useRef(null);
+  const usuario = UsuarioStorage.get();
 
   const [letters, setLetters] = useState([]);
   const [droppedLetters, setDroppedLetters] = useState([]);
@@ -67,37 +64,33 @@ function FaceJogoVogais() {
     setErros(0);
   }, []);
 
+  function chamaRotinaDeslogado() {
+    setModalConfig({
+      show: true,
+      title: "Atenção",
+      message: "Você precisa estar logado.",
+      icon: "⚠️",
+      color: "#ff9800",
+      doneButton: {
+        label: "OK",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
+  }
+
   // redirect if not logged
   useEffect(() => {
-    if (!usuario?.token) {
-      setModalConfig({
-        show: true,
-        title: "Atenção",
-        message: "Você precisa estar logado.",
-        icon: "⚠️",
-        color: "#ff9800",
-        doneButton: {
-          label: "OK",
-          onClick: () => navigate("/"),
-        },
-        onClose: () => navigate("/"),
-      });
-    }
+    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
   }, [usuario, navigate]);
-
-  const convertToMinutes = (time) => {
-    const [m, s] = time.split(":").map(Number);
-    return m + s / 60;
-  };
-
   const handleTimeUpdate = (newTime) => setTime(newTime);
 
   const infoJogo = {
-    tempoTotal: parseFloat(convertToMinutes(time).toFixed(2)),
-    tentativas,
-    acertos,
-    erros,
-    infoJogos_id_fk: { id: idJogoVogais },
+    tempoTotal: convertToSeconds(time),
+    totalTentativas: tentativas,
+    totalAcertos: acertos,
+    totalErros: erros,
+    jogo: { id: idJogoVogais },
     dependente: { id: idDependente },
   };
 
@@ -108,7 +101,7 @@ function FaceJogoVogais() {
         setLoading(true);
 
         try {
-          await registrarInfos(infoJogo);
+          await InfoJogosService.registrar(infoJogo);
 
           setTimerActive(false);
           setLoading(false);
@@ -193,16 +186,22 @@ function FaceJogoVogais() {
     const { setNodeRef } = useDroppable({ id: "droppable-area" });
 
     return (
-      <div ref={setNodeRef} className={styles.resultLetter}>
-        <div className={styles.dropaArea}>
-          {droppedLetters.map((l) => (
-            <div key={l.id} className={styles.letterInDroppable}>
-              {String.fromCharCode(64 + l.value)}
-            </div>
-          ))}
+      <>
+        <div ref={setNodeRef} className={styles.resultLetter}>
+          <div className={styles.dropaArea}>
+            {droppedLetters.map((letter) => (
+              <div
+                key={letter.id}
+                id={"num" + letter.id}
+                className={styles.letterInDroppable}
+              >
+                {String.fromCharCode(64 + letter.value)}
+              </div>
+            ))}
+          </div>
         </div>
         <img className={styles.bgImage} src={image} alt="" />
-      </div>
+      </>
     );
   };
 
@@ -213,9 +212,12 @@ function FaceJogoVogais() {
       <div className={styles.bodyGame}>
         <div className={styles.game}>
           <div className={styles.gameContent}>
-            <h1>Jogo das Vogais</h1>
-            <p>ARRASTE APENAS AS VOGAIS</p>
-
+            <div className={styles.vogaisText}>
+              <h1 className={styles.vogaisHeading}>Jogo das Vogais</h1>
+              <p className={styles.vogaisParagraph}>
+                ARRASTE PARA CIMA APENAS AS LETRAS VOGAIS
+              </p>
+            </div>
             <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
               <DroppableArea />
               <GameVogais letters={letters} />

@@ -1,71 +1,69 @@
-import { useEffect, useState } from 'react';
-import styles from './novaSenha.module.css';
-import { useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
+import styles from "./novaSenha.module.css";
+import { useNavigate } from "react-router-dom";
+import { FaLock } from "react-icons/fa";
+import { AuthService } from "../../../services/auth.service";
 
 function NovaSenha() {
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const canAccess = localStorage.getItem('canAccessNovaSenha');
-    if (!canAccess) {
-      navigate('/'); // bloqueia acesso direto
-    }
-  }, []);
-
-
-  const [id, setId] = useState('2');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
+  // 🔒 Proteção de rota
+  useEffect(() => {
+    const canAccess = localStorage.getItem("canAccessNovaSenha");
+    if (!canAccess) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
 
-    if (senha !== confirmarSenha) {
-      setError('As senhas não coincidem.');
+    setError("");
+    setSuccess("");
+
+    if (!senha || !confirmarSenha) {
+      setError("Preencha todos os campos.");
       return;
     }
 
-    try {
-      debugger
-      setIsLoading(true);
-      const token = localStorage.getItem('token');
-      const dto = {
-        token : token,
-        novaSenha: senha
-      };
+    if (senha !== confirmarSenha) {
+      setError("As senhas não coincidem.");
+      return;
+    }
 
-      const response = await fetch('https://backend-9qjw.onrender.com/senha/atualizar', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dto)
+    if (senha.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await AuthService.updatePassword({
+        token,
+        novaSenha: senha,
       });
 
+      // 🔐 Limpeza segura
+      localStorage.removeItem("token");
+      localStorage.removeItem("canAccessVerifyToken");
+      localStorage.removeItem("canAccessNovaSenha");
 
-      if (response.status === 200) {
-        localStorage.removeItem('canAccessVerifyToken');
-        localStorage.removeItem('canAccessNovaSenha');
-        localStorage.clear();
-        sessionStorage.clear();
+      setSuccess("Senha atualizada com sucesso!");
 
-        setSuccess('Senha atualizada com sucesso!');
-        setTimeout(() => {
-          navigate('/'); // ou "/login"
-        }, 2000);
-      } else {
-        setError('Erro ao atualizar senha.');
-      }
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (err) {
-      setError('Falha ao atualizar senha. Verifique os dados e tente novamente.');
+      setError(err?.message || "Falha ao atualizar senha. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -75,42 +73,47 @@ function NovaSenha() {
     <div className={styles.container}>
       <div className={styles.rightSide}>
         <h2>Nova Senha</h2>
+
         <form className={styles.form} onSubmit={handleSubmit}>
-          <label htmlFor="senha">Nova Senha</label>
+          <label>Nova Senha</label>
           <div className={styles.inputGroup}>
             <FaLock />
             <input
               type="password"
-              name="senha"
-              required
               placeholder="Digite a nova senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
+              disabled={isLoading}
+              required
             />
           </div>
 
-          <label htmlFor="confirmarSenha">Confirmar Nova Senha</label>
+          <label>Confirmar Nova Senha</label>
           <div className={styles.inputGroup}>
             <FaLock />
             <input
               type="password"
-              name="confirmarSenha"
-              required
               placeholder="Confirme a nova senha"
               value={confirmarSenha}
               onChange={(e) => setConfirmarSenha(e.target.value)}
+              disabled={isLoading}
+              required
             />
           </div>
 
-          {error && <p style={{ color: 'red', fontSize: '0.9rem' }}>{error}</p>}
-          {success && <p style={{ color: 'green', fontSize: '0.9rem' }}>{success}</p>}
+          {error && <p className={styles.error}>{error}</p>}
+          {success && <p className={styles.success}>{success}</p>}
 
-          <button type="submit" className={styles.btnLogin} disabled={isLoading}>
-            {isLoading ? 'Atualizando...' : 'Atualizar Senha'}
+          <button
+            type="submit"
+            className={styles.btnLogin}
+            disabled={isLoading}
+          >
+            {isLoading ? "Atualizando..." : "Atualizar Senha"}
           </button>
 
           <div className={styles.links}>
-            <a href="/">Voltar para login</a>
+            <button onClick={() => navigate("/")}>Voltar para login</button>
           </div>
         </form>
       </div>

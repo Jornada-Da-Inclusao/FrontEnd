@@ -1,15 +1,9 @@
 import React, { useState, useMemo } from "react";
 import styles from "../cadastrarDependente/cadastrarDep.module.css";
 import { DependenteService } from "../../../services/dependente.service";
-import { calcularIdade } from "../calcularIdade";
 import DependenteModals from "../../../components/Modal-custom-alert/DependenteModal";
 import { icons } from "../icons";
-
-// ---------------- helpers ----------------
-const getUsuarioId = () => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  return usuario?.id || null;
-};
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
 
 const getDateLimits = () => {
   const hoje = new Date();
@@ -50,16 +44,16 @@ const CadastroForm = () => {
 
   const getPayload = (usuarioId) => ({
     nome: form.nome,
-    idade: calcularIdade(form.dataNascimento),
+    dataNascimento: new Date(form.dataNascimento).toISOString(),
     sexo: form.sexo,
     foto: form.avatar,
-    usuario_id_fk: {
+    usuario: {
       id: usuarioId,
     },
   });
 
   const validate = () => {
-    const usuarioId = getUsuarioId();
+    const usuarioId = UsuarioStorage.getId();
 
     return (
       form.nome && form.dataNascimento && form.sexo && form.avatar && usuarioId
@@ -74,7 +68,7 @@ const CadastroForm = () => {
       return;
     }
 
-    const usuarioId = getUsuarioId();
+    const usuarioId = UsuarioStorage.getId();
 
     try {
       await DependenteService.cadastrar(getPayload(usuarioId));

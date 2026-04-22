@@ -8,7 +8,7 @@ import logo from "../../assets/images/LOGO.png";
 import { CustomModal } from "../../components/Modal-custom-alert/CustomModal.jsx";
 
 const initialState = {
-  usuario: "",
+  email: "",
   senha: "",
 };
 
@@ -54,15 +54,15 @@ function Login() {
           <h2 className="login-title">Faça seu login para continuar.</h2>
 
           <form onSubmit={login} className={styles.form}>
-            <label htmlFor="usuario">Email</label>
+            <label htmlFor="email">Email</label>
             <div className={styles.inputGroup}>
               <input
                 type="email"
-                id="usuario"
-                name="usuario"
+                id="email"
+                name="email"
                 placeholder="Digite seu e-mail"
                 required
-                value={form.usuario}
+                value={form.email}
                 onChange={atualizarEstado}
               />
             </div>
@@ -73,13 +73,14 @@ function Login() {
                 type="password"
                 id="senha"
                 name="senha"
+                minLength={8}
+                maxLength={100}
                 placeholder="Digite sua senha"
                 required
                 value={form.senha}
                 onChange={atualizarEstado}
               />
             </div>
-
             <div className={styles.extraOptions}>
               <label>
                 <input type="checkbox" /> Lembrar

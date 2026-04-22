@@ -11,7 +11,7 @@ export const UsuarioService = {
   login: (dados) =>
     request({
       method: "POST",
-      url: "/auth/login",
+      url: "/usuarios/logar",
       data: dados,
     }),
 

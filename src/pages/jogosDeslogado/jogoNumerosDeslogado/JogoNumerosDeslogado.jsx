@@ -7,8 +7,6 @@ import {
   useSensors,
   PointerSensor,
 } from "@dnd-kit/core";
-import { JogoContext } from "@/contexts/JogoContext";
-import { AuthContext } from "@/contexts/AuthContext";
 
 import { randomizeArr } from "@/utils/utils.js";
 import NumerosGrid from "@/components/jogoNumeros/numerosGrid/NumerosGrid.jsx";
@@ -34,19 +32,16 @@ export default function JogoNumeros() {
   const [tentativas, setTentativas] = useState(0);
   const [time, setTime] = useState("03:00"); // Estado para armazenar o tempo formatado
   const [modalConfig, setModalConfig] = useState({ show: false });
-  const [isTimerActive, setIsTimerActive] = useState(true);  // Novo estado para controlar o timer
+  const [isTimerActive, setIsTimerActive] = useState(true); // Novo estado para controlar o timer
 
   useEffect(() => {
     const shuffledNumbers = randomizeArr([...numbers]);
     setNumbers(shuffledNumbers);
   }, []);
 
-
   const handleTimeUpdate = (newTime) => {
     setTime(newTime); // Atualiza o estado com o novo tempo
   };
-
-
 
   useEffect(() => {
     if (dialog.current?.open && !showPopup) {
@@ -58,7 +53,7 @@ export default function JogoNumeros() {
 
   useEffect(() => {
     if (droppedNumbers.length === 10) {
-      setIsTimerActive(false);  // Para o timer quando o jogo terminar
+      setIsTimerActive(false); // Para o timer quando o jogo terminar
       const tempoFinal = time;
       // Quando o jogo terminar, exibe uma mensagem com o resultado
       const resultadoMessage = `
@@ -70,7 +65,7 @@ export default function JogoNumeros() {
                       Para mais informações, por favor, faça login.
                   `;
       setPopupMessage(resultadoMessage);
-      setShowPopup(true);  // Exibe o popup com os resultados
+      setShowPopup(true); // Exibe o popup com os resultados
     }
   }, [droppedNumbers, acertos, erros, tentativas, time]);
 
@@ -105,7 +100,7 @@ export default function JogoNumeros() {
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
-    console.log(active, over)
+    console.log(active, over);
 
     setTentativas((prev) => prev + 1);
 

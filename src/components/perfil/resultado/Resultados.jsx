@@ -8,9 +8,11 @@ import GaugeChart from "../resultado/graficos/GraficoMedidor";
 import RadarChart from "../resultado/graficos/GraficoRadar";
 
 import { DependenteService } from "../../../services/dependente.service";
-import { JogoService } from "../../../services/jogo.service";
+import { InfoJogosService } from "../../../services/infoJogos.service";
 
 import { JogosModal } from "../../Modal-custom-alert/JogosModal";
+import { JogosService } from "@/services/jogos.service";
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
 
 const Resultados = () => {
   const [dependentes, setDependentes] = useState([]);
@@ -38,7 +40,9 @@ const Resultados = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = (await DependenteService.buscarTodos?.()) || [];
+        const idUsuario = UsuarioStorage.getId();
+        const data =
+          (await DependenteService.buscarPorUsuario?.(idUsuario)) || [];
         setDependentes(data);
       } catch (err) {
         console.error("Erro ao buscar dependentes:", err);
@@ -63,7 +67,9 @@ const Resultados = () => {
 
     const loadJogos = async () => {
       try {
-        const jogos = await JogoService.getPorDependente(dependenteSelecionado);
+        const jogos = await InfoJogosService.getByDependenteId(
+          dependenteSelecionado,
+        );
 
         setHistoricoJogos(jogos);
 
@@ -78,7 +84,7 @@ const Resultados = () => {
           const ultimosPorTipo = [];
 
           for (const jogo of ordenados) {
-            const nome = jogo.infoJogos_id_fk?.nome?.toLowerCase() || "";
+            const nome = jogo.nomeJogo?.toLowerCase() || "";
             let tipo;
 
             if (nome.includes("mem")) tipo = "Memória";
@@ -139,13 +145,12 @@ const Resultados = () => {
   // DOWNLOADS (SERVICE)
   // =========================
   const downloadPdf = async () => {
-    const id = sessionStorage.getItem("idDependente");
-    if (!id) return;
+    if (!dependenteSelecionado) return;
 
     setIsLoadingPdf(true);
 
     try {
-      await DependenteService.downloadPdf(id);
+      await DependenteService.downloadPdf(dependenteSelecionado);
     } catch (err) {
       console.error("Erro ao gerar PDF:", err);
     } finally {
@@ -154,13 +159,12 @@ const Resultados = () => {
   };
 
   const downloadExcel = async () => {
-    const id = sessionStorage.getItem("idDependente");
-    if (!id) return;
+    if (!dependenteSelecionado) return;
 
     setIsLoadingExcel(true);
 
     try {
-      await DependenteService.downloadExcel(id);
+      await DependenteService.downloadExcel(dependenteSelecionado);
     } catch (err) {
       console.error("Erro ao gerar Excel:", err);
     } finally {
@@ -175,12 +179,12 @@ const Resultados = () => {
     if (!jogadaSelecionada) return;
 
     try {
-      await JogoService.deletar(jogadaSelecionada);
+      // await InfoJogosService.deletar(jogadaSelecionada);
 
       setModalConfirmDelete(false);
       setModalSuccess(true);
 
-      const jogos = await JogoService.getPorDependente(dependenteSelecionado);
+      const jogos = await JogosService.getPorDependente(dependenteSelecionado);
       setHistoricoJogos(jogos);
     } catch (err) {
       console.error("Erro ao excluir jogo:", err);
@@ -212,20 +216,20 @@ const Resultados = () => {
 
     const dados = mostrarUltimoJogo
       ? jogosPorTipo.map((jogo) => ({
-          acertos: jogo.acertos,
-          erros: jogo.erros,
-          tentativas: jogo.tentativas,
+          totalAcertos: jogo.totalAcertos,
+          totalErros: jogo.totalErros,
+          totalTentativas: jogo.totalTentativas,
           tempoTotal: jogo.tempoTotal > 0 ? jogo.tempoTotal : 1,
-          jogo: padronizarNomeJogo(jogo.infoJogos_id_fk?.nome),
+          jogo: padronizarNomeJogo(jogo.nomeJogo),
         }))
       : [
           {
-            acertos: jogoSelecionado.acertos,
-            erros: jogoSelecionado.erros,
-            tentativas: jogoSelecionado.tentativas,
+            totalAcertos: jogoSelecionado.totalAcertos,
+            totalErros: jogoSelecionado.totalErros,
+            totalTentativas: jogoSelecionado.totalTentativas,
             tempoTotal:
               jogoSelecionado.tempoTotal > 0 ? jogoSelecionado.tempoTotal : 1,
-            jogo: padronizarNomeJogo(jogoSelecionado.infoJogos_id_fk?.nome),
+            jogo: padronizarNomeJogo(jogoSelecionado.nomeJogo),
           },
         ];
 
@@ -275,7 +279,7 @@ const Resultados = () => {
               value={tipoGrafico}
               onChange={(e) => setTipoGrafico(e.target.value)}
             >
-              <option value="bar">Acertos/Erros</option>
+              <option value="bar">Tentativas, Acertos e Erros</option>
               <option value="gauge">Tempo</option>
               <option value="radar">Habilidades</option>
             </select>
@@ -331,8 +335,7 @@ const Resultados = () => {
                         className={styles.btnHistory}
                         onClick={() => selecionarJogo(jogo)}
                       >
-                        {jogo.infoJogos_id_fk?.nome} -{" "}
-                        {data?.toLocaleDateString()}{" "}
+                        {jogo.nomeJogo} - {data?.toLocaleDateString()}{" "}
                         {data?.toLocaleTimeString()}
                         <button
                           className={styles.btnExcluir}

@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
 .inputGroup {
   position: relative;
@@ -30,24 +29,22 @@
   border-color: #e60000;
 }
 
-
 .loginTitle {
   margin-bottom: 10px;
   font-size: 1rem;
   color: #666;
 }
 
-
 .container {
   display: flex;
   height: 100vh;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .leftSide {
   flex: 1;
   position: relative;
-  background-image: url('../../assets/images/kids.jpg');
+  background-image: url("../../assets/images/kids.jpg");
   background-size: cover;
   background-position: center;
   color: white;
@@ -60,10 +57,12 @@
 }
 
 .leftSide::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
   z-index: -1;
 }
@@ -149,13 +148,13 @@ input[type="password"]:focus {
 }
 
 .extraOptions a {
-  color: #007BFF;
+  color: #007bff;
   text-decoration: none;
   cursor: pointer;
 }
 
 .styles.links {
-  color: #007BFF;
+  color: #007bff;
   text-decoration: none;
   cursor: pointer;
 }
@@ -185,18 +184,17 @@ input[type="password"]:focus {
   filter: brightness(1.1);
 }
 
-.btnLogin > svg{
+.btnLogin > svg {
   height: 50%;
   width: 100%;
 }
 
 @media (max-width: 768px) {
-  .rightSide{
+  .rightSide {
     width: 100%;
   }
 
-  .leftSide{
+  .leftSide {
     display: none;
   }
-
 }

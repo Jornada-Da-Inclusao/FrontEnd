@@ -6,18 +6,20 @@ import { CustomModal } from "../../components/Modal-custom-alert/CustomModal.jsx
 import { RotatingLines } from "react-loader-spinner";
 import logo from "../../assets/images/LOGO.png";
 import { UsuarioService } from "@/services/usuario.service.js";
+import { ClassNames } from "@emotion/react";
 
 function Cadastro() {
   const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState({
     nome: "",
-    usuario: "",
+    email: "",
     senha: "",
   });
 
   const [confirmaSenha, setConfirmaSenha] = useState("");
   const [loading, setLoading] = useState(false);
+  const [stateExibeDicaSenha, setStateExibeDicaSenha] = useState(false);
 
   const [modalSucesso, setModalSucesso] = useState(false);
   const [modalErro, setModalErro] = useState(false);
@@ -54,7 +56,7 @@ function Cadastro() {
 
       setUsuario({
         nome: "",
-        usuario: "",
+        email: "",
         senha: "",
       });
       setConfirmaSenha("");
@@ -89,8 +91,8 @@ function Cadastro() {
             <label>E-mail</label>
             <input
               type="email"
-              name="usuario"
-              value={usuario.usuario}
+              name="email"
+              value={usuario.email}
               onChange={atualizarEstado}
             />
 
@@ -99,15 +101,34 @@ function Cadastro() {
               type="password"
               name="senha"
               value={usuario.senha}
+              minLength={8}
+              maxLength={100}
               onChange={atualizarEstado}
+              onFocus={() => setStateExibeDicaSenha(true)}
+              onBlur={() => setStateExibeDicaSenha(false)}
             />
 
             <label>Confirmar Senha</label>
             <input
               type="password"
               value={confirmaSenha}
+              minLength={8}
+              maxLength={100}
               onChange={(e) => setConfirmaSenha(e.target.value)}
+              onFocus={() => setStateExibeDicaSenha(true)}
+              onBlur={() => setStateExibeDicaSenha(false)}
             />
+
+            <ul
+              className={`${styles.passwordHint} ${
+                !stateExibeDicaSenha ? styles.passwordHintInvisivel : ""
+              }`}
+            >
+              <li>Mínimo de 8 caracteres</li>
+              <li>Pelo menos 1 letra maiúscula</li>
+              <li>Pelo menos 1 número</li>
+              <li>Pelo menos 1 caractere especial</li>
+            </ul>
 
             <button
               type="submit"

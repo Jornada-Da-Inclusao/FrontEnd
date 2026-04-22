@@ -8,6 +8,7 @@ import { DependenteService } from "../../../services/dependente.service";
 import { playerStorage } from "../../../helper/playerStorage";
 
 import style from "./selectPlayer.module.css";
+import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
 
 const SelectPlayer = () => {
   const [dependentes, setDependentes] = useState([]);
@@ -19,8 +20,7 @@ const SelectPlayer = () => {
   useEffect(() => {
     const carregar = async () => {
       try {
-        // ⚠️ ideal: pegar usuário logado de auth context
-        const usuarioId = sessionStorage.getItem("userId");
+        const usuarioId = UsuarioStorage.getId();
 
         const data = await DependenteService.buscarPorUsuario(usuarioId);
         setDependentes(data || []);
