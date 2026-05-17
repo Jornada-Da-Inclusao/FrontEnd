@@ -5,10 +5,12 @@ import styles from './AudioButton.module.css';
 /**
  * Component for playing audio from GCS with accessibility features
  * 
- * @param {string} audioUrl - Full URL to GCS audio file
- * @param {string} label - Text label for the button
- * @param {string} ariaLabel - Accessible label for screen readers
- * @param {boolean} disabled - Whether button is disabled
+ * @param {{
+ *   audioUrl: string,
+ *   label?: string,
+ *   ariaLabel?: string,
+ *   disabled?: boolean,
+ * }} props
  */
 export function AudioButton({ 
   audioUrl, 
@@ -19,7 +21,9 @@ export function AudioButton({
   const { play, pause, stop, isPlaying, isLoading, error } = useTTS();
   const [showError, setShowError] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (isPlaying) {
       stop();
     } else {
