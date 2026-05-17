@@ -19,7 +19,7 @@ import { convertToSeconds } from "@/helper/formataTime";
 
 import { IDS_JOGOS } from "@/utils/constants/jogos/ids";
 
-import styles from "./JogoCores.module.css";
+import styles from "./jogoCores.module.css";
 import { colorsGameFactory } from "@/components/jogos/cores/core/colorsFactory";
 import { useColorsGame } from "@/components/jogos/cores/core/useColorsGame";
 
