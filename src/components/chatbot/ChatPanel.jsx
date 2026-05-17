@@ -4,10 +4,13 @@ import ChatMessage from "./ChatMessage.jsx";
 import ChatInput from "./ChatInput.jsx";
 import styles from "./chat.module.css";
 
+const SLOW_REQUEST_DELAY_MS = 1200;
+
 const ChatPanel = () => {
   const { messages, sendMessage, startChat, loading, sending, resetChat, error } = useChatbot();
   const listRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [showSlowLoadingHint, setShowSlowLoadingHint] = useState(false);
 
   useEffect(() => {
     if (open && messages.length === 0 && !loading) {
@@ -20,7 +23,24 @@ const ChatPanel = () => {
       // @ts-ignore DOM typing in JS file
       listRef.current.scrollTop = listRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, showSlowLoadingHint]);
+
+  useEffect(() => {
+    const hasPendingRequest = loading || sending;
+
+    if (!hasPendingRequest) {
+      setShowSlowLoadingHint(false);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowSlowLoadingHint(true);
+    }, SLOW_REQUEST_DELAY_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [loading, sending]);
 
   const handleSend = (text) => {
     if (!text) return;
@@ -46,9 +66,9 @@ const ChatPanel = () => {
         <aside className={styles.panel} aria-label="Assistente" role="region">
           <header className={styles.header}>
             <h2>Ajuda</h2>
-            <div>
-              <button onClick={() => setOpen(false)} className={styles.reset} aria-label="Fechar">Fechar</button>
+            <div className={styles.controls}>
               <button onClick={resetChat} className={styles.reset} aria-label="Reiniciar conversa">Reiniciar</button>
+              <button onClick={() => setOpen(false)} className={styles.reset} aria-label="Fechar">Fechar</button>
             </div>
           </header>
 
@@ -62,6 +82,17 @@ const ChatPanel = () => {
             {!loading && !error && messages.map((m, i) => (
               <ChatMessage key={i} message={m} onQuickAction={handleQuickAction} />
             ))}
+
+            {showSlowLoadingHint && !error && (
+              <div className={styles.loadingHint} role="status" aria-live="polite">
+                <span className={styles.loadingDots} aria-hidden>
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <span>Assistente processando sua mensagem...</span>
+              </div>
+            )}
           </div>
 
           <ChatInput onSend={handleSend} disabled={sending} />

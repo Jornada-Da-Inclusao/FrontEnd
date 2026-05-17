@@ -103,6 +103,11 @@
   overflow: hidden;
 }
 
+.controls {
+    display: flex;
+    gap: 1rem;
+}
+
 .avatarBtn {
   position: fixed;
   right: 1rem;
@@ -140,4 +145,53 @@
   padding: 0.5rem;
   border-radius: 6px;
   margin-bottom: 0.5rem;
+}
+
+.loadingHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: #154273;
+  font-size: 0.9rem;
+  width: fit-content;
+}
+
+.loadingDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.loadingDots span {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: #1f5fa3;
+  opacity: 0.35;
+  animation: chatbotDotPulse 1s infinite ease-in-out;
+}
+
+.loadingDots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.loadingDots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes chatbotDotPulse {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.75);
+    opacity: 0.35;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
