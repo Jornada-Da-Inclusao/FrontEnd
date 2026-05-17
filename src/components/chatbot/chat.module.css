@@ -141,3 +141,30 @@
   border-radius: 6px;
   margin-bottom: 0.5rem;
 }
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  color: #154273; /* visible dark-blue foreground for icons */
+  cursor: pointer;
+}
+.iconBtn:hover {
+  background: rgba(21,66,115,0.06);
+}
+.iconBtn svg {
+  width: 1rem;
+  height: 1rem;
+  color: currentColor;
+}

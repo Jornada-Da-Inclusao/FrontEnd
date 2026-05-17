@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import useChatbot from "../../hooks/useChatbot";
 import ChatMessage from "./ChatMessage.jsx";
 import ChatInput from "./ChatInput.jsx";
@@ -47,8 +49,23 @@ const ChatPanel = () => {
           <header className={styles.header}>
             <h2>Ajuda</h2>
             <div>
-              <button onClick={() => setOpen(false)} className={styles.reset} aria-label="Fechar">Fechar</button>
-              <button onClick={resetChat} className={styles.reset} aria-label="Reiniciar conversa">Reiniciar</button>
+                <button
+                  onClick={resetChat}
+                  className={`${styles.iconBtn} ${styles.reset}`}
+                  aria-label="Reiniciar conversa"
+                  title="Reiniciar conversa"
+                >
+                  <FontAwesomeIcon icon={faRotateRight} aria-hidden="true" />
+                </button>
+
+                <button
+                  onClick={() => setOpen(false)}
+                  className={`${styles.iconBtn} ${styles.reset}`}
+                  aria-label="Fechar assistente"
+                  title="Fechar"
+                >
+                  <FontAwesomeIcon icon={faTimes} aria-hidden="true" />
+                </button>
             </div>
           </header>
 
