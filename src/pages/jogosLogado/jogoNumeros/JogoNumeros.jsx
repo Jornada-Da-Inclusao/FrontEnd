@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   DndContext,
@@ -17,6 +17,7 @@ import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
 import { InfoJogosService } from "@/services/infoJogos.service";
 import { convertToSeconds } from "@/helper/formataTime";
+import { IDS_JOGOS } from "@/utils/constants/jogos/ids";
 
 export default function JogoNumeros() {
   const navigate = useNavigate();
@@ -50,8 +51,11 @@ export default function JogoNumeros() {
 
   const [modalConfig, setModalConfig] = useState({ show: false });
 
-  const idJogoNumeros = 2;
   const idDependente = Number(sessionStorage.getItem("playerId"));
+
+  const location = useLocation();
+
+  const { gameId, difficulty } = location.state || {};
 
   useEffect(() => {
     sessionStorage.setItem("acertos", "0");
@@ -62,9 +66,9 @@ export default function JogoNumeros() {
     setTotalNumber(numbers.length);
   }, []);
 
-  useEffect(() => {
-    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
-  }, [usuario, navigate]);
+  // useEffect(() => {
+  //   if (!modalConfig.show) return chamaRotinaDeslogado();
+  // }, [navigate]);
 
   const handleTimeUpdate = (t) => setTime(t);
 
@@ -73,9 +77,36 @@ export default function JogoNumeros() {
     totalTentativas: tentativas,
     totalAcertos: acertos,
     totalErros: erros,
-    jogo: { id: idJogoNumeros },
+    jogo: { id: IDS_JOGOS.FACIL.NUMEROS },
     dependente: { id: idDependente },
   };
+
+  const finalizaDeslogado = () => {
+    setTimerActive(false);
+    const tempoFinal = time;
+    const resultadoMessage = `
+                      Acertos: ${acertos}
+                      Erros: ${erros}
+                      Tentativas: ${tentativas}
+                      Tempo: ${tempoFinal}
+                      
+                      Para mais informações, por favor, faça login.
+                  `;
+    setModalConfig({
+      show: true,
+      title: "Missão concluída!",
+      message: resultadoMessage,
+      icon: "🏆",
+      color: "#4caf50",
+      doneButton: {
+        label: "Voltar",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
+  };
+
+  // const
 
   useEffect(() => {
     const finalizar = async () => {
@@ -85,12 +116,13 @@ export default function JogoNumeros() {
         !jogoRegistrado
       ) {
         setJogoRegistrado(true);
+        setTimerActive(false);
+
+        if (!usuario) return finalizaDeslogado();
         setLoading(true);
 
         try {
           await InfoJogosService.registrar(infoJogo);
-
-          setTimerActive(false);
 
           setModalConfig({
             show: true,

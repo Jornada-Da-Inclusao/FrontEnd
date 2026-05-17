@@ -22,6 +22,7 @@ import { CustomModal } from "@/components/Modal-custom-alert/CustomModal.jsx";
 import { UsuarioStorage } from "@/helper/retornaUsuarioLogado.js";
 import { InfoJogosService } from "@/services/infoJogos.service.js";
 import { convertToSeconds } from "@/helper/formataTime.js";
+import { IDS_JOGOS } from "@/utils/constants/jogos/ids.js";
 
 export default function JogoCores() {
   const navigate = useNavigate();
@@ -54,7 +55,6 @@ export default function JogoCores() {
 
   const [modalConfig, setModalConfig] = useState({ show: false });
 
-  const idJogoCores = 4;
   const idDependente = Number(sessionStorage.getItem("playerId"));
 
   useEffect(() => {
@@ -80,9 +80,9 @@ export default function JogoCores() {
   }
 
   // redirect if not logged
-  useEffect(() => {
-    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
-  }, [usuario, navigate]);
+  // useEffect(() => {
+  //   if (!modalConfig.show) return chamaRotinaDeslogado();
+  // }, [navigate]);
 
   const handleTimeUpdate = (newTime) => setTime(newTime);
 
@@ -91,20 +91,47 @@ export default function JogoCores() {
     totalTentativas: tentativas,
     totalAcertos: acertos,
     totalErros: erros,
-    jogo: { id: idJogoCores },
+    jogo: { id: IDS_JOGOS.FACIL.CORES },
     dependente: { id: idDependente },
+  };
+
+  const finalizaDeslogado = () => {
+    setTimerActive(false);
+    const tempoFinal = time;
+    const resultadoMessage = `
+                      Acertos: ${acertos}
+                      Erros: ${erros}
+                      Tentativas: ${tentativas}
+                      Tempo: ${tempoFinal}
+                      
+                      Para mais informações, por favor, faça login.
+                  `;
+    setModalConfig({
+      show: true,
+      title: "Missão concluída!",
+      message: resultadoMessage,
+      icon: "🏆",
+      color: "#4caf50",
+      doneButton: {
+        label: "Voltar",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
   };
 
   useEffect(() => {
     const finalizar = async () => {
       if (droppedColors.length === colorsData.length && !jogoRegistrado) {
         setJogoRegistrado(true);
+        setTimerActive(false);
+
+        if (!usuario) return finalizaDeslogado();
         setLoading(true);
 
         try {
           await InfoJogosService.registrar(infoJogo);
 
-          setTimerActive(false);
           setLoading(false);
 
           setModalConfig({

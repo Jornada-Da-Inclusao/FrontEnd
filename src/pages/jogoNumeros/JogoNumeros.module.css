@@ -51,7 +51,7 @@
   margin-inline: auto;
   min-height: var(--min-height);
 
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   flex-direction: column;

@@ -99,6 +99,11 @@ export function AuthProvider({ children }) {
   function clearAuthStorage() {
     localStorage.removeItem(STORAGE_KEYS.token);
     localStorage.removeItem(STORAGE_KEYS.email);
+    sessionStorage.removeItem("playerId");
+    sessionStorage.removeItem("player");
+    sessionStorage.removeItem("acertos");
+    sessionStorage.removeItem("erros");
+    sessionStorage.removeItem("idDependente");
   }
 
   // ⏰ modal de expiração

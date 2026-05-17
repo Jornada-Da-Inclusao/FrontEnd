@@ -13,10 +13,12 @@ import Perfil from "./pages/perfil/perfil.jsx";
 
 // jogos logado
 import SelectPlayer from "./pages/jogosLogado/selecionarPlayer/selectPlayer.jsx";
-import JogoCores from "./pages/jogosLogado/jogoCores/JogoCores.jsx";
-import JogoMemoria from "./pages/jogosLogado/jogoMemoria/JogoMemoria.jsx";
-import FaceJogoVogais from "./pages/jogosLogado/faceJogoVogais/FaceJogoVogais.jsx";
-import FaceJogoNumeros from "./pages/jogosLogado/jogoNumeros/JogoNumeros.jsx";
+// import JogoCores from "./pages/jogosLogado/jogoCores/JogoCores.jsx";
+// import JogoMemoria from "./pages/jogosLogado/jogoMemoria/JogoMemoria.jsx";
+import JogoMemoria from "./pages/jogoMemoria/JogoMemoria";
+// import FaceJogoVogais from "./pages/jogosLogado/faceJogoVogais/FaceJogoVogais.jsx";
+import JogoNumeros from "./pages/jogoNumeros/JogoNumeros";
+// import FaceJogoNumeros from "./pages/jogosLogado/jogoNumeros/JogoNumeros.jsx";
 import {
   ExplicacaoCores,
   ExplicacaoMemoria,
@@ -24,13 +26,9 @@ import {
   ExplicacaoVogais,
 } from "./components/explicacoes/Explicacoes.jsx";
 
-// jogos deslogado
-import JogoCoresDeslogado from "./pages/jogosDeslogado/jogoCoresDeslogado/JogoCoresDeslogado";
-import JogoMemoriaDeslogado from "./pages/jogosDeslogado/jogoMemoriaDeslogado/JogoMemoriaDeslogado";
-import FaceJogoVogaisDeslogado from "./pages/jogosDeslogado/faceJogoVogaisDeslogado/FaceJogoVogaisDeslogado";
-import JogoNumerosDeslogado from "./pages/jogosDeslogado/jogoNumerosDeslogado/JogoNumerosDeslogado";
-
 import { AuthProvider } from "./contexts/AuthContext";
+import JogoVogais from "./pages/jogoVogais/JogoVogais";
+import JogoCores from "./pages/jogoCores/JogoCores";
 
 const App = () => (
   <Router>
@@ -46,23 +44,9 @@ const App = () => (
         <Route path="/jogo-vogais-exp" element={<ExplicacaoVogais />} />
 
         <Route path="/jogo-memoria" element={<JogoMemoria />} />
-        <Route path="/jogo-numeros" element={<FaceJogoNumeros />} />
-        <Route path="/jogo-vogais" element={<FaceJogoVogais />} />
+        <Route path="/jogo-numeros" element={<JogoNumeros />} />
+        <Route path="/jogo-vogais" element={<JogoVogais />} />
         <Route path="/jogo-cores" element={<JogoCores />} />
-
-        <Route
-          path="/jogo-memoria-deslogado"
-          element={<JogoMemoriaDeslogado />}
-        />
-        <Route
-          path="/jogo-numeros-deslogado"
-          element={<JogoNumerosDeslogado />}
-        />
-        <Route
-          path="/jogo-vogais-deslogado"
-          element={<FaceJogoVogaisDeslogado />}
-        />
-        <Route path="/jogo-cores-deslogado" element={<JogoCoresDeslogado />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/sendToken" element={<SendToken />} />
