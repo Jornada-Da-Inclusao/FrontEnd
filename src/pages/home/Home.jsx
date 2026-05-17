@@ -1,9 +1,11 @@
+import React from "react";
 import Header from "../../components/home/header/Header.jsx";
 import Carousel from "../../components/home/carousel/Carousel.jsx";
 import Cards from "../../components/home/card/Cards.jsx";
 import Contact from "../../components/home/contato/Contact.jsx";
 import About from "../../components/home/sobre/About.jsx";
 import Footer from "../../components/home/footer/Footer.jsx";
+import ChatPanel from "../../components/chatbot/ChatPanel.jsx";
 import styles from "./home.module.css";
 
 const Home = () => (
@@ -14,6 +16,7 @@ const Home = () => (
     <Cards />
     <About />
     <Contact />
+    <ChatPanel />
     <Footer />
   </div>
 );

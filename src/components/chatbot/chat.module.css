@@ -1,0 +1,122 @@
+.panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: 320px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  z-index: 1000;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+.messages {
+  padding: 0.75rem;
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.message {
+  display: flex;
+  flex-direction: column;
+}
+.bubble {
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  max-width: 85%;
+}
+.user .bubble {
+  background: #0078d4;
+  color: white;
+  margin-left: auto;
+}
+.bot .bubble {
+  background: #f1f1f1;
+  color: #111;
+  margin-right: auto;
+}
+.quickActions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.quickBtn {
+  background: #efefef;
+  color: #111;
+  border: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.inputForm {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-top: 1px solid #f0f0f0;
+  background: #fff;
+}
+.input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+.send {
+  background: #0078d4;
+  color: white;
+  border: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.reset {
+  background: transparent;
+  border: 0;
+  color: #555;
+  cursor: pointer;
+}
+.empty {
+  color: #666;
+  text-align: center;
+  padding: 1rem;
+}
+.srOnly {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.debug {
+  font-size: 11px;
+  color: #333;
+  background: #f8f8f8;
+  padding: 0.5rem;
+  border-radius: 6px;
+  max-height: 120px;
+  overflow: auto;
+  margin-top: 0.5rem;
+}
+.error {
+  color: #a00;
+  background: #fff0f0;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}

@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const CHATBOT_API_BASE_URL = (
-  import.meta.env.VITE_CHATBOT_API_URL ||
-  "https://chatbot-service-yu32.onrender.com"
-).replace(/\/$/, "");
+// Use a relative base URL in development so the Vite dev server proxy can forward requests
+const CHATBOT_API_BASE_URL = import.meta.env.DEV
+  ? ""
+  : (import.meta.env.VITE_CHATBOT_API_URL || "https://chatbot-service-yu32.onrender.com").replace(/\/$/, "");
 
 const chatbotApi = axios.create({
   baseURL: CHATBOT_API_BASE_URL,

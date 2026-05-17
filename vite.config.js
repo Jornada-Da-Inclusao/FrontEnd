@@ -14,4 +14,14 @@ export default defineConfig({
     }
   },
   plugins: [react()]
+  ,
+  server: {
+    proxy: {
+      '/api/chat': {
+        target: process.env.VITE_CHATBOT_API_URL || 'https://chatbot-service-yu32.onrender.com',
+        changeOrigin: true,
+        secure: true,
+      }
+    }
+  }
 })
