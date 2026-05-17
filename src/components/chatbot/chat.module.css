@@ -55,9 +55,9 @@
   flex-wrap: wrap;
 }
 .quickBtn {
-  background: #efefef;
+  background: #a0d1f7;
   color: #111;
-  border: 0;
+  border: solid #111 1px;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   cursor: pointer;
