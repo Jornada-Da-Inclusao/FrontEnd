@@ -10,10 +10,10 @@ export const level1 = {
 
   validate: ({ number, numbers, droppedNumbers, over }) => {
     const expected = droppedNumbers.length;
-    return number.value === expected;
+    return number.value === expected + 1;
   },
 
-  isCompleted: (numbers, dropped) => {
+  isCompleted: ({ numbers }) => {
     return numbers.length === 0;
   },
 };

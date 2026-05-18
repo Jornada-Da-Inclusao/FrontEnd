@@ -166,7 +166,7 @@ export const level2 = {
     });
   },
 
-  isCompleted: (numbers) => numbers.length === 0,
+  isCompleted: ({ numbers }) => numbers.length === 0,
 
   getMode: () => {
     const modes = Object.values(MODES);

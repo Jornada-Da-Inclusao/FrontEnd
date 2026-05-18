@@ -45,11 +45,12 @@ export function useNumerosGame(difficulty) {
     scoreStore.set({ acertos: 0, erros: 0 });
   }, [rules]);
 
+  console.log(numbers)
+  console.log(numbers.length)
+
   const isCompleted =
     gameData &&
-    droppedNumbers.length > 0 &&
-    numbers.length === 0 &&
-    rules?.isCompleted?.(numbers, droppedNumbers);
+    rules?.isCompleted?.({ numbers, droppedNumbers, gameData });
 
   function handleDragEnd(event) {
     const { active, over } = event;
