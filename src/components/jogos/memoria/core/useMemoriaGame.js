@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { randomizeArr } from "@/utils/utils";
 import { memoryFactory } from "./memoryFactory";
+import { scoreStore } from "../../scoreStore/scoreStore";
 
 export function useMemoriaGame(difficulty, cardsData) {
-  const config = useMemo(() => memoryFactory(difficulty), [difficulty]);
+  const rules = useMemo(() => memoryFactory(difficulty), [difficulty]);
 
   const [cards, setCards] = useState([]);
   const [flipped, setFlipped] = useState([]);
@@ -16,11 +17,15 @@ export function useMemoriaGame(difficulty, cardsData) {
   // const isCompleted = useMemo(() => {
   //   return config.isCompleted({ matched, cards });
   // }, [matched, cards, config]);
-  const isCompleted = false;
+  const isCompleted = rules?.isCompleted?.({ matched, cards });
+
+  useEffect(() => {
+    scoreStore.set({ acertos, erros });
+  }, [acertos, erros]);
 
   // INIT - monta deck baseado na dificuldade
   useEffect(() => {
-    const selectedPairs = randomizeArr(cardsData).slice(0, config.pairs);
+    const selectedPairs = randomizeArr(cardsData).slice(0, rules.pairs);
 
     const duplicated = [...selectedPairs, ...selectedPairs];
 
@@ -32,7 +37,9 @@ export function useMemoriaGame(difficulty, cardsData) {
     setTentativas(0);
     setAcertos(0);
     setErros(0);
-  }, [cardsData, config.pairs]);
+
+    scoreStore.set({ acertos: 0, erros: 0 });
+  }, [cardsData, rules.pairs]);
 
   function flipCard(index) {
     if (
@@ -52,7 +59,7 @@ export function useMemoriaGame(difficulty, cardsData) {
       const c1 = cards[i1];
       const c2 = cards[i2];
 
-      const isMatch = config.validate({ c1, c2 });
+      const isMatch = rules.validate({ c1, c2 });
 
       if (isMatch) {
         setMatched((p) => [...p, i1, i2]);

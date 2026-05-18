@@ -11,7 +11,7 @@ export function memoryFactory(difficulty) {
     },
 
     isCompleted: ({ matched, cards }) => {
-      return matched.length === cards.length;
+      return matched.length != 0 && cards.length != 0 && matched.length === cards.length;
     },
   };
 }
