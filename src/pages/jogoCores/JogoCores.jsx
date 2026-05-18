@@ -23,7 +23,6 @@ import { convertToSeconds } from "@/helper/formataTime";
 import { IDS_JOGOS } from "@/utils/constants/jogos/ids";
 
 import styles from "./jogoCores.module.css";
-import { colorsGameFactory } from "@/components/jogos/cores/core/colorsFactory";
 import { useColorsGame } from "@/components/jogos/cores/core/useColorsGame";
 import { descriptionTemplates } from "@/components/jogos/cores/data/strings.data";
 import { colorBlocks } from "@/components/jogos/cores/data/colors.data";
@@ -35,11 +34,17 @@ export default function JogoCores() {
 
   const { difficulty } = location.state || {};
 
-  const level = colorsGameFactory(difficulty || "FACIL");
+  const selectedDifficulty = difficulty || sessionStorage.getItem("difficulty") || "FACIL";
 
-  const game = useColorsGame(level);
+  const game = useColorsGame(selectedDifficulty);
 
   const sensors = useSensors(useSensor(PointerSensor));
+
+  const shapeLabels = {
+    circle: "Círculo",
+    square: "Quadrado",
+    triangle: "Triângulo",
+  };
 
   const DroppableArea = ({ id, children, accepts = [] }) => {
     const { setNodeRef } = useDroppable({ id, data: { accepts } });
@@ -51,16 +56,58 @@ export default function JogoCores() {
     );
   };
 
-  const ColorBox = ({ id, color }) => {
+  const ColorBox = ({ draggable }) => {
+    const id = draggable.id;
+    const color = draggable.hex || draggable.color || draggable.value || draggable.code;
+    const shape = draggable.shape;
+
     const { attributes, listeners, setNodeRef, transform, isDragging } =
       useDraggable({ id, data: { type: id } });
 
     const style = {
-      backgroundColor: color,
       transform: transform ? CSS.Translate.toString(transform) : undefined,
       willChange: "transform",
       zIndex: isDragging ? "var(--z-drag)" : undefined,
     };
+
+    // Render an SVG for shapes, fallback to colored square
+    const content = shape ? (
+      <svg viewBox="0 0 100 100" className={styles.shapeSvg} aria-hidden>
+        {shape === "circle" && (
+          <circle
+            cx="50"
+            cy="50"
+            r="30"
+            fill={color}
+            stroke="rgba(0, 0, 0, 0.35)"
+            strokeWidth="4"
+          />
+        )}
+        {shape === "square" && (
+          <rect
+            x="20"
+            y="20"
+            width="60"
+            height="60"
+            rx="8"
+            ry="8"
+            fill={color}
+            stroke="rgba(0, 0, 0, 0.35)"
+            strokeWidth="4"
+          />
+        )}
+        {shape === "triangle" && (
+          <polygon
+            points="50,18 82,78 18,78"
+            fill={color}
+            stroke="rgba(0, 0, 0, 0.35)"
+            strokeWidth="4"
+          />
+        )}
+      </svg>
+    ) : (
+      <div style={{ backgroundColor: color, width: '100%', height: '100%', borderRadius: '0.5em' }} />
+    );
 
     return (
       <div
@@ -70,13 +117,15 @@ export default function JogoCores() {
         style={style}
         {...attributes}
         {...listeners}
-      />
+      >
+        {content}
+      </div>
     );
   };
 
   const Colors = () =>
     (shuffledDraggables || []).map((draggable) => (
-      <ColorBox key={draggable.id} id={draggable.id} color={draggable.hex || draggable.color || draggable.value} />
+      <ColorBox key={draggable.id} draggable={draggable} />
     ));
 
   const Card = ({ target }) => (
@@ -200,7 +249,7 @@ export default function JogoCores() {
         totalErros: game.erros,
 
         jogo: {
-          id: IDS_JOGOS[difficulty]?.CORES,
+          id: IDS_JOGOS[selectedDifficulty]?.CORES,
         },
 
         dependente: {
@@ -306,7 +355,7 @@ export default function JogoCores() {
                       return (
                         <p key={target.id} className={styles.paragraph}>
                           {target.article ? `${target.article} ` : ""}
-                          <b>{target.label ?? target.name ?? target.id}</b> {template} <b>{color.label ?? color.name ?? colorId}</b>
+                                              <b>{target.label ?? target.name ?? target.id}</b> {template} <b>{(target.traits?.shape && shapeLabels[target.traits.shape]) ? shapeLabels[target.traits.shape] + ' ' : ''}{color.label ?? color.name ?? colorId}</b>
                         </p>
                       );
                     })}

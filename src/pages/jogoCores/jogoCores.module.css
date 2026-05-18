@@ -77,16 +77,27 @@ body {
   cursor: grab;
   position: relative;
   z-index: var(--z-square);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 
   border: 1px solid black;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
   border-radius: 1em;
   margin: auto;
   height: 4em;
   width: 4em;
+  background-color: var(--clr-game-terciary);
 
   &:focus-within {
     cursor: move;
   }
+}
+
+.shapeSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .dragging {

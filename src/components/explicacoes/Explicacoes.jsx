@@ -44,6 +44,8 @@ function TemplateExplicacao({ title, description, route, gameKey }) {
 
     if (!gameId) return;
 
+    sessionStorage.setItem("difficulty", difficulty);
+
     // exemplo: enviar via state (React Router)
     navigate(route, {
       state: { gameId, difficulty },
