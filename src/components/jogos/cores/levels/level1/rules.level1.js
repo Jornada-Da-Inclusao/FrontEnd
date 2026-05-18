@@ -14,11 +14,12 @@ export const level1 = {
     return "Arraste as cores corretas para os animais.";
   },
 
-  validateMove({ draggable, target }) {
+  validateMove({ item, target }) {
+    const draggable = item || {};
     return draggable.id === target.traits.color;
   },
 
   isCompleted({ matchedTargets = [], targets = [] }) {
-    return matchedTargets.length === targets.length;
+    return matchedTargets.length != 0 && targets.length != 0 && matchedTargets.length === targets.length;
   },
 };

@@ -26,10 +26,10 @@ export function useColorsGame(difficulty) {
 
   // INIT GAME
   useEffect(() => {
-    const data = rules.createGame();
+    const data = rules.createGame ? rules.createGame() : rules.setup ? rules.setup() : {};
 
     setTargets(data.targets || []);
-    setItems(data.draggables || []);
+    setItems(data.draggables || data.items || []);
 
     setGameData(data);
 
@@ -87,41 +87,25 @@ export function useColorsGame(difficulty) {
     setErros((p) => p + 1);
   }
 
-  const isCompleted = rules.isCompleted({
-    matchedTargets,
-    items,
-    gameData,
-  });
+  console.log()
+  const isCompleted = rules.isCompleted({ matchedTargets, targets });
   return {
+    title: rules.title,
+    description: rules.getDescription
+      ? rules.getDescription(gameData)
+      : rules.description,
+
     draggables: items || [],
     targets: targets || [],
+
     matchedTargets: matchedTargets || [],
 
     acertos,
     erros,
     tentativas,
 
-    isCompleted: false,
+    isCompleted,
 
     handleDragEnd,
   };
-  // return {
-  //   title: rules.title,
-  //   description: rules.getDescription
-  //     ? rules.getDescription(gameData)
-  //     : rules.description,
-
-  //   items,
-  //   targets,
-
-  //   matchedTargets,
-
-  //   acertos,
-  //   erros,
-  //   tentativas,
-
-  //   isCompleted,
-
-  //   handleDragEnd,
-  // };
 }

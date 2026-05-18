@@ -135,7 +135,6 @@ const JogoMemoria = () => {
 
         registrarInfosJogo()
           .then((resultado) => {
-            console.log(resultado);
             setLoadingModal(false); // esconde o modal ao terminar
 
             setModalConfig({
@@ -256,7 +255,6 @@ const JogoMemoria = () => {
           return novoValor;
         });
       }
-      console.log(cardsChosenId, cardsChosen);
 
       clearChosenCards(); // Limpa as cartas escolhidas para nova rodada.
     } else {
@@ -359,7 +357,7 @@ const JogoMemoria = () => {
           icon="⏳"
           color="#2196f3"
           doneButton={null} // Oculta botões
-          onClose={() => {}} // Impede fechamento manual
+          onClose={() => { }} // Impede fechamento manual
         />
       )}
     </>

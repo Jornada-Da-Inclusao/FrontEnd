@@ -158,8 +158,6 @@ Tempo: ${time}
     });
   }
 
-  console.log(game.droppedLetters);
-
   function DroppableArea() {
     const { setNodeRef } = useDroppable({
       id: "droppable-area",

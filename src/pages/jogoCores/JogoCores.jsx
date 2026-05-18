@@ -7,7 +7,10 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  useDroppable,
+  useDraggable,
 } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 import Timer from "@/components/timer/Timer";
 import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
@@ -22,6 +25,8 @@ import { IDS_JOGOS } from "@/utils/constants/jogos/ids";
 import styles from "./jogoCores.module.css";
 import { colorsGameFactory } from "@/components/jogos/cores/core/colorsFactory";
 import { useColorsGame } from "@/components/jogos/cores/core/useColorsGame";
+import { descriptionTemplates } from "@/components/jogos/cores/data/strings.data";
+import { colorBlocks } from "@/components/jogos/cores/data/colors.data";
 
 export default function JogoCores() {
   const navigate = useNavigate();
@@ -35,6 +40,117 @@ export default function JogoCores() {
   const game = useColorsGame(level);
 
   const sensors = useSensors(useSensor(PointerSensor));
+
+  const DroppableArea = ({ id, children, accepts = [] }) => {
+    const { setNodeRef } = useDroppable({ id, data: { accepts } });
+
+    return (
+      <div id={id} ref={setNodeRef} className={styles.dropArea}>
+        {children}
+      </div>
+    );
+  };
+
+  const ColorBox = ({ id, color }) => {
+    const { attributes, listeners, setNodeRef, transform, isDragging } =
+      useDraggable({ id, data: { type: id } });
+
+    const style = {
+      backgroundColor: color,
+      transform: transform ? CSS.Translate.toString(transform) : undefined,
+      willChange: "transform",
+      zIndex: isDragging ? "var(--z-drag)" : undefined,
+    };
+
+    return (
+      <div
+        className={`${styles.square} ${isDragging ? styles.dragging : ""}`}
+        id={id}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+      />
+    );
+  };
+
+  const Colors = () =>
+    (shuffledDraggables || []).map((draggable) => (
+      <ColorBox key={draggable.id} id={draggable.id} color={draggable.hex || draggable.color || draggable.value} />
+    ));
+
+  const Card = ({ target }) => (
+    <div className={styles.card}>
+      <img src={target.image} alt={target.label} width={100} />
+      <DroppableArea id={target.id} accepts={[target.traits?.color]}>
+        {(() => {
+          const matched = game.matchedTargets.find((m) => m.targetId === target.id);
+          if (!matched) return null;
+          const item = matched.item || matched;
+          const colorValue = item.hex || item.color || item.value || item.code;
+          const bg = hexToRgba(colorValue, 0.65) || undefined;
+          return <div className={styles.matchedBox} style={{ backgroundColor: bg }} />;
+        })()}
+      </DroppableArea>
+    </div>
+  );
+
+  const Cards = () => (game.targets || []).map((t) => <Card key={t.id} target={t} />);
+
+  // Randomize description templates once per game targets initialization
+  const [templateMap, setTemplateMap] = useState([]);
+
+  // Shuffle the color squares once per game draggables initialization
+  const [shuffledDraggables, setShuffledDraggables] = useState([]);
+
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  useEffect(() => {
+    const targets = game.targets || [];
+    if (!targets.length) return;
+
+    const map = targets.map(() => {
+      const idx = Math.floor(Math.random() * descriptionTemplates.length);
+      return descriptionTemplates[idx];
+    });
+
+    setTemplateMap(map);
+  }, [game.targets?.length]);
+
+  useEffect(() => {
+    const items = game.draggables || [];
+    if (!items.length) {
+      setShuffledDraggables([]);
+      return;
+    }
+
+    setShuffledDraggables((prev) => {
+      // If length changed (new game) or previous is empty, reshuffle
+      if (!prev || prev.length !== items.length) return shuffleArray(items);
+      // Otherwise keep previous order but filter out removed items
+      const filtered = prev.filter((p) => items.some((it) => it.id === p.id));
+      // if filtered lost items, append missing items shuffled
+      const missing = items.filter((it) => !filtered.some((f) => f.id === it.id));
+      return [...filtered, ...shuffleArray(missing)];
+    });
+  }, [game.draggables?.length]);
+
+  function hexToRgba(hex, alpha = 0.65) {
+    if (!hex) return undefined;
+    const h = hex.replace('#', '');
+    const bigint = parseInt(h.length === 3 ? h.split('').map(c=>c+c).join('') : h, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
 
   const usuario = UsuarioStorage.get();
 
@@ -179,35 +295,32 @@ export default function JogoCores() {
 
               <p className={styles.paragraph}>{game.description}</p>
 
-              <div className={styles.colorArea}>
-                {(game.draggables ?? []).map((draggable) => (
-                  <div key={draggable.id}>
-                    {draggable.label ?? draggable.value ?? draggable.id}
+              <div className={styles.info}>
+                {(game.targets || []).length ? (
+                  <div>
+                    {(game.targets || []).map((target, idx) => {
+                      const colorId = target.traits?.color;
+                      const color = colorBlocks.find((c) => c.id === colorId) || {};
+                      const template = templateMap[idx] || descriptionTemplates[idx % descriptionTemplates.length];
+
+                      return (
+                        <p key={target.id} className={styles.paragraph}>
+                          {target.article ? `${target.article} ` : ""}
+                          <b>{target.label ?? target.name ?? target.id}</b> {template} <b>{color.label ?? color.name ?? colorId}</b>
+                        </p>
+                      );
+                    })}
                   </div>
-                ))}
+                ) : null}
+              </div>
+
+              <div className={styles.colorArea}>
+                <Colors />
               </div>
             </section>
 
             <section className={styles.cardGrid}>
-              {game.targets.map((target) => {
-                const matched = game.matchedTargets.find(
-                  (item) => item.targetId === target.id,
-                );
-
-                return (
-                  <div key={target.id} className={styles.card}>
-                    <img src={target.img} alt={target.name} />
-
-                    <div className={styles.dropArea}>
-                      {game.matchedTargets.some(
-                        (m) => m.targetId === target.id,
-                      ) ? (
-                        <div className={styles.matchedBox} />
-                      ) : null}
-                    </div>
-                  </div>
-                );
-              })}
+              <Cards />
             </section>
           </DndContext>
         </div>

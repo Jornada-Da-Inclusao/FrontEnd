@@ -45,9 +45,6 @@ export function useNumerosGame(difficulty) {
     scoreStore.set({ acertos: 0, erros: 0 });
   }, [rules]);
 
-  console.log(numbers)
-  console.log(numbers.length)
-
   const isCompleted =
     gameData &&
     rules?.isCompleted?.({ numbers, droppedNumbers, gameData });
