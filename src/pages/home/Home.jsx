@@ -1,3 +1,4 @@
+import React from "react";
 import Header from "../../components/home/header/Header.jsx";
 import Carousel from "../../components/home/carousel/Carousel.jsx";
 import Cards from "../../components/home/card/Cards.jsx";
