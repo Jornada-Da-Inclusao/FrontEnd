@@ -1,9 +1,19 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./explicacao.module.css";
-import { CustomModal } from "../Modal-custom-alert/CustomModal"; // ajuste se necessário
+import { CustomModal } from "../Modal-custom-alert/CustomModal";
+import { TextWithAudio } from "../TTS/TextWithAudio";
+import { getAudioContent } from "../../services/gcs-audio.service";
 
-function TemplateExplicacao({ title, description, route }) {
+/**
+ * @param {{
+ *   title: string,
+ *   description: string,
+ *   route: string,
+ *   audioTextId?: string,
+ * }} props
+ */
+function TemplateExplicacao({ title, description, route, audioTextId }) {
   const navigate = useNavigate();
 
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -61,7 +71,16 @@ function TemplateExplicacao({ title, description, route }) {
       <div className={styles.explicacaoBody}>
         <div className={styles.containerExp}>
           <h2 className={styles.headingExp}>{title}</h2>
-          <p className={styles.paragraphExp}>{description}</p>
+          {audioTextId ? (() => {
+            const content = getAudioContent(audioTextId);
+            return content ? (
+              <TextWithAudio text={content.text} audioUrl={content.audioUrl} textId={content.textId} textStyle={{ backgroundColor: 'transparent', border: 'none', padding: 0, margin: 0, fontSize: '1.4rem', fontFamily: 'sans-serif', textAlign: 'justify', color: 'var(--black, #000)' }} />
+            ) : (
+              <p className={styles.paragraphExp}>{description}</p>
+            );
+          })() : (
+            <p className={styles.paragraphExp}>{description}</p>
+          )}
           <div className={styles.choices}>
             <button
               className={styles.inlineButton}
@@ -91,7 +110,7 @@ export const ExplicacaoCores = () => {
 
     if (!usuario) {
       setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
-      sessionStorage.setItem('player','2')
+      sessionStorage.setItem('player', '2')
     }
   }, []); // O useEffect será executado apenas uma vez após a montagem do componente
 
@@ -99,14 +118,16 @@ export const ExplicacaoCores = () => {
   return stateUserDeslogado ? (
     <TemplateExplicacao
       title="Jogo das Cores"
-      description="O objetivo é arrastar cada uma das cores para o container do animal correspondente."
+      description="O objetivo é arrastar cada uma das cores para a caixa do animal correspondente."
       route="/jogo-cores-deslogado"
+      audioTextId="explicacao_page_cores"
     />
   ) : (
     <TemplateExplicacao
       title="Jogo das Cores"
-      description="O objetivo é arrastar cada uma das cores para o container do animal correspondente."
+      description="O objetivo é arrastar cada uma das cores para a caixa do animal correspondente."
       route="/jogo-cores"
+      audioTextId="explicacao_page_cores"
     />
   );
 };
@@ -114,87 +135,93 @@ export const ExplicacaoCores = () => {
 
 export const ExplicacaoMemoria = () => {
 
-    const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
+  const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
 
   useEffect(() => {
     const usuario = localStorage.getItem("usuario");
 
     if (!usuario) {
       setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
-      sessionStorage.setItem('player','2')
-    }
-  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
-
-  // Aqui a lógica de renderização condicional
-  return stateUserDeslogado ? (
-      <TemplateExplicacao
-    title="Jogo da Memória"
-    description="Revele todas as cartas encontrando os pares iguais consecutivos."
-    route="/jogo-memoria-deslogado"
-  />
-  ) : (
-      <TemplateExplicacao
-    title="Jogo da Memória"
-    description="Revele todas as cartas encontrando os pares iguais consecutivos."
-    route="/jogo-memoria"
-  />
-  );
-};
-
-export const ExplicacaoNumeros = () => {
-
-    const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
-
-  useEffect(() => {
-    const usuario = localStorage.getItem("usuario");
-
-    if (!usuario) {
-      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
-      sessionStorage.setItem('player','2')
-    }
-  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
-
-  // Aqui a lógica de renderização condicional
-  return stateUserDeslogado ? (
-  <TemplateExplicacao
-    title="Jogo dos Números"
-    description="Ordene todos os números em sequência numérica ao arrastá-los para o container."
-    route="/jogo-numeros-deslogado"
-  />
-  ) : (
-      <TemplateExplicacao
-    title="Jogo dos Números"
-    description="Ordene todos os números em sequência numérica ao arrastá-los para o container."
-    route="/jogo-numeros"
-  />
-  );
-};
-
-export const ExplicacaoVogais = () => {
-
-    const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
-
-  useEffect(() => {
-    const usuario = localStorage.getItem("usuario");
-
-    if (!usuario) {
-      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
-      sessionStorage.setItem('player','2')
+      sessionStorage.setItem('player', '2')
     }
   }, []); // O useEffect será executado apenas uma vez após a montagem do componente
 
   // Aqui a lógica de renderização condicional
   return stateUserDeslogado ? (
     <TemplateExplicacao
-    title="Jogo das Vogais"
-    description="Arraste, dentre o alfabeto inteiro, apenas as letras vogais para o container."
-    route="/jogo-vogais-deslogado"
-  />
+      title="Jogo da Memória"
+      description="Revele todas as cartas encontrando os pares iguais consecutivos."
+      route="/jogo-memoria-deslogado"
+      audioTextId="explicacao_page_memoria"
+    />
   ) : (
-        <TemplateExplicacao
-    title="Jogo das Vogais"
-    description="Arraste, dentre o alfabeto inteiro, apenas as letras vogais para o container."
-    route="/jogo-vogais"
-  />
+    <TemplateExplicacao
+      title="Jogo da Memória"
+      description="Revele todas as cartas encontrando os pares iguais consecutivos."
+      route="/jogo-memoria"
+      audioTextId="explicacao_page_memoria"
+    />
+  );
+};
+
+export const ExplicacaoNumeros = () => {
+
+  const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
+
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+
+    if (!usuario) {
+      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
+      sessionStorage.setItem('player', '2')
+    }
+  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
+
+  // Aqui a lógica de renderização condicional
+  return stateUserDeslogado ? (
+    <TemplateExplicacao
+      title="Jogo dos Números"
+      description="Ordene todos os números em sequência numérica ao arrastá-los para a caixa."
+      route="/jogo-numeros-deslogado"
+      audioTextId="explicacao_page_numeros"
+    />
+  ) : (
+    <TemplateExplicacao
+      title="Jogo dos Números"
+      description="Ordene todos os números em sequência numérica ao arrastá-los para a caixa."
+      route="/jogo-numeros"
+      audioTextId="explicacao_page_numeros"
+    />
+  );
+};
+
+export const ExplicacaoVogais = () => {
+
+  const [stateUserDeslogado, setStateUserDeslogado] = useState(false);
+
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+
+    if (!usuario) {
+      setStateUserDeslogado(true); // Atualiza o estado se o usuário não estiver logado
+      sessionStorage.setItem('player', '2')
+    }
+  }, []); // O useEffect será executado apenas uma vez após a montagem do componente
+
+  // Aqui a lógica de renderização condicional
+  return stateUserDeslogado ? (
+    <TemplateExplicacao
+      title="Jogo das Vogais"
+      description="Arraste, dentre o alfabeto inteiro, apenas as letras vogais para a caixa."
+      route="/jogo-vogais-deslogado"
+      audioTextId="explicacao_page_vogais"
+    />
+  ) : (
+    <TemplateExplicacao
+      title="Jogo das Vogais"
+      description="Arraste, dentre o alfabeto inteiro, apenas as letras vogais para a caixa."
+      route="/jogo-vogais"
+      audioTextId="explicacao_page_vogais"
+    />
   );
 };

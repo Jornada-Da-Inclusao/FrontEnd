@@ -1,0 +1,91 @@
+.audioButtonContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.audioButton {
+  padding: 8px 14px;
+  border: 2px solid #3498db;
+  background-color: #fff;
+  color: #3498db;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.audioButton:hover:not(:disabled) {
+  background-color: #3498db;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.audioButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.audioButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.audioButton.playing {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+}
+
+.audioButton.playing:hover {
+  background-color: #c0392b;
+  border-color: #c0392b;
+}
+
+.audioButton.loading {
+  background-color: #f39c12;
+  border-color: #f39c12;
+  color: #fff;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.errorMessage {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 10;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyboard focus for accessibility */
+.audioButton:focus-visible {
+  outline: 3px solid #3498db;
+  outline-offset: 2px;
+}
+
+.audioButton.playing:focus-visible {
+  outline-color: #e74c3c;
+}
