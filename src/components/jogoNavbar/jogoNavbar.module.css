@@ -1,6 +1,6 @@
 @import url('../../assets/styles/color_pallete.css');
 
-.navbar{
+.navbar {
     width: max-content;
     margin: 15px;
     background-color: #a7d6dc;
@@ -10,26 +10,26 @@
     justify-self: center;
 }
 
-.navbar ul{
+.navbar ul {
     justify-content: space-between;
     display: flex;
     align-items: center;
-    height: min-content; 
+    height: min-content;
     gap: 15px;
 }
 
-.navbar ul li{
-    margin-bottom: 0; 
+.navbar ul li {
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     flex-direction: row;
 }
 
-.navbar ul li span{
+.navbar ul li span {
     color: white;
 }
 
-.navbar ul li button{
+.navbar ul li button {
     background-color: transparent;
     border: 2px solid #a7d6dc;
     border-radius: 12px;
@@ -39,43 +39,48 @@
     transition: 0.5s;
 }
 
-.navbar ul li button:hover{
+.navbar ul li button:hover {
     border-color: lightcyan;
     transition: 0.5s;
 }
 
-.navbar ul li svg{
+.navbar ul li img {
+    margin-right: 10px;
+    max-width: 5%;
+}
+
+.navbar ul li svg {
     margin-right: 10px;
 }
 
-.navbar ul li:nth-child(2):hover svg{
+.navbar ul li:nth-child(2):hover svg {
     transform: rotate(360deg);
     transition: 0.5s;
 }
 
-.navbar ul li:last-child span{
+.navbar ul li:last-child span {
     padding: 0 5px;
 }
 
 .modalOverlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
 }
 
 .modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  min-width: 350px;
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    min-width: 350px;
 }
 
-.modal button{
+.modal button {
     color: white;
     padding: 10px;
     background-color: var(--red);
@@ -85,7 +90,7 @@
     border-radius: 12px;
 }
 
-.modal h3{
+.modal h3 {
     font-size: larger;
     border-bottom: 2px solid var(--red);
     width: 100%;
@@ -93,9 +98,9 @@
 }
 
 .modalOptions {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
 }
 
 .modalOptions li {
@@ -103,7 +108,7 @@
     width: 100%;
 }
 
-.modalOptions li button{
+.modalOptions li button {
     background-color: var(--red);
     padding: 10px;
     width: 100%;
@@ -113,16 +118,16 @@
     transition: 0.5s;
 }
 
-.modalOptions li button:hover{
+.modalOptions li button:hover {
     padding-left: 15%;
     transition: 0.5s;
 }
 
-.modalOptions li button svg{
+.modalOptions li button svg {
     margin-right: 10px;
 }
 
-.ativo{
+.ativo {
     background-color: white !important;
     border: 2px solid var(--red) !important;
     color: var(--red) !important;
@@ -130,42 +135,41 @@
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 8px;
-  object-fit: cover;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
 }
 
-.avatarIcon{
+.avatarIcon {
     color: white;
 }
 
 @media (max-width: 768px) {
-.navbar{
-    display: none;
-    width: 67vw;
-    margin: 30px 0 0 10px;
-    justify-self: flex-start;
-}
+    .navbar {
+        display: none;
+        width: 67vw;
+        margin: 30px 0 0 10px;
+        justify-self: flex-start;
+    }
 
-.navbar span{
-    display: none;
-}
+    .navbar span {
+        display: none;
+    }
 
-.navbar ul li button svg{
-    margin-right: 0;
-}
+    .navbar ul li button svg {
+        margin-right: 0;
+    }
 
-.navbar ul li button{
-    padding: 5px;
-}
+    .navbar ul li button {
+        padding: 5px;
+    }
 
-.avatar{
-    width: 20px;
-    height: 20px;
-    margin-right: 0;
-    margin: 10px;
+    .avatar {
+        width: 20px;
+        height: 20px;
+        margin-right: 0;
+        margin: 10px;
+    }
 }
-}
-

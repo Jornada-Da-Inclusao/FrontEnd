@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"; // Importa os hooks 'useState' e 'useEffect' do React para gerenciar o estado e os efeitos colaterais no componente.
-import { useNavigate } from "react-router-dom"; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
+import { useLocation, useNavigate } from "react-router-dom"; // Importa o hook 'useNavigate' para permitir a navegação programática entre as páginas.
 import Timer from "../../../components/timer/Timer";
 import img1 from "@assets/images/memoria/pequena.png";
 import img2 from "@assets/images/memoria/pequena3.png";
@@ -13,6 +13,7 @@ import { CustomModal } from "@/components/Modal-custom-alert/CustomModal";
 import { UsuarioStorage } from "@/helper/retornaUsuarioLogado";
 import { InfoJogosService } from "@/services/infoJogos.service";
 import { convertToSeconds } from "@/helper/formataTime";
+import { IDS_JOGOS } from "@/utils/constants/jogos/ids";
 
 const JogoMemoria = () => {
   const navigate = useNavigate(); // Usado para navegar para outras páginas quando necessário.
@@ -47,10 +48,13 @@ const JogoMemoria = () => {
   const usuario = UsuarioStorage.get();
   const [loadingModal, setLoadingModal] = useState(false);
   const [modalConfig, setModalConfig] = useState({ show: false });
-  const idJogoMemoria = 1;
   const idDependente = parseInt(sessionStorage.getItem("playerId"));
   const [jogoRegistrado, setJogoRegistrado] = useState(false);
   const [stateTimerAtivo, setStateTimerAtivo] = useState(true);
+
+  const location = useLocation();
+
+  const { gameId, difficulty } = location.state || {};
 
   useEffect(() => {
     sessionStorage.setItem("acertos", "0");
@@ -75,9 +79,9 @@ const JogoMemoria = () => {
   }
 
   // redirect if not logged
-  useEffect(() => {
-    if (!usuario?.id && !modalConfig.show) return chamaRotinaDeslogado();
-  }, [usuario, navigate]);
+  // useEffect(() => {
+  //   if (!modalConfig.show) return chamaRotinaDeslogado();
+  // }, [navigate]);
 
   const handleTimeUpdate = (newTime) => {
     setTime(newTime); // Atualiza o estado com o novo tempo
@@ -87,6 +91,30 @@ const JogoMemoria = () => {
     return await InfoJogosService.registrar(infoJogoMemoria);
   }
 
+  const finalizaDeslogado = () => {
+    const tempoFinal = time;
+    const resultadoMessage = `
+                      Acertos: ${acertos}
+                      Erros: ${erros}
+                      Tentativas: ${tentativas}
+                      Tempo: ${tempoFinal}
+                      
+                      Para mais informações, por favor, faça login.
+                  `;
+    setModalConfig({
+      show: true,
+      title: "Missão concluída!",
+      message: resultadoMessage,
+      icon: "🏆",
+      color: "#4caf50",
+      doneButton: {
+        label: "Voltar",
+        onClick: () => navigate("/"),
+      },
+      onClose: () => navigate("/"),
+    });
+  };
+
   useEffect(() => {
     const executarAsync = async () => {
       setInfoJogoMemoria({
@@ -94,18 +122,19 @@ const JogoMemoria = () => {
         totalTentativas: tentativas,
         totalAcertos: acertos,
         totalErros: erros,
-        jogo: { id: idJogoMemoria },
+        jogo: { id: gameId },
         dependente: { id: idDependente },
       });
 
       if (cardsWon.length === 8 && !jogoRegistrado) {
         setJogoRegistrado(true);
+        setStateTimerAtivo(false);
+
+        if (!usuario) return finalizaDeslogado();
         setLoadingModal(true); // mostra o modal de carregamento
 
         registrarInfosJogo()
           .then((resultado) => {
-            console.log(resultado);
-            setStateTimerAtivo(false);
             setLoadingModal(false); // esconde o modal ao terminar
 
             setModalConfig({
@@ -150,7 +179,7 @@ const JogoMemoria = () => {
     tentativas,
     acertos,
     erros,
-    idJogoMemoria,
+    IDS_JOGOS.FACIL.MEMORIA,
     idDependente,
   ]);
 
@@ -226,7 +255,6 @@ const JogoMemoria = () => {
           return novoValor;
         });
       }
-      console.log(cardsChosenId, cardsChosen);
 
       clearChosenCards(); // Limpa as cartas escolhidas para nova rodada.
     } else {
@@ -329,7 +357,7 @@ const JogoMemoria = () => {
           icon="⏳"
           color="#2196f3"
           doneButton={null} // Oculta botões
-          onClose={() => {}} // Impede fechamento manual
+          onClose={() => { }} // Impede fechamento manual
         />
       )}
     </>
